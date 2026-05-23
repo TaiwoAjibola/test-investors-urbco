@@ -6,7 +6,7 @@ import { ToastProviderWrapper } from "@/hooks/use-toast";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Urbco Agent - Premium Real Estate Fractional Investment",
+  title: "Urbco - Own a Fraction of Premium Real Estate",
   description: "Invest in Nigeria's most lucrative properties with as little as ₦500,000. Earn passive income through rental yields and capital appreciation.",
   keywords: ["real estate", "investment", "fractional ownership", "Nigeria", "property investment", "passive income"],
 };

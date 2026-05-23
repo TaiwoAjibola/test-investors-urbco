@@ -11,7 +11,7 @@ import { formatCurrency, formatPercentage } from "@/lib/utils";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart as RechartsPieChart, Pie, Cell } from "recharts";
 import Link from "next/link";
 
-const COLORS = ["#10b981", "#14b8a6", "#06b6d4", "#0ea5e9"];
+const COLORS = ["#870F73", "#D4A065", "#06b6d4", "#0ea5e9"];
 
 export default function PortfolioPage() {
   const totalValue = investments.reduce((sum, inv) => sum + inv.currentValuation, 0);
@@ -78,15 +78,15 @@ export default function PortfolioPage() {
               <AreaChart data={dashboardMetrics.portfolioGrowth}>
                 <defs>
                   <linearGradient id="colorPortfolio" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#10b981" stopOpacity={0.3} />
-                    <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
+                    <stop offset="5%" stopColor="#870F73" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="#870F73" stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
                 <XAxis dataKey="month" stroke="#64748b" />
                 <YAxis stroke="#64748b" tickFormatter={(value) => `₦${value / 1000000}M`} />
                 <Tooltip formatter={(value) => [formatCurrency(Number(value)), "Value"]} />
-                <Area type="monotone" dataKey="value" stroke="#10b981" strokeWidth={3} fill="url(#colorPortfolio)" />
+                <Area type="monotone" dataKey="value" stroke="#870F73" strokeWidth={3} fill="url(#colorPortfolio)" />
               </AreaChart>
             </ResponsiveContainer>
           </div>

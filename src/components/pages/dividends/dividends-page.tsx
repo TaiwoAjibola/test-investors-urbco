@@ -87,7 +87,7 @@ export default function DividendsPage() {
                 <XAxis dataKey="month" stroke="#64748b" />
                 <YAxis stroke="#64748b" tickFormatter={(value) => `₦${value / 1000}`} />
                 <Tooltip formatter={(value) => [formatCurrency(Number(value)), "Amount"]} />
-                <Bar dataKey="amount" fill="#10b981" radius={[8, 8, 0, 0]} />
+                <Bar dataKey="amount" fill="#870F73" radius={[8, 8, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>

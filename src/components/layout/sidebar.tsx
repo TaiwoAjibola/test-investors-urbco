@@ -15,14 +15,13 @@ import {
   Shield,
   Gift,
   TrendingUp,
-  Home,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAppStore } from "@/stores/appStore";
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { name: "Marketplace", href: "/marketplace", icon: Building2 },
+  { name: "Own-a-Fraction", href: "/marketplace", icon: Building2 },
   { name: "Portfolio", href: "/portfolio", icon: PieChart },
   { name: "Dividends", href: "/dividends", icon: TrendingUp },
   { name: "Wallet", href: "/wallet", icon: Wallet },
@@ -57,13 +56,7 @@ export function Sidebar() {
         {/* Logo */}
         <div className="flex h-20 items-center justify-between px-6 border-b border-slate-100">
           <Link href="/dashboard" className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
-              <Home className="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <span className="text-xl font-bold text-slate-900">Urbco</span>
-              <span className="text-xl font-light text-slate-500">Agent</span>
-            </div>
+            <img src="/urbco-logo.svg" alt="Urbco" className="h-10" />
           </Link>
         </div>
 

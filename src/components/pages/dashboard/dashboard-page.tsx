@@ -11,7 +11,7 @@ import { dashboardMetrics, investments, dividends, notifications, properties } f
 import { formatCurrency, formatPercentage } from "@/lib/utils";
 import Link from "next/link";
 
-const COLORS = ["#10b981", "#14b8a6", "#06b6d4", "#0ea5e9"];
+const COLORS = ["#870F73", "#D4A065", "#06b6d4", "#0ea5e9"];
 
 export default function DashboardPage() {
   const recentNotifications = notifications.slice(0, 3);
@@ -143,8 +143,8 @@ export default function DashboardPage() {
                   <AreaChart data={dashboardMetrics.portfolioGrowth}>
                     <defs>
                       <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#10b981" stopOpacity={0.3} />
-                        <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
+                        <stop offset="5%" stopColor="#870F73" stopOpacity={0.3} />
+                        <stop offset="95%" stopColor="#870F73" stopOpacity={0} />
                       </linearGradient>
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
@@ -162,7 +162,7 @@ export default function DashboardPage() {
                     <Area
                       type="monotone"
                       dataKey="value"
-                      stroke="#10b981"
+                      stroke="#870F73"
                       strokeWidth={3}
                       fillOpacity={1}
                       fill="url(#colorValue)"

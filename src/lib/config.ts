@@ -1,8 +1,8 @@
 // Application Configuration
 
 export const APP_CONFIG = {
-  name: "Urbco Agent",
-  tagline: "Premium Real Estate Fractional Investment",
+  name: "Urbco",
+  tagline: "Own a Fraction of Premium Real Estate",
   version: "1.0.0",
   
   // Investment Settings
@@ -52,7 +52,7 @@ export const APP_CONFIG = {
 export const NAVIGATION = {
   main: [
     { name: "Dashboard", href: "/dashboard", icon: "LayoutDashboard" },
-    { name: "Marketplace", href: "/marketplace", icon: "Building2" },
+    { name: "Own-a-Fraction", href: "/marketplace", icon: "Building2" },
     { name: "Portfolio", href: "/portfolio", icon: "PieChart" },
     { name: "Dividends", href: "/dividends", icon: "TrendingUp" },
     { name: "Wallet", href: "/wallet", icon: "Wallet" },

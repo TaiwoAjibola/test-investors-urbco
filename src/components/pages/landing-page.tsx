@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Building2, TrendingUp, Users, Shield, ArrowRight, Home, CheckCircle, Phone } from "lucide-react";
+import { Building2, TrendingUp, Users, Shield, ArrowRight, CheckCircle, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -57,18 +57,12 @@ export default function LandingPage() {
       <nav className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-xl border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <Link href="/" className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
-              <Home className="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <span className="text-xl font-bold text-slate-900">Urbco</span>
-              <span className="text-xl font-light text-slate-500">Agent</span>
-            </div>
+            <img src="/urbco-logo.svg" alt="Urbco" className="h-10" />
           </Link>
           <div className="hidden md:flex items-center space-x-8">
-            <Link href="#properties" className="text-slate-600 hover:text-emerald-600 transition-colors">Properties</Link>
-            <Link href="#how-it-works" className="text-slate-600 hover:text-emerald-600 transition-colors">How It Works</Link>
-            <Link href="#calculator" className="text-slate-600 hover:text-emerald-600 transition-colors">Calculator</Link>
+            <Link href="/marketplace" className="text-slate-600 hover:text-emerald-600 transition-colors">Own-a-Fraction</Link>
+            <Link href="/services" className="text-slate-600 hover:text-emerald-600 transition-colors">Services</Link>
+            <Link href="/about" className="text-slate-600 hover:text-emerald-600 transition-colors">About Us</Link>
             <Link href="/auth/login" className="text-slate-600 hover:text-emerald-600 transition-colors">Login</Link>
             <Link href="/auth/signup">
               <Button variant="premium">Get Started</Button>
@@ -377,14 +371,8 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-4 gap-12 mb-12">
             <div>
-              <div className="flex items-center space-x-3 mb-6">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
-                  <Home className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <span className="text-xl font-bold">Urbco</span>
-                  <span className="text-xl font-light text-slate-400">Agent</span>
-                </div>
+              <div className="mb-6">
+                <img src="/urbco-logo.svg" alt="Urbco" className="h-10 brightness-0 invert" />
               </div>
               <p className="text-slate-400 text-sm">
                 Nigeria's leading real estate fractional investment platform.
@@ -393,17 +381,17 @@ export default function LandingPage() {
             <div>
               <h4 className="font-semibold mb-4">Platform</h4>
               <ul className="space-y-2 text-slate-400 text-sm">
-                <li><Link href="/marketplace" className="hover:text-white">Properties</Link></li>
-                <li><Link href="#how-it-works" className="hover:text-white">How It Works</Link></li>
-                <li><Link href="#calculator" className="hover:text-white">ROI Calculator</Link></li>
+                <li><Link href="/marketplace" className="hover:text-white">Own-a-Fraction</Link></li>
+                <li><Link href="/services" className="hover:text-white">Services</Link></li>
+                <li><Link href="/about" className="hover:text-white">About Us</Link></li>
               </ul>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Company</h4>
               <ul className="space-y-2 text-slate-400 text-sm">
-                <li><a href="#" className="hover:text-white">About Us</a></li>
-                <li><a href="#" className="hover:text-white">Careers</a></li>
-                <li><a href="#" className="hover:text-white">Contact</a></li>
+                <li><Link href="/about" className="hover:text-white">About Us</Link></li>
+                <li><Link href="/about#careers" className="hover:text-white">Careers</Link></li>
+                <li><Link href="/about#contact" className="hover:text-white">Contact</Link></li>
               </ul>
             </div>
             <div>
@@ -416,7 +404,7 @@ export default function LandingPage() {
             </div>
           </div>
           <div className="border-t border-slate-800 pt-8 text-center text-slate-400 text-sm">
-            © 2024 Urbco Agent. All rights reserved.
+            © 2024 Urbco. All rights reserved.
           </div>
         </div>
       </footer>
