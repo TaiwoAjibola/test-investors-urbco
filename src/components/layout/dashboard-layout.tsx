@@ -14,11 +14,11 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
       <div
         className={cn(
           "transition-all duration-300",
-          "lg:ml-72"
+          "lg:ml-64"
         )}
       >
         <Header />
-        <main className="p-6">{children}</main>
+        <main className="p-8">{children}</main>
       </div>
     </div>
   );

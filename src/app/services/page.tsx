@@ -43,31 +43,31 @@ export default function ServicesPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-xl border-b border-slate-100">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <Link href="/" className="flex items-center space-x-3">
-            <img src="/urbco-logo.svg" alt="Urbco" className="h-10" />
+      <nav className="fixed top-0 w-full z-50 bg-white/85 backdrop-blur-xl border-b border-slate-100">
+        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+          <Link href="/" className="flex items-center">
+            <img src="/urbco-logo.svg" alt="Urbco" className="h-9" />
           </Link>
-          <div className="hidden md:flex items-center space-x-8">
-            <Link href="/marketplace" className="text-slate-600 hover:text-emerald-600 transition-colors">Own-a-Fraction</Link>
-            <Link href="/services" className="text-emerald-600 font-medium">Services</Link>
-            <Link href="/about" className="text-slate-600 hover:text-emerald-600 transition-colors">About Us</Link>
-            <Link href="/auth/login" className="text-slate-600 hover:text-emerald-600 transition-colors">Login</Link>
+          <div className="hidden md:flex items-center gap-8">
+            <Link href="/marketplace" className="text-sm font-medium text-slate-600 hover:text-emerald-600 transition-colors">Own-a-Fraction</Link>
+            <Link href="/services" className="text-sm font-medium text-emerald-600 transition-colors">Services</Link>
+            <Link href="/about" className="text-sm font-medium text-slate-600 hover:text-emerald-600 transition-colors">About Us</Link>
+            <Link href="/auth/login" className="text-sm font-medium text-slate-600 hover:text-emerald-600 transition-colors">Login</Link>
             <Link href="/auth/signup">
-              <Button variant="premium">Get Started</Button>
+              <Button variant="premium" size="sm">Get Started</Button>
             </Link>
           </div>
         </div>
       </nav>
 
       {/* Hero */}
-      <section className="pt-32 pb-20 px-6 bg-gradient-to-br from-slate-50 via-emerald-50/30 to-teal-50/20">
+      <section className="pt-28 pb-20 px-6 bg-gradient-to-b from-slate-50 via-emerald-50/30 to-white">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-            <h1 className="text-5xl md:text-6xl font-bold text-slate-900 mb-6 leading-tight">
-              Our <span className="bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent">Services</span>
+            <h1 className="font-display text-5xl md:text-6xl font-bold text-slate-900 mb-6 leading-[1.05] tracking-tight">
+              Our <span className="gradient-text">Services</span>
             </h1>
-            <p className="text-xl text-slate-600 max-w-3xl mx-auto">
+            <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
               Comprehensive real estate investment services designed to help you build wealth through premium Nigerian property.
             </p>
           </motion.div>

@@ -40,23 +40,25 @@ export default function DashboardPage() {
       </div>
 
       {/* Metrics Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0 }}
         >
-          <Card className="relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-100 rounded-full -translate-y-1/2 translate-x-1/2 opacity-50" />
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-slate-600">Total Invested</CardTitle>
-              <DollarSign className="h-5 w-5 text-emerald-600" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-slate-900">{formatCurrency(dashboardMetrics.totalInvested)}</div>
-              <div className="flex items-center mt-2 text-sm text-emerald-600">
+          <Card className="relative overflow-hidden hover:shadow-[0_8px_16px_-4px_rgb(15_23_42/0.08),0_16px_32px_-8px_rgb(15_23_42/0.10)] transition-shadow duration-300">
+            <div className="absolute inset-x-0 top-0 h-1 bg-emerald-500" />
+            <CardContent className="pt-6">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-sm font-medium text-slate-600">Total Invested</span>
+                <div className="w-9 h-9 rounded-lg bg-emerald-50 flex items-center justify-center">
+                  <DollarSign className="h-4.5 w-4.5 text-emerald-600" />
+                </div>
+              </div>
+              <div className="font-display text-3xl font-bold text-slate-900 tracking-tight">{formatCurrency(dashboardMetrics.totalInvested)}</div>
+              <div className="flex items-center mt-3 text-[13px] text-emerald-600">
                 <ArrowUpRight className="h-4 w-4 mr-1" />
-                <span>+12.5% from last month</span>
+                <span className="font-medium">+12.5% from last month</span>
               </div>
             </CardContent>
           </Card>
@@ -67,17 +69,19 @@ export default function DashboardPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
         >
-          <Card className="relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-teal-100 rounded-full -translate-y-1/2 translate-x-1/2 opacity-50" />
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-slate-600">Portfolio Value</CardTitle>
-              <TrendingUp className="h-5 w-5 text-teal-600" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-slate-900">{formatCurrency(dashboardMetrics.portfolioValue)}</div>
-              <div className="flex items-center mt-2 text-sm text-emerald-600">
+          <Card className="relative overflow-hidden hover:shadow-[0_8px_16px_-4px_rgb(15_23_42/0.08),0_16px_32px_-8px_rgb(15_23_42/0.10)] transition-shadow duration-300">
+            <div className="absolute inset-x-0 top-0 h-1 bg-teal-500" />
+            <CardContent className="pt-6">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-sm font-medium text-slate-600">Portfolio Value</span>
+                <div className="w-9 h-9 rounded-lg bg-teal-50 flex items-center justify-center">
+                  <TrendingUp className="h-4.5 w-4.5 text-teal-600" />
+                </div>
+              </div>
+              <div className="font-display text-3xl font-bold text-slate-900 tracking-tight">{formatCurrency(dashboardMetrics.portfolioValue)}</div>
+              <div className="flex items-center mt-3 text-[13px] text-emerald-600">
                 <ArrowUpRight className="h-4 w-4 mr-1" />
-                <span>+8.6% growth</span>
+                <span className="font-medium">+8.6% growth</span>
               </div>
             </CardContent>
           </Card>
@@ -88,15 +92,17 @@ export default function DashboardPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
         >
-          <Card className="relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-blue-100 rounded-full -translate-y-1/2 translate-x-1/2 opacity-50" />
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-slate-600">Annual Returns</CardTitle>
-              <PieChart className="h-5 w-5 text-blue-600" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-slate-900">{formatCurrency(dashboardMetrics.projectedAnnualReturns)}</div>
-              <div className="text-sm text-slate-500 mt-2">Projected for next 12 months</div>
+          <Card className="relative overflow-hidden hover:shadow-[0_8px_16px_-4px_rgb(15_23_42/0.08),0_16px_32px_-8px_rgb(15_23_42/0.10)] transition-shadow duration-300">
+            <div className="absolute inset-x-0 top-0 h-1 bg-blue-500" />
+            <CardContent className="pt-6">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-sm font-medium text-slate-600">Annual Returns</span>
+                <div className="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center">
+                  <PieChart className="h-4.5 w-4.5 text-blue-600" />
+                </div>
+              </div>
+              <div className="font-display text-3xl font-bold text-slate-900 tracking-tight">{formatCurrency(dashboardMetrics.projectedAnnualReturns)}</div>
+              <div className="text-[13px] text-slate-500 mt-3">Projected for next 12 months</div>
             </CardContent>
           </Card>
         </motion.div>
@@ -106,17 +112,19 @@ export default function DashboardPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
         >
-          <Card className="relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-amber-100 rounded-full -translate-y-1/2 translate-x-1/2 opacity-50" />
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-slate-600">Dividends Earned</CardTitle>
-              <Wallet className="h-5 w-5 text-amber-600" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-slate-900">{formatCurrency(dashboardMetrics.totalDividendsEarned)}</div>
-              <div className="flex items-center mt-2 text-sm text-emerald-600">
+          <Card className="relative overflow-hidden hover:shadow-[0_8px_16px_-4px_rgb(15_23_42/0.08),0_16px_32px_-8px_rgb(15_23_42/0.10)] transition-shadow duration-300">
+            <div className="absolute inset-x-0 top-0 h-1 bg-amber-500" />
+            <CardContent className="pt-6">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-sm font-medium text-slate-600">Dividends Earned</span>
+                <div className="w-9 h-9 rounded-lg bg-amber-50 flex items-center justify-center">
+                  <Wallet className="h-4.5 w-4.5 text-amber-600" />
+                </div>
+              </div>
+              <div className="font-display text-3xl font-bold text-slate-900 tracking-tight">{formatCurrency(dashboardMetrics.totalDividendsEarned)}</div>
+              <div className="flex items-center mt-3 text-[13px] text-emerald-600">
                 <ArrowUpRight className="h-4 w-4 mr-1" />
-                <span>Lifetime earnings</span>
+                <span className="font-medium">Lifetime earnings</span>
               </div>
             </CardContent>
           </Card>

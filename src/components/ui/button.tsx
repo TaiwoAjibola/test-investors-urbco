@@ -9,22 +9,22 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = "default", size = "default", isLoading, children, disabled, ...props }, ref) => {
-    const baseStyles = "inline-flex items-center justify-center rounded-xl font-medium transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 disabled:pointer-events-none disabled:opacity-50";
+    const baseStyles = "inline-flex items-center justify-center rounded-xl font-medium transition-all duration-200 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 cursor-pointer";
     
     const variants = {
-      default: "bg-emerald-600 text-white hover:bg-emerald-700 shadow-lg shadow-emerald-600/30",
-      destructive: "bg-red-600 text-white hover:bg-red-700 shadow-lg shadow-red-600/30",
-      outline: "border-2 border-slate-200 bg-transparent hover:bg-slate-100 text-slate-900",
+      default: "bg-emerald-600 text-white hover:bg-emerald-700 shadow-sm shadow-emerald-600/20",
+      destructive: "bg-red-600 text-white hover:bg-red-700 shadow-sm shadow-red-600/20",
+      outline: "border border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 text-slate-900 shadow-sm",
       secondary: "bg-slate-100 text-slate-900 hover:bg-slate-200",
-      ghost: "hover:bg-slate-100 text-slate-900",
+      ghost: "hover:bg-slate-100 text-slate-700",
       link: "text-emerald-600 underline-offset-4 hover:underline",
-      premium: "bg-gradient-to-r from-emerald-600 to-teal-500 text-white hover:from-emerald-700 hover:to-teal-600 shadow-xl shadow-emerald-600/40",
+      premium: "bg-gradient-to-r from-emerald-600 to-emerald-500 text-white hover:from-emerald-700 hover:to-emerald-600 shadow-md shadow-emerald-600/25",
     };
     
     const sizes = {
-      default: "h-12 px-6 py-3 text-sm",
-      sm: "h-10 px-4 text-xs",
-      lg: "h-14 px-8 text-base",
+      default: "h-11 px-6 text-sm font-semibold",
+      sm: "h-9 px-4 text-xs font-semibold",
+      lg: "h-14 px-8 text-base font-semibold",
       icon: "h-10 w-10",
     };
     

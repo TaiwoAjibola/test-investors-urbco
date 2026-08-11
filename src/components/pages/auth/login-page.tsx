@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Home, Mail, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -30,7 +30,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-emerald-50/30 to-teal-50/20 flex items-center justify-center px-6 py-12">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 via-emerald-50/30 to-white flex items-center justify-center px-6 py-12">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
@@ -38,19 +38,13 @@ export default function LoginPage() {
         className="w-full max-w-md"
       >
         {/* Logo */}
-        <Link href="/" className="flex items-center justify-center space-x-3 mb-8">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
-            <Home className="w-7 h-7 text-white" />
-          </div>
-          <div>
-            <span className="text-2xl font-bold text-slate-900">Urbco</span>
-            <span className="text-2xl font-light text-slate-500">Agent</span>
-          </div>
+        <Link href="/" className="flex items-center justify-center mb-8">
+          <img src="/urbco-logo.svg" alt="Urbco" className="h-10" />
         </Link>
 
-        <Card className="border-0 shadow-xl">
+        <Card className="border border-slate-200/80 shadow-[0_4px_8px_-2px_rgb(15_23_42/0.08),0_12px_24px_-6px_rgb(15_23_42/0.08)]">
           <CardHeader className="text-center pb-2">
-            <CardTitle className="text-2xl font-bold">Welcome Back</CardTitle>
+            <CardTitle className="font-display text-2xl font-bold">Welcome Back</CardTitle>
             <CardDescription>Sign in to your investment account</CardDescription>
           </CardHeader>
           <CardContent>

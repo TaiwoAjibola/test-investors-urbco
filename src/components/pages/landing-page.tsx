@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Building2, TrendingUp, Users, Shield, ArrowRight, CheckCircle, Phone } from "lucide-react";
+import { Building2, TrendingUp, Users, Shield, ArrowRight, CheckCircle, Phone, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -54,25 +54,25 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-xl border-b border-slate-100">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <Link href="/" className="flex items-center space-x-3">
-            <img src="/urbco-logo.svg" alt="Urbco" className="h-10" />
+      <nav className="fixed top-0 w-full z-50 bg-white/85 backdrop-blur-xl border-b border-slate-100">
+        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+          <Link href="/" className="flex items-center">
+            <img src="/urbco-logo.svg" alt="Urbco" className="h-9" />
           </Link>
-          <div className="hidden md:flex items-center space-x-8">
-            <Link href="/marketplace" className="text-slate-600 hover:text-emerald-600 transition-colors">Own-a-Fraction</Link>
-            <Link href="/services" className="text-slate-600 hover:text-emerald-600 transition-colors">Services</Link>
-            <Link href="/about" className="text-slate-600 hover:text-emerald-600 transition-colors">About Us</Link>
-            <Link href="/auth/login" className="text-slate-600 hover:text-emerald-600 transition-colors">Login</Link>
+          <div className="hidden md:flex items-center gap-8">
+            <Link href="/marketplace" className="text-sm font-medium text-slate-600 hover:text-emerald-600 transition-colors">Own-a-Fraction</Link>
+            <Link href="/services" className="text-sm font-medium text-slate-600 hover:text-emerald-600 transition-colors">Services</Link>
+            <Link href="/about" className="text-sm font-medium text-slate-600 hover:text-emerald-600 transition-colors">About Us</Link>
+            <Link href="/auth/login" className="text-sm font-medium text-slate-600 hover:text-emerald-600 transition-colors">Login</Link>
             <Link href="/auth/signup">
-              <Button variant="premium">Get Started</Button>
+              <Button variant="premium" size="sm">Get Started</Button>
             </Link>
           </div>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <section className="pt-32 pb-20 px-6 bg-gradient-to-br from-slate-50 via-emerald-50/30 to-teal-50/20">
+      <section className="pt-28 pb-20 px-6 bg-gradient-to-b from-slate-50 via-emerald-50/30 to-white">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -80,14 +80,15 @@ export default function LandingPage() {
             transition={{ duration: 0.8 }}
             className="text-center"
           >
-            <Badge variant="premium" className="mb-6 text-sm px-4 py-2">
-              🎉 Nigeria's #1 Real Estate Investment Platform
+            <Badge className="mb-6 text-sm px-4 py-1.5">
+              <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500 mr-1.5" />
+              Nigeria's #1 Real Estate Investment Platform
             </Badge>
-            <h1 className="text-5xl md:text-7xl font-bold text-slate-900 mb-6 leading-tight">
-              Own Fractional Shares of
-              <span className="bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent"> Premium Real Estate</span>
+            <h1 className="font-display text-5xl md:text-7xl font-bold text-slate-900 mb-6 leading-[1.05] tracking-tight">
+              Own a Fraction of
+              <span className="gradient-text"> Premium Real Estate</span>
             </h1>
-            <p className="text-xl text-slate-600 mb-10 max-w-3xl mx-auto">
+            <p className="text-xl text-slate-600 mb-10 max-w-3xl mx-auto leading-relaxed">
               Invest in Nigeria's most lucrative properties with as little as ₦500,000. 
               Earn passive income through rental yields and capital appreciation.
             </p>
@@ -114,7 +115,7 @@ export default function LandingPage() {
                   transition={{ delay: index * 0.1 }}
                   className="text-center"
                 >
-                  <div className="text-3xl md:text-4xl font-bold text-slate-900 mb-2">{stat.value}</div>
+                  <div className="font-display text-3xl md:text-4xl font-bold text-slate-900 mb-1">{stat.value}</div>
                   <div className="text-sm text-slate-500">{stat.label}</div>
                 </motion.div>
               ))}
@@ -127,7 +128,7 @@ export default function LandingPage() {
       <section id="properties" className="py-20 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-slate-900 mb-4">Featured Investment Opportunities</h2>
+            <h2 className="font-display text-4xl font-bold text-slate-900 mb-4">Featured Investment Opportunities</h2>
             <p className="text-xl text-slate-600">Carefully selected properties with high returns</p>
           </div>
 
@@ -197,7 +198,7 @@ export default function LandingPage() {
       <section id="how-it-works" className="py-20 px-6 bg-slate-50">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-slate-900 mb-4">How Urbco Works</h2>
+            <h2 className="font-display text-4xl font-bold text-slate-900 mb-4">How Urbco Works</h2>
             <p className="text-xl text-slate-600">Start earning passive income in 4 simple steps</p>
           </div>
 
@@ -230,7 +231,7 @@ export default function LandingPage() {
       <section className="py-20 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-slate-900 mb-4">Why Invest With Urbco</h2>
+            <h2 className="font-display text-4xl font-bold text-slate-900 mb-4">Why Invest With Urbco</h2>
             <p className="text-xl text-slate-600">The smart way to build wealth through real estate</p>
           </div>
 
@@ -260,7 +261,7 @@ export default function LandingPage() {
       <section id="calculator" className="py-20 px-6 bg-gradient-to-br from-emerald-600 to-teal-600">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-white mb-4">Calculate Your Returns</h2>
+            <h2 className="font-display text-4xl font-bold text-white mb-4">Calculate Your Returns</h2>
             <p className="text-xl text-emerald-100">See how much you could earn with Urbco</p>
           </div>
 
@@ -298,7 +299,7 @@ export default function LandingPage() {
       <section className="py-20 px-6 bg-slate-50">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-slate-900 mb-4">What Our Investors Say</h2>
+            <h2 className="font-display text-4xl font-bold text-slate-900 mb-4">What Our Investors Say</h2>
             <p className="text-xl text-slate-600">Join thousands of satisfied investors</p>
           </div>
 
@@ -347,7 +348,7 @@ export default function LandingPage() {
       {/* CTA Section */}
       <section className="py-20 px-6">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold text-slate-900 mb-6">Ready to Start Your Investment Journey?</h2>
+          <h2 className="font-display text-4xl font-bold text-slate-900 mb-6">Ready to Start Your Investment Journey?</h2>
           <p className="text-xl text-slate-600 mb-10">
             Join over 5,000 investors earning passive income through premium real estate
           </p>
