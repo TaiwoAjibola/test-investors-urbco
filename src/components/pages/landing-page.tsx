@@ -31,35 +31,35 @@ export default function LandingPage() {
   const heroProperty = properties[0];
 
   const stats = [
-    { label: "Total Property Funded", value: "₦12.5B+", icon: Wallet },
+    { label: "Trustee-Protected Capital", value: "₦12.5B+", icon: Wallet },
     { label: "Active Investors", value: "5,000+", icon: Users },
-    { label: "Average Annual ROI", value: "22.5%", icon: LineChart },
+    { label: "Milestone-Gated Releases", value: "100%", icon: LineChart },
   ];
 
   const howItWorks = [
-    { step: "01", title: "Invest with confidence", desc: "You send funds to independent trustees — not straight to the developer." },
-    { step: "02", title: "Funds stay protected", desc: "Trustees hold your capital securely until project milestones are met." },
-    { step: "03", title: "Milestone-based release", desc: "Only when the developer hits agreed milestones do trustees release funds." },
-    { step: "04", title: "Earn as the project grows", desc: "Track progress transparently and collect returns as value is delivered." },
+    { step: "01", title: "You invest", desc: "You send your funds to independent trustees — never directly to the developer." },
+    { step: "02", title: "Trustees hold your money", desc: "Your capital stays safe and secure until the developer reaches an agreed milestone." },
+    { step: "03", title: "Milestone reached", desc: "When the developer hits a milestone, trustees release the matching funds." },
+    { step: "04", title: "Developer gets paid", desc: "Developers receive funds only for what has been delivered — trust built into every stage." },
   ];
 
   const testimonials = [
     {
       name: "Chinedu Okafor",
       role: "Business Owner, Lagos",
-      quote: "Urbco made buying into Lekki real estate effortless. My first dividend arrived right on schedule.",
+      quote: "Knowing trustees hold my funds until milestones are met, I finally feel safe putting money into development projects.",
       initials: "CO",
     },
     {
       name: "Fatima Abdullahi",
       role: "Doctor, Abuja",
-      quote: "I finally own property without the headaches of management. The dashboard is beautiful and clear.",
+      quote: "Before Urbco there was no trust layer. Now trustees release money only when the developer delivers — that changed everything.",
       initials: "FA",
     },
     {
       name: "Tunde Bakare",
       role: "Tech Entrepreneur",
-      quote: "Transparency is everything. I can track funding progress and my exact ROI in real time.",
+      quote: "I can see exactly when each milestone is hit and when funds are released. Transparency I never had before.",
       initials: "TB",
     },
   ];
@@ -117,17 +117,17 @@ export default function LandingPage() {
             <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
               <Badge className="mb-6 border border-[#D4A065]/30 bg-[#D4A065]/10 px-4 py-1.5 text-[#D4A065]">
                 <Sparkles className="mr-1.5 h-3.5 w-3.5" />
-                Nigeria&apos;s #1 Fractional Real Estate Platform
+                Trustee-Protected Real Estate Investment
               </Badge>
               <h1 className="font-display text-5xl font-bold leading-[1.05] tracking-tight text-white md:text-[4.25rem]">
-                Own real estate.
+                Funds held by trustees.
                 <br />
-                <span className="gradient-text">Start from ₦500K.</span>
+                <span className="gradient-text">Released on milestones.</span>
               </h1>
               <p className="mt-6 max-w-xl text-lg leading-relaxed text-slate-400">
-                Your capital goes to independent{" "}
-                <span className="font-semibold text-white">trustees</span>, not straight to developers.
-                Funds are released only when milestones are met — so your money stays safe and secure.
+                Investors send money to <span className="font-semibold text-white">trustees</span>, not
+                directly to developers. Trustees hold your capital safely and release it only when the
+                developer reaches each milestone — so your funds stay safe and secure with us.
               </p>
 
               <div className="mt-9 flex flex-col gap-4 sm:flex-row">
@@ -350,7 +350,7 @@ export default function LandingPage() {
                 <Rocket className="mr-1.5 h-3.5 w-3.5" /> How It Works
               </Badge>
               <h2 className="font-display text-4xl font-bold tracking-tight text-white md:text-5xl">
-                How trustees keep your funds <span className="gradient-text">safe</span>
+                How trustee protection <span className="gradient-text">works</span>
               </h2>
             </div>
 
@@ -387,11 +387,11 @@ export default function LandingPage() {
                   <Shield className="mr-1.5 h-3.5 w-3.5" /> Why Urbco
                 </Badge>
                 <h2 className="font-display text-4xl font-bold tracking-tight text-white md:text-5xl">
-                  A real layer of trust<br />between you and the <span className="gradient-text">developer.</span>
+                  The layer of trust<br />investing was <span className="gradient-text">missing.</span>
                 </h2>
               </div>
               <p className="text-lg leading-relaxed text-slate-400 lg:max-w-md lg:justify-self-end">
-                Before Urbco, investors sent money straight to developers with no protection. Now trustees hold the funds and release them only when milestones are reached.
+                Before now, investors gave developers money without any layer of trust. Urbco changes that — trustees hold the funds and release them only when milestones are reached.
               </p>
             </div>
 
@@ -405,15 +405,15 @@ export default function LandingPage() {
                 <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#870F73]">
                   <TrendingUp className="h-7 w-7 text-white" />
                 </div>
-                <h3 className="font-display mt-6 text-2xl font-bold text-white">Trustee-secured capital</h3>
+                <h3 className="font-display mt-6 text-2xl font-bold text-white">Money that&apos;s safe before it&apos;s spent</h3>
                 <p className="mt-3 mb-8 max-w-md leading-relaxed text-slate-400">
-                  Investors fund trustees. Trustees release money to developers only at verified milestones. Your capital is protected every step of the way.
+                  Investors send money to the trustees. The trustees then release money to developers only when milestones are met — so your funds stay safe and secure at every stage.
                 </p>
                 <div className="grid grid-cols-2 gap-4">
                   {[
                     { label: "Funds held by", value: "Trustees" },
-                    { label: "Released on", value: "Milestones" },
-                    { label: "Investor protection", value: "Built-in" },
+                    { label: "Release trigger", value: "Milestones" },
+                    { label: "Investor trust layer", value: "Guaranteed" },
                     { label: "Developer access", value: "Earned" },
                   ].map((item) => (
                     <div key={item.label} className="rounded-xl border border-white/10 bg-black/20 p-4">
@@ -425,9 +425,9 @@ export default function LandingPage() {
               </motion.div>
 
               {[
-                { icon: Shield, title: "Funds never go direct", desc: "Unlike before, you don’t wire money straight to developers. Trustees sit in the middle." },
-                { icon: Users, title: "Milestone releases only", desc: "Developers get capital when they deliver — not upfront on trust alone." },
-                { icon: Award, title: "Safe & secure by design", desc: "Opco exists to prove to investors that their funds are protected until value is delivered." },
+                { icon: Shield, title: "No more direct transfers", desc: "Before, investors gave developers money with no layer of trust. With Urbco, trustees sit between them." },
+                { icon: Users, title: "Milestone-gated releases", desc: "Developers receive funds only when they reach each milestone — never upfront on promises alone." },
+                { icon: Award, title: "Safe & secure by design", desc: "Our goal is to show every developer that investor funds are safe and secure until value is delivered." },
               ].map((feature, i) => (
                 <motion.div
                   key={feature.title}
@@ -583,10 +583,10 @@ export default function LandingPage() {
           <div className="relative mx-auto max-w-6xl overflow-hidden rounded-[2.5rem] border border-white/10 bg-gradient-to-br from-[#870F73] to-[#5a0a4c] p-12 text-center md:p-20">
             <div className="pointer-events-none absolute -top-20 left-1/2 h-64 w-[600px] -translate-x-1/2 rounded-full bg-white/10 blur-[80px]" />
             <h2 className="font-display relative text-4xl font-bold tracking-tight text-white md:text-6xl">
-              Your funds stay safe<br />until milestones are met.
+              Invest with the trust layer<br />that actually protects you.
             </h2>
             <p className="relative mx-auto mt-5 max-w-xl text-lg text-white/80">
-              Invest through trustees. We release capital to developers only when they deliver — so your money is never left unprotected.
+              Send your money to trustees, not developers. Funds are released only when milestones are met — so you never invest without protection. Create your free account today.
             </p>
             <div className="relative mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
               <Link href="/auth/signup">
@@ -611,7 +611,7 @@ export default function LandingPage() {
             <div className="md:col-span-1">
               <img src="/urbco-logo.svg" alt="Urbco" className="mb-4 h-8 brightness-0 invert" />
               <p className="max-w-xs text-sm leading-relaxed text-slate-400">
-                Trustee-secured real estate investing. Your capital is held safely and released to developers only at verified milestones.
+                Trustee-secured real estate investing. Investors fund trustees, and trustees release funds to developers only when milestones are reached.
               </p>
             </div>
             <div>
