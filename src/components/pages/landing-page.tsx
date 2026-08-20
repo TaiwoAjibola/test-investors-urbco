@@ -120,14 +120,14 @@ export default function LandingPage() {
                 Trustee-Protected Real Estate Investment
               </Badge>
               <h1 className="font-display text-5xl font-bold leading-[1.05] tracking-tight text-white md:text-[4.25rem]">
-                Funds held by trustees.
+                Invest in real estate.
                 <br />
-                <span className="gradient-text">Released on milestones.</span>
+                <span className="gradient-text">Earn up to 22.5% annually.</span>
               </h1>
               <p className="mt-6 max-w-xl text-lg leading-relaxed text-slate-400">
-                Investors send money to <span className="font-semibold text-white">trustees</span>, not
-                directly to developers. Trustees hold your capital safely and release it only when the
-                developer reaches each milestone — so your funds stay safe and secure with us.
+                Start with as little as <span className="font-semibold text-white">₦500,000</span> and
+                grow your capital through rental income and appreciation — while independent trustees
+                keep your funds safe until every milestone is met.
               </p>
 
               <div className="mt-9 flex flex-col gap-4 sm:flex-row">
