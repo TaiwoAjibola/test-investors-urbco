@@ -37,10 +37,10 @@ export default function LandingPage() {
   ];
 
   const howItWorks = [
-    { step: "01", title: "Create your account", desc: "Sign up in minutes and complete light KYC verification." },
-    { step: "02", title: "Pick a property", desc: "Browse vetted, income-generating assets across Nigeria." },
-    { step: "03", title: "Buy your fraction", desc: "Own a tradable share from as little as ₦500,000." },
-    { step: "04", title: "Collect quarterly earnings", desc: "Rental income + appreciation paid straight to your wallet." },
+    { step: "01", title: "Invest with confidence", desc: "You send funds to independent trustees — not straight to the developer." },
+    { step: "02", title: "Funds stay protected", desc: "Trustees hold your capital securely until project milestones are met." },
+    { step: "03", title: "Milestone-based release", desc: "Only when the developer hits agreed milestones do trustees release funds." },
+    { step: "04", title: "Earn as the project grows", desc: "Track progress transparently and collect returns as value is delivered." },
   ];
 
   const testimonials = [
@@ -125,9 +125,9 @@ export default function LandingPage() {
                 <span className="gradient-text">Start from ₦500K.</span>
               </h1>
               <p className="mt-6 max-w-xl text-lg leading-relaxed text-slate-400">
-                Buy a fraction of premium Lagos and Abuja properties, earn up to{" "}
-                <span className="font-semibold text-white">22.5% annually</span> from rental income
-                and appreciation — without buying a whole house.
+                Your capital goes to independent{" "}
+                <span className="font-semibold text-white">trustees</span>, not straight to developers.
+                Funds are released only when milestones are met — so your money stays safe and secure.
               </p>
 
               <div className="mt-9 flex flex-col gap-4 sm:flex-row">
@@ -350,7 +350,7 @@ export default function LandingPage() {
                 <Rocket className="mr-1.5 h-3.5 w-3.5" /> How It Works
               </Badge>
               <h2 className="font-display text-4xl font-bold tracking-tight text-white md:text-5xl">
-                From sign-up to dividend in <span className="gradient-text">four steps</span>
+                How trustees keep your funds <span className="gradient-text">safe</span>
               </h2>
             </div>
 
@@ -387,11 +387,11 @@ export default function LandingPage() {
                   <Shield className="mr-1.5 h-3.5 w-3.5" /> Why Urbco
                 </Badge>
                 <h2 className="font-display text-4xl font-bold tracking-tight text-white md:text-5xl">
-                  Built like an institution.<br />Felt like a <span className="gradient-text">modern bank.</span>
+                  A real layer of trust<br />between you and the <span className="gradient-text">developer.</span>
                 </h2>
               </div>
               <p className="text-lg leading-relaxed text-slate-400 lg:max-w-md lg:justify-self-end">
-                Institutional-grade diligence, legal title ownership, professional property management — wrapped in a clean, modern experience.
+                Before Urbco, investors sent money straight to developers with no protection. Now trustees hold the funds and release them only when milestones are reached.
               </p>
             </div>
 
@@ -405,16 +405,16 @@ export default function LandingPage() {
                 <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#870F73]">
                   <TrendingUp className="h-7 w-7 text-white" />
                 </div>
-                <h3 className="font-display mt-6 text-2xl font-bold text-white">Compound your wealth</h3>
+                <h3 className="font-display mt-6 text-2xl font-bold text-white">Trustee-secured capital</h3>
                 <p className="mt-3 mb-8 max-w-md leading-relaxed text-slate-400">
-                  Your rental yield and capital appreciation are reinvested automatically. Watch your stake grow quarter after quarter with transparent, real-time reporting.
+                  Investors fund trustees. Trustees release money to developers only at verified milestones. Your capital is protected every step of the way.
                 </p>
                 <div className="grid grid-cols-2 gap-4">
                   {[
-                    { label: "Rental yield from", value: "8.45%" },
-                    { label: "Capital appreciation", value: "up to 20%" },
-                    { label: "Dividend frequency", value: "Quarterly" },
-                    { label: "Management fee", value: "Transparent" },
+                    { label: "Funds held by", value: "Trustees" },
+                    { label: "Released on", value: "Milestones" },
+                    { label: "Investor protection", value: "Built-in" },
+                    { label: "Developer access", value: "Earned" },
                   ].map((item) => (
                     <div key={item.label} className="rounded-xl border border-white/10 bg-black/20 p-4">
                       <p className="text-xs text-slate-400">{item.label}</p>
@@ -425,9 +425,9 @@ export default function LandingPage() {
               </motion.div>
 
               {[
-                { icon: Shield, title: "Legally yours", desc: "Every fraction is backed by proper title and legal documentation. You own a real share." },
-                { icon: Users, title: "Hands-off income", desc: "We handle tenants, maintenance, and collections. You just watch returns arrive." },
-                { icon: Award, title: "Institutional diligence", desc: "Properties pass strict location, title, and cash-flow checks before listing." },
+                { icon: Shield, title: "Funds never go direct", desc: "Unlike before, you don’t wire money straight to developers. Trustees sit in the middle." },
+                { icon: Users, title: "Milestone releases only", desc: "Developers get capital when they deliver — not upfront on trust alone." },
+                { icon: Award, title: "Safe & secure by design", desc: "Opco exists to prove to investors that their funds are protected until value is delivered." },
               ].map((feature, i) => (
                 <motion.div
                   key={feature.title}
@@ -583,10 +583,10 @@ export default function LandingPage() {
           <div className="relative mx-auto max-w-6xl overflow-hidden rounded-[2.5rem] border border-white/10 bg-gradient-to-br from-[#870F73] to-[#5a0a4c] p-12 text-center md:p-20">
             <div className="pointer-events-none absolute -top-20 left-1/2 h-64 w-[600px] -translate-x-1/2 rounded-full bg-white/10 blur-[80px]" />
             <h2 className="font-display relative text-4xl font-bold tracking-tight text-white md:text-6xl">
-              Your money deserves better<br />than a savings account.
+              Your funds stay safe<br />until milestones are met.
             </h2>
             <p className="relative mx-auto mt-5 max-w-xl text-lg text-white/80">
-              Join 5,000+ Nigerians growing wealth through premium real estate. Create your free account today.
+              Invest through trustees. We release capital to developers only when they deliver — so your money is never left unprotected.
             </p>
             <div className="relative mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
               <Link href="/auth/signup">
@@ -611,7 +611,7 @@ export default function LandingPage() {
             <div className="md:col-span-1">
               <img src="/urbco-logo.svg" alt="Urbco" className="mb-4 h-8 brightness-0 invert" />
               <p className="max-w-xs text-sm leading-relaxed text-slate-400">
-                Nigeria&apos;s leading fractional real estate investment platform. Own premium property, start small, grow big.
+                Trustee-secured real estate investing. Your capital is held safely and released to developers only at verified milestones.
               </p>
             </div>
             <div>
