@@ -88,7 +88,7 @@ export default function LandingPage() {
         <div className="mx-auto max-w-7xl px-6 pt-4">
           <div className="flex h-16 items-center justify-between rounded-2xl border border-white/10 bg-[#12101a]/80 px-5 shadow-[0_8px_30px_rgb(0_0_0/0.35)] backdrop-blur-xl">
             <Link href="/" className="flex items-center">
-              <img src="/urbco-logo.svg" alt="Urbco" className="h-8 brightness-0 invert" />
+              <img src="/urbco-logo-white.svg" alt="Urbco" className="h-10" />
             </Link>
             <nav className="hidden items-center gap-8 lg:flex">
               <Link href="/marketplace" className="text-sm font-medium text-slate-300 transition-colors hover:text-white">Own-a-Fraction</Link>
@@ -609,7 +609,7 @@ export default function LandingPage() {
         <div className="mx-auto max-w-7xl">
           <div className="grid gap-10 md:grid-cols-4">
             <div className="md:col-span-1">
-              <img src="/urbco-logo.svg" alt="Urbco" className="mb-4 h-8 brightness-0 invert" />
+              <img src="/urbco-logo-white.svg" alt="Urbco" className="mb-4 h-10" />
               <p className="max-w-xs text-sm leading-relaxed text-slate-400">
                 Trustee-secured real estate investing. Investors fund trustees, and trustees release funds to developers only when milestones are reached.
               </p>
