@@ -27,39 +27,39 @@ import Link from "next/link";
 import { useState } from "react";
 
 export default function LandingPage() {
-  const [investmentAmount, setInvestmentAmount] = useState(1000000);
+  const [investmentAmount, setInvestmentAmount] = useState(10000000);
   const heroProperty = properties[0];
 
   const stats = [
     { label: "Trustee-Protected Capital", value: "₦12.5B+", icon: Wallet },
-    { label: "Active Investors", value: "5,000+", icon: Users },
-    { label: "Milestone-Gated Releases", value: "100%", icon: LineChart },
+    { label: "Average Investment Ticket", value: "₦15M+", icon: Users },
+    { label: "Fixed-Term Annual ROI", value: "22.5%", icon: LineChart },
   ];
 
   const howItWorks = [
-    { step: "01", title: "You invest", desc: "You send your funds to independent trustees — never directly to the developer." },
-    { step: "02", title: "Trustees hold your money", desc: "Your capital stays safe and secure until the developer reaches an agreed milestone." },
-    { step: "03", title: "Milestone reached", desc: "When the developer hits a milestone, trustees release the matching funds." },
-    { step: "04", title: "Developer gets paid", desc: "Developers receive funds only for what has been delivered — trust built into every stage." },
+    { step: "01", title: "Deploy large capital", desc: "Allocate ₦10M–₦100M+ in one go. Your funds go straight to independent trustees, never to the developer." },
+    { step: "02", title: "Trustees secure your capital", desc: "Capital is held safely and released to the developer only when verified milestones are met — your money stays protected." },
+    { step: "03", title: "Earn while you wait", desc: "Quarterly dividends and capital appreciation accrue to your in-app wallet and portfolio throughout the term." },
+    { step: "04", title: "Capital + ROI at term", desc: "At the end of the fixed term, principal plus returns are settled. Track everything live inside the app." },
   ];
 
   const testimonials = [
     {
       name: "Chinedu Okafor",
-      role: "Business Owner, Lagos",
-      quote: "Knowing trustees hold my funds until milestones are met, I finally feel safe putting money into development projects.",
+      role: "Portfolio Investor — ₦50M Deployed, Lagos",
+      quote: "I deployed ₦50M and watch dividends hit my wallet every quarter. At term, capital plus ROI landed without chasing anyone.",
       initials: "CO",
     },
     {
       name: "Fatima Abdullahi",
-      role: "Doctor, Abuja",
-      quote: "Before Urbco there was no trust layer. Now trustees release money only when the developer delivers — that changed everything.",
+      role: "Private Investor — ₦25M Deployed, Abuja",
+      quote: "For large tickets, trust is everything. Trustees holding funds until milestones is the reason I moved my capital to Urbco.",
       initials: "FA",
     },
     {
       name: "Tunde Bakare",
-      role: "Tech Entrepreneur",
-      quote: "I can see exactly when each milestone is hit and when funds are released. Transparency I never had before.",
+      role: "Family Office, Lagos",
+      quote: "We allocate 8-figure sums per asset. The portfolio, wallet and dividend tracking inside the app is exactly what high-value investors need.",
       initials: "TB",
     },
   ];
@@ -117,29 +117,29 @@ export default function LandingPage() {
             <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
               <Badge className="mb-6 border border-[#D4A065]/30 bg-[#D4A065]/10 px-4 py-1.5 text-[#D4A065]">
                 <Sparkles className="mr-1.5 h-3.5 w-3.5" />
-                Trustee-Protected Real Estate Investment
+                For High-Value Investors • Trustee-Secured
               </Badge>
               <h1 className="font-display text-5xl font-bold leading-[1.05] tracking-tight text-white md:text-[4.25rem]">
-                Invest in real estate.
+                Deploy large capital.
                 <br />
-                <span className="gradient-text">Earn up to 22.5% annually.</span>
+                <span className="gradient-text">Earn term-based ROI.</span>
               </h1>
               <p className="mt-6 max-w-xl text-lg leading-relaxed text-slate-400">
-                Start with as little as <span className="font-semibold text-white">₦500,000</span> and
-                grow your capital through rental income and appreciation — while independent trustees
-                keep your funds safe until every milestone is met.
+                For investors who allocate <span className="font-semibold text-white">₦10M — ₦100M+</span> per
+                asset. Lock in for a fixed term, receive quarterly dividends in your in-app wallet, and
+                track capital growth — all secured by independent trustees until milestones are met.
               </p>
 
               <div className="mt-9 flex flex-col gap-4 sm:flex-row">
                 <Link href="/auth/signup">
                   <Button variant="premium" size="lg" className="w-full group sm:w-auto">
-                    Start Investing Now
+                    Allocate Capital Now
                     <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
                   </Button>
                 </Link>
                 <Link href="/marketplace">
                   <Button variant="outline" size="lg" className="w-full border-white/15 bg-white/5 text-white hover:bg-white/10 sm:w-auto">
-                    Explore Portfolio
+                    View Assets
                   </Button>
                 </Link>
               </div>
@@ -159,7 +159,7 @@ export default function LandingPage() {
                     ))}
                     <span className="ml-1 text-sm font-semibold text-white">4.9</span>
                   </div>
-                  <p className="text-sm text-slate-400">Trusted by 5,000+ investors</p>
+                  <p className="text-sm text-slate-400">Trusted by high-value investors</p>
                 </div>
               </div>
             </motion.div>
@@ -350,7 +350,7 @@ export default function LandingPage() {
                 <Rocket className="mr-1.5 h-3.5 w-3.5" /> How It Works
               </Badge>
               <h2 className="font-display text-4xl font-bold tracking-tight text-white md:text-5xl">
-                How trustee protection <span className="gradient-text">works</span>
+                How high-value capital <span className="gradient-text">grows</span>
               </h2>
             </div>
 
@@ -387,11 +387,11 @@ export default function LandingPage() {
                   <Shield className="mr-1.5 h-3.5 w-3.5" /> Why Urbco
                 </Badge>
                 <h2 className="font-display text-4xl font-bold tracking-tight text-white md:text-5xl">
-                  The layer of trust<br />investing was <span className="gradient-text">missing.</span>
+                  Built for capital that<br />expects <span className="gradient-text">more.</span>
                 </h2>
               </div>
               <p className="text-lg leading-relaxed text-slate-400 lg:max-w-md lg:justify-self-end">
-                Before now, investors gave developers money without any layer of trust. Urbco changes that — trustees hold the funds and release them only when milestones are reached.
+                Large deployments deserve institutional discipline. Trustees hold your funds, dividends land in your in-app wallet quarterly, and the portfolio shows live capital + ROI until term settlement.
               </p>
             </div>
 
@@ -405,16 +405,16 @@ export default function LandingPage() {
                 <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#870F73]">
                   <TrendingUp className="h-7 w-7 text-white" />
                 </div>
-                <h3 className="font-display mt-6 text-2xl font-bold text-white">Money that&apos;s safe before it&apos;s spent</h3>
+                <h3 className="font-display mt-6 text-2xl font-bold text-white">Large capital, fully secured</h3>
                 <p className="mt-3 mb-8 max-w-md leading-relaxed text-slate-400">
-                  Investors send money to the trustees. The trustees then release money to developers only when milestones are met — so your funds stay safe and secure at every stage.
+                  Deploy millions in one allocation. Trustees hold capital until milestones are verified, while dividends and appreciation flow to your wallet and portfolio inside the app.
                 </p>
                 <div className="grid grid-cols-2 gap-4">
                   {[
+                    { label: "Ticket size", value: "₦10M — ₦100M+" },
+                    { label: "Dividends", value: "Quarterly to Wallet" },
                     { label: "Funds held by", value: "Trustees" },
-                    { label: "Release trigger", value: "Milestones" },
-                    { label: "Investor trust layer", value: "Guaranteed" },
-                    { label: "Developer access", value: "Earned" },
+                    { label: "ROI at term", value: "Capital + 22.5% p.a." },
                   ].map((item) => (
                     <div key={item.label} className="rounded-xl border border-white/10 bg-black/20 p-4">
                       <p className="text-xs text-slate-400">{item.label}</p>
@@ -425,9 +425,9 @@ export default function LandingPage() {
               </motion.div>
 
               {[
-                { icon: Shield, title: "No more direct transfers", desc: "Before, investors gave developers money with no layer of trust. With Urbco, trustees sit between them." },
-                { icon: Users, title: "Milestone-gated releases", desc: "Developers receive funds only when they reach each milestone — never upfront on promises alone." },
-                { icon: Award, title: "Safe & secure by design", desc: "Our goal is to show every developer that investor funds are safe and secure until value is delivered." },
+                { icon: Shield, title: "Dividends inside the app", desc: "Quarterly payouts land in your Urbco wallet. Track, withdraw or compound — all without leaving the app." },
+                { icon: Users, title: "Portfolio-level tracking", desc: "Monitor large allocations, live valuations, asset allocation and upcoming dividends in one place." },
+                { icon: Award, title: "Trustee-secured until term", desc: "Capital is only released on verified milestones. At term, you receive capital plus accrued ROI — secure by design." },
               ].map((feature, i) => (
                 <motion.div
                   key={feature.title}
@@ -457,29 +457,29 @@ export default function LandingPage() {
                   <LineChart className="mr-1.5 h-3.5 w-3.5" /> ROI Calculator
                 </Badge>
                 <h2 className="font-display text-3xl font-bold tracking-tight text-white md:text-5xl">
-                  See what your money could become
+                  See what large capital could return
                 </h2>
-                <p className="mt-3 text-slate-400">Drag the amount and watch your projected returns grow.</p>
+                <p className="mt-3 text-slate-400">Allocate ₦10M+ and project your term ROI. Dividends are paid quarterly inside the app.</p>
               </div>
 
               <div className="grid items-center gap-10 md:grid-cols-2">
                 <div>
                   <label className="mb-3 flex items-center justify-between text-sm">
-                    <span className="text-slate-300">Investment amount</span>
+                    <span className="text-slate-300">Allocation amount</span>
                     <span className="font-display text-xl font-bold text-white">{formatCurrency(investmentAmount)}</span>
                   </label>
                   <input
                     type="range"
-                    min={500000}
-                    max={50000000}
-                    step={500000}
+                    min={10000000}
+                    max={100000000}
+                    step={1000000}
                     value={investmentAmount}
                     onChange={(e) => setInvestmentAmount(Number(e.target.value))}
                     className="w-full accent-[#D4A065]"
                   />
                   <div className="mt-2 flex justify-between text-xs text-slate-500">
-                    <span>₦500K</span>
-                    <span>₦50M</span>
+                    <span>₦10M</span>
+                    <span>₦100M</span>
                   </div>
 
                   <div className="mt-8 space-y-3">
@@ -526,7 +526,7 @@ export default function LandingPage() {
                     <p className="font-display text-4xl font-bold text-white">
                       +{formatCurrency(calculateReturns(investmentAmount, 5))}
                     </p>
-                    <p className="mt-1 text-sm text-slate-400">projected in 5 years<br />at 22% p.a.</p>
+                    <p className="mt-1 text-sm text-slate-400">projected in 5 years<br />at 22.5% p.a. — dividends quarterly</p>
                   </div>
                 </div>
               </div>
@@ -542,7 +542,7 @@ export default function LandingPage() {
                 <Users className="mr-1.5 h-3.5 w-3.5" /> Investor Stories
               </Badge>
               <h2 className="font-display text-4xl font-bold tracking-tight text-white md:text-5xl">
-                Real people. <span className="gradient-text">Real returns.</span>
+                Trusted by investors deploying <span className="gradient-text">millions.</span>
               </h2>
             </div>
 
@@ -583,10 +583,10 @@ export default function LandingPage() {
           <div className="relative mx-auto max-w-6xl overflow-hidden rounded-[2.5rem] border border-white/10 bg-gradient-to-br from-[#870F73] to-[#5a0a4c] p-12 text-center md:p-20">
             <div className="pointer-events-none absolute -top-20 left-1/2 h-64 w-[600px] -translate-x-1/2 rounded-full bg-white/10 blur-[80px]" />
             <h2 className="font-display relative text-4xl font-bold tracking-tight text-white md:text-6xl">
-              Invest with the trust layer<br />that actually protects you.
+              Deploy millions. Get ROI at term.
             </h2>
             <p className="relative mx-auto mt-5 max-w-xl text-lg text-white/80">
-              Send your money to trustees, not developers. Funds are released only when milestones are met — so you never invest without protection. Create your free account today.
+              Allocate large capital, receive quarterly dividends in your in-app wallet, and collect capital plus returns at the end of the fixed term — all secured by trustees.
             </p>
             <div className="relative mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
               <Link href="/auth/signup">
@@ -611,7 +611,7 @@ export default function LandingPage() {
             <div className="md:col-span-1">
               <img src="/urbco-logo-white.svg" alt="Urbco" className="mb-4 h-10" />
               <p className="max-w-xs text-sm leading-relaxed text-slate-400">
-                Trustee-secured real estate investing. Investors fund trustees, and trustees release funds to developers only when milestones are reached.
+                For high-value investors allocating ₦10M+ per asset. Trustee-secured, dividend-paying, term-based real estate investing.
               </p>
             </div>
             <div>
