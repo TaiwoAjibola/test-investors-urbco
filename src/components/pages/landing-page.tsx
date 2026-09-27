@@ -149,9 +149,10 @@ export default function LandingPage() {
                 transition={{ duration: 0.55, delay: 0.08 }}
                 className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-slate-600 sm:text-lg"
               >
-                Urbco gives you two ways to own Nigerian real estate — a high-value institutional track for
-                large capital, and a fractional track for building wealth steadily. Capital is held by an
-                independent trustee and released against verified milestones.
+                Urbco gives you two ways to own Nigerian real estate. Urbco Foundry serves high-net-worth
+                individuals, family offices and institutions deploying large capital. Urbco Harbour is
+                for individuals building wealth gradually from ₦100K. Capital is held by an independent
+                trustee and released against verified milestones.
               </motion.p>
 
               <motion.div
@@ -204,8 +205,8 @@ export default function LandingPage() {
                 Choose the track that fits your capital
               </h2>
               <p className="mt-4 text-slate-600">
-                Both tracks are trustee-secured and pay quarterly. The difference is ticket size, structure,
-                and how you participate in the asset.
+                Both are trustee-secured and pay quarterly. Urbco Foundry serves high-net-worth individuals, family
+                offices and institutions; Urbco Harbour is for individual investors building wealth over time.
               </p>
             </div>
 
@@ -219,7 +220,7 @@ export default function LandingPage() {
                     </span>
                     <Badge className="bg-accent-500 text-slate-900">High-value track</Badge>
                   </div>
-                  <h3 className="mt-5 font-display text-2xl font-bold text-slate-900">Institutional Track</h3>
+                  <h3 className="mt-5 font-display text-2xl font-bold text-slate-900">Urbco Foundry</h3>
                   <p className="mt-1 text-sm font-semibold text-accent-700">Tickets from ₦200M</p>
                   <p className="mt-4 text-sm leading-relaxed text-slate-600">
                     For family offices, HNWIs and institutions deploying large capital into completed and
@@ -241,7 +242,7 @@ export default function LandingPage() {
                   </ul>
                   <Link href="/auth/signup?track=foundry" className="mt-auto pt-8">
                     <Button variant="outline" className="w-full border-accent-400 text-accent-800 hover:bg-accent-50">
-                      Apply for institutional access <ArrowRight className="ml-2 h-4 w-4" />
+                      Apply for Foundry access <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                   </Link>
                 </CardContent>
@@ -256,7 +257,7 @@ export default function LandingPage() {
                     </span>
                     <Badge className="bg-brand-600 text-white">Fractional track</Badge>
                   </div>
-                  <h3 className="mt-5 font-display text-2xl font-bold text-slate-900">Fractional Track</h3>
+                  <h3 className="mt-5 font-display text-2xl font-bold text-slate-900">Urbco Harbour</h3>
                   <p className="mt-1 text-sm font-semibold text-brand-700">Entry from ₦100K</p>
                   <p className="mt-4 text-sm leading-relaxed text-slate-600">
                     For individuals and families building wealth over time. Buy fractions of income-producing
@@ -277,7 +278,7 @@ export default function LandingPage() {
                   </ul>
                   <Link href="/auth/signup?track=harbor" className="mt-auto pt-8">
                     <Button className="w-full">
-                      Start fractional investing <ArrowRight className="ml-2 h-4 w-4" />
+                      Start with Harbour <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                   </Link>
                 </CardContent>
@@ -303,8 +304,8 @@ export default function LandingPage() {
               <div className="inline-flex w-full shrink-0 gap-1 rounded-xl border border-line bg-surface-sunken p-1 sm:w-auto" role="tablist" aria-label="Filter assets by track">
                 {([
                   { key: "all", label: "All" },
-                  { key: "foundry", label: "Institutional" },
-                  { key: "harbor", label: "Fractional" },
+                  { key: "foundry", label: "Urbco Foundry" },
+                  { key: "harbor", label: "Urbco Harbour" },
                 ] as const).map((t) => (
                   <button
                     key={t.key}
@@ -438,7 +439,7 @@ export default function LandingPage() {
                     <div className="text-xs font-semibold text-slate-500">Track yield</div>
                     <div className="mt-1 font-display text-2xl font-extrabold text-slate-900">{calcYield}%</div>
                     <div className="mt-0.5 text-xs text-slate-500">
-                      {activeTrack === "harbor" ? "Fractional" : activeTrack === "foundry" ? "Institutional" : "Blended average"}
+                      {activeTrack === "harbor" ? "Urbco Harbour" : activeTrack === "foundry" ? "Urbco Foundry" : "Blended average"}
                     </div>
                   </div>
                   <div className="rounded-xl border border-line bg-surface-sunken p-5">
@@ -477,9 +478,9 @@ export default function LandingPage() {
 
             <div className="mt-14 grid gap-6 md:grid-cols-3">
               {[
-                { icon: Sparkles, title: "Individuals", body: "Complete identity verification in-app and start from ₦100K. No paperwork queues.", cta: "Start with ₦100K" },
-                { icon: Briefcase, title: "Family Offices", body: "Dedicated onboarding with AUM evidence, trustee documentation and a named advisor.", cta: "Talk to an advisor" },
-                { icon: Landmark, title: "Institutions", body: "Full KYB: CAC verification, UBO identification and sanctions/PEP screening.", cta: "Institutional onboarding" },
+                { icon: Sparkles, title: "High-net-worth individuals", body: "Join Urbco Foundry for direct allocations in completed and near-completion assets.", cta: "Join Urbco Foundry" },
+                { icon: Briefcase, title: "Family offices", body: "Join Urbco Foundry with AUM evidence, trustee documentation and a named advisor.", cta: "Join Urbco Foundry" },
+                { icon: Landmark, title: "Institutions", body: "Join Urbco Foundry with full KYB: CAC verification, UBO identification and sanctions/PEP screening.", cta: "Start KYB" },
               ].map((t) => (
                 <Card key={t.title} className="border-line">
                   <CardContent className="p-6">

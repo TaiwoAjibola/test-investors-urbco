@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, Suspense } from "react";
-import { motion } from "framer-motion";
-import { Mail, Lock, User, Phone, Eye, EyeOff, ArrowRight, Crown, Anchor, Building2, Briefcase, Users, ShieldCheck, Check } from "lucide-react";
+import { Mail, Lock, User, Phone, Eye, EyeOff, ArrowRight, Crown, Anchor, Building2, Briefcase, Users, ShieldCheck, Check, Landmark, IdCard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,34 +10,63 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 
+type Track = "foundry" | "harbor";
+type Entity = "individual" | "family-office" | "institution";
+
 const TRACKS = [
   {
     key: "foundry" as const,
-    name: "Institutional",
+    name: "Urbco Foundry",
     icon: Crown,
-    blurb: "For family offices, HNWIs and institutions",
+    blurb: "High-value institutional investing",
     detail: "Allocations from ₦200M into completed and near-completion assets.",
-    accent: "border-accent-400 bg-accent-50",
+    accent: "border-accent-500 bg-accent-50",
     iconClass: "bg-accent-100 text-accent-700",
-    dot: "bg-accent-600",
   },
   {
     key: "harbor" as const,
-    name: "Fractional",
+    name: "Urbco Harbour",
     icon: Anchor,
-    blurb: "For individuals building wealth steadily",
+    blurb: "Fractional investing for individuals",
     detail: "Entry from ₦100K with quarterly wallet dividends.",
-    accent: "border-brand-400 bg-brand-50",
+    accent: "border-brand-500 bg-brand-50",
     iconClass: "bg-brand-100 text-brand-700",
-    dot: "bg-brand-600",
   },
 ];
 
-const ENTITY_TYPES = [
-  { key: "individual" as const, label: "Individual", icon: Users, on: "border-brand-500 bg-brand-50 text-brand-800", off: "border-line bg-white text-slate-600 hover:border-brand-200" },
-  { key: "family-office" as const, label: "Family office", icon: Briefcase, on: "border-brand-500 bg-brand-50 text-brand-800", off: "border-line bg-white text-slate-600 hover:border-brand-200" },
-  { key: "institution" as const, label: "Institution", icon: Building2, on: "border-brand-500 bg-brand-50 text-brand-800", off: "border-line bg-white text-slate-600 hover:border-brand-200" },
+const ENTITY_OPTIONS: Record<Track, { key: Entity; label: string; icon: typeof Users; blurb: string }[]> = {
+  foundry: [
+    { key: "individual", label: "High-net-worth individual", icon: User, blurb: "Personal account, large capital" },
+    { key: "family-office", label: "Family office", icon: Briefcase, blurb: "Office with trustees and advisors" },
+    { key: "institution", label: "Institution", icon: Building2, blurb: "Pension, bank, fund or corporate" },
+  ],
+  harbor: [
+    { key: "individual", label: "Individual", icon: Users, blurb: "Personal account, invest from ₦100K" },
+  ],
+};
+
+const COUNTRIES = [
+  { v: "NG", l: "Nigeria" }, { v: "GH", l: "Ghana" }, { v: "KE", l: "Kenya" },
+  { v: "ZA", l: "South Africa" }, { v: "UK", l: "United Kingdom" }, { v: "US", l: "United States" }, { v: "AE", l: "United Arab Emirates" },
 ];
+
+const INSTITUTION_TYPES = [
+  "Pension fund", "Asset manager", "Insurance company", "Bank", "Private equity",
+  "Corporate treasury", "Endowment", "Sovereign wealth fund", "Other",
+];
+
+const STRUCTURES = ["Equity", "Debt / note", "Revenue share", "Joint venture"];
+
+function Section({ step, title, children }: { step: number; title: string; children: React.ReactNode }) {
+  return (
+    <fieldset>
+      <legend className="mb-3 text-sm font-semibold text-slate-900">
+        <span className="text-brand-600">{step}.</span> {title}
+      </legend>
+      {children}
+    </fieldset>
+  );
+}
 
 export default function SignupPage() {
   return (
@@ -51,31 +79,50 @@ export default function SignupPage() {
 function SignupContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const initialTrack = searchParams?.get("track") === "foundry" ? "foundry" : "harbor";
+  const initialTrack: Track = searchParams?.get("track") === "foundry" ? "foundry" : "harbor";
 
-  const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    phone: "",
-    password: "",
-    confirmPassword: "",
-    country: "NG",
-    investorTrack: initialTrack as "foundry" | "harbor",
-    entityType: "individual" as "individual" | "family-office" | "institution",
-  });
+  const [track, setTrack] = useState<Track>(initialTrack);
+  const [entity, setEntity] = useState<Entity>("individual");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [agreed, setAgreed] = useState(false);
 
-  const passwordsMatch = formData.confirmPassword.length === 0 || formData.password === formData.confirmPassword;
+  const [form, setForm] = useState({
+    // shared account
+    fullName: "", email: "", phone: "", password: "", confirmPassword: "", country: "NG",
+    // individual
+    dateOfBirth: "", nationality: "Nigerian", idType: "Passport",
+    sourceOfFunds: "Employment income", employmentStatus: "Employed",
+    // family office
+    entityName: "", aumRange: "$10M – $50M", registrationNumber: "", officeCountry: "NG",
+    // institution
+    institutionType: INSTITUTION_TYPES[0], institutionName: "", cacNumber: "", taxId: "", regulatorName: "",
+    // foundry sizing
+    ticketSize: "₦200M – ₦500M", targetAssets: "Income-producing", horizon: "3 – 5 years", structure: STRUCTURES[0],
+  });
+
+  const set = (patch: Partial<typeof form>) => setForm({ ...form, ...patch });
+  const isHarbour = track === "harbor";
+  const isInstitution = entity === "institution";
+  const isFamilyOffice = entity === "family-office";
+
+  const passwordsMatch = form.confirmPassword.length === 0 || form.password === form.confirmPassword;
+
+  // Switch track: reset entity to a valid option for the new track
+  const chooseTrack = (next: Track) => {
+    if (next === track) return;
+    setTrack(next);
+    if (next === "harbor") setEntity("individual");
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!agreed || !passwordsMatch) return;
     setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 1200));
+    await new Promise((r) => setTimeout(r, 1200));
     setIsLoading(false);
-    router.push("/auth/otp-verify");
+    // Institutions complete full KYB on the dedicated onboarding route after OTP.
+    router.push(isInstitution ? "/onboard/institutional" : "/auth/otp-verify");
   };
 
   return (
@@ -87,27 +134,25 @@ function SignupContent() {
 
         <Card className="border-line shadow-card">
           <CardHeader className="px-6 pb-2 text-center sm:px-8">
-            <CardTitle className="font-display text-2xl font-extrabold text-slate-900 sm:text-3xl">Create your account</CardTitle>
+            <CardTitle className="font-display text-2xl font-extrabold text-slate-900 sm:text-3xl">
+              Create your account
+            </CardTitle>
             <CardDescription className="mt-1 text-slate-600">
-              Tell us how you plan to invest so we can set up the right onboarding.
+              Choose a track and tell us about you — the questions you see next depend on both.
             </CardDescription>
           </CardHeader>
 
           <CardContent className="px-6 pt-6 sm:px-8">
             <form onSubmit={handleSubmit} className="space-y-7">
               {/* 1 — Track */}
-              <fieldset>
-                <legend className="mb-3 text-sm font-semibold text-slate-900">
-                  <span className="text-brand-600">1.</span> Choose your investment track
-                </legend>
+              <Section step={1} title="Choose your investment track">
                 <div className="grid gap-3 sm:grid-cols-2">
                   {TRACKS.map((t) => {
-                    const selected = formData.investorTrack === t.key;
+                    const selected = track === t.key;
                     return (
                       <button
-                        type="button"
-                        key={t.key}
-                        onClick={() => setFormData({ ...formData, investorTrack: t.key })}
+                        type="button" key={t.key}
+                        onClick={() => chooseTrack(t.key)}
                         aria-pressed={selected}
                         className={`cursor-pointer rounded-xl border p-4 text-left transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 ${
                           selected ? t.accent : "border-line bg-white hover:border-slate-300"
@@ -126,64 +171,64 @@ function SignupContent() {
                     );
                   })}
                 </div>
-              </fieldset>
+              </Section>
 
-              {/* 2 — Entity type */}
-              <fieldset>
-                <legend className="mb-3 text-sm font-semibold text-slate-900">
-                  <span className="text-brand-600">2.</span> How will you invest?
-                </legend>
-                <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-3">
-                  {ENTITY_TYPES.map((e) => {
-                    const selected = formData.entityType === e.key;
+              {/* 2 — Investor category (track-dependent) */}
+              <Section step={2} title={isHarbour ? "You are investing as" : "Who is investing?"}>
+                <div className={`grid gap-2.5 ${isHarbour ? "grid-cols-1" : "sm:grid-cols-3"}`}>
+                  {ENTITY_OPTIONS[track].map((o) => {
+                    const selected = entity === o.key;
                     return (
                       <button
-                        type="button"
-                        key={e.key}
-                        onClick={() => setFormData({ ...formData, entityType: e.key })}
+                        type="button" key={o.key}
+                        onClick={() => setEntity(o.key)}
                         aria-pressed={selected}
-                        className={`flex cursor-pointer items-center gap-2.5 rounded-xl border px-3.5 py-3 text-left text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 ${
-                          selected ? e.on : e.off
+                        className={`flex cursor-pointer items-start gap-2.5 rounded-xl border px-3.5 py-3 text-left transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 ${
+                          selected
+                            ? "border-brand-500 bg-brand-50 text-brand-800"
+                            : "border-line bg-white text-slate-600 hover:border-brand-200"
                         }`}
                       >
-                        <e.icon className="h-4 w-4 shrink-0" />
-                        {e.label}
+                        <o.icon className="mt-0.5 h-4 w-4 shrink-0" />
+                        <span>
+                          <span className="block text-sm font-semibold">{o.label}</span>
+                          <span className="mt-0.5 block text-xs text-slate-500">{o.blurb}</span>
+                        </span>
                       </button>
                     );
                   })}
                 </div>
-                {formData.entityType === "institution" && (
-                  <p className="mt-3 flex items-start gap-2 rounded-lg border border-brand-200 bg-brand-50 p-3 text-xs text-brand-800">
-                    <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0" />
-                    After email verification you will be routed to institutional onboarding for CAC, UBO and
-                    sanctions/PEP screening.
+                {isHarbour && (
+                  <p className="mt-3 flex items-start gap-2 rounded-lg border border-line bg-surface-sunken p-3 text-xs text-slate-600">
+                    <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-brand-600" />
+                    Urbco Harbour is for individual investors. Family offices and institutions join
+                    through Urbco Foundry.
                   </p>
                 )}
-              </fieldset>
+              </Section>
 
-              {/* 3 — Details */}
-              <fieldset>
-                <legend className="mb-3 text-sm font-semibold text-slate-900">
-                  <span className="text-brand-600">3.</span> Your details
-                </legend>
+              {/* 3 — Account details (all tracks) */}
+              <Section step={3} title="Account details">
                 <div className="space-y-4">
                   <div className="grid gap-4 sm:grid-cols-2">
                     <div className="space-y-1.5">
-                      <Label htmlFor="fullName" className="text-slate-700">Full name</Label>
+                      <Label htmlFor="fullName" className="text-slate-700">
+                        {isInstitution ? "Signatory full name" : isFamilyOffice ? "Your full name" : "Full name"}
+                      </Label>
                       <div className="relative">
                         <User className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-                        <Input id="fullName" placeholder="e.g. Ada Okonkwo" value={formData.fullName}
-                          onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                          className="pl-9" required autoComplete="name" />
+                        <Input id="fullName" value={form.fullName} onChange={(e) => set({ fullName: e.target.value })}
+                          className="pl-9" required autoComplete="name" placeholder="e.g. Ada Okonkwo" />
                       </div>
                     </div>
                     <div className="space-y-1.5">
-                      <Label htmlFor="email" className="text-slate-700">Email address</Label>
+                      <Label htmlFor="email" className="text-slate-700">
+                        {isInstitution ? "Official company email" : "Email address"}
+                      </Label>
                       <div className="relative">
                         <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-                        <Input id="email" type="email" placeholder="you@example.com" value={formData.email}
-                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                          className="pl-9" required autoComplete="email" />
+                        <Input id="email" type="email" value={form.email} onChange={(e) => set({ email: e.target.value })}
+                          className="pl-9" required autoComplete="email" placeholder="you@example.com" />
                       </div>
                     </div>
                   </div>
@@ -193,23 +238,21 @@ function SignupContent() {
                       <Label htmlFor="phone" className="text-slate-700">Phone number</Label>
                       <div className="relative">
                         <Phone className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-                        <Input id="phone" type="tel" placeholder="+234 801 234 5678" value={formData.phone}
-                          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                          className="pl-9" required autoComplete="tel" />
+                        <Input id="phone" type="tel" value={form.phone} onChange={(e) => set({ phone: e.target.value })}
+                          className="pl-9" required autoComplete="tel" placeholder="+234 801 234 5678" />
                       </div>
                     </div>
                     <div className="space-y-1.5">
-                      <Label htmlFor="country" className="text-slate-700">Country</Label>
-                      <Select value={formData.country} onValueChange={(v) => setFormData({ ...formData, country: v })}>
+                      <Label htmlFor="country" className="text-slate-700">
+                        {isFamilyOffice ? "Office country" : isInstitution ? "Country of registration" : "Country of residence"}
+                      </Label>
+                      <Select
+                        value={isFamilyOffice ? form.officeCountry : form.country}
+                        onValueChange={(v) => set(isFamilyOffice ? { officeCountry: v } : { country: v })}
+                      >
                         <SelectTrigger id="country" className="w-full"><SelectValue /></SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="NG">Nigeria</SelectItem>
-                          <SelectItem value="GH">Ghana</SelectItem>
-                          <SelectItem value="KE">Kenya</SelectItem>
-                          <SelectItem value="ZA">South Africa</SelectItem>
-                          <SelectItem value="UK">United Kingdom</SelectItem>
-                          <SelectItem value="US">United States</SelectItem>
-                          <SelectItem value="AE">United Arab Emirates</SelectItem>
+                          {COUNTRIES.map((c) => <SelectItem key={c.v} value={c.v}>{c.l}</SelectItem>)}
                         </SelectContent>
                       </Select>
                     </div>
@@ -220,13 +263,12 @@ function SignupContent() {
                       <Label htmlFor="password" className="text-slate-700">Password</Label>
                       <div className="relative">
                         <Lock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-                        <Input id="password" type={showPassword ? "text" : "password"} placeholder="••••••••"
-                          value={formData.password}
-                          onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                          className="pl-9 pr-10" required autoComplete="new-password" minLength={8} />
+                        <Input id="password" type={showPassword ? "text" : "password"} value={form.password}
+                          onChange={(e) => set({ password: e.target.value })}
+                          className="pl-9 pr-10" required minLength={8} autoComplete="new-password" placeholder="Min. 8 characters" />
                         <button type="button" onClick={() => setShowPassword((v) => !v)}
-                          className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-slate-400 transition-colors hover:text-slate-700"
-                          aria-label={showPassword ? "Hide password" : "Show password"}>
+                          aria-label={showPassword ? "Hide password" : "Show password"}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-slate-400 transition-colors hover:text-slate-700">
                           {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                         </button>
                       </div>
@@ -235,25 +277,211 @@ function SignupContent() {
                       <Label htmlFor="confirmPassword" className="text-slate-700">Confirm password</Label>
                       <div className="relative">
                         <Lock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-                        <Input id="confirmPassword" type={showPassword ? "text" : "password"} placeholder="••••••••"
-                          value={formData.confirmPassword}
-                          onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-                          className={`pl-9 ${!passwordsMatch ? "border-red-400 focus-visible:ring-red-500" : ""}`}
-                          required autoComplete="new-password" />
+                        <Input id="confirmPassword" type={showPassword ? "text" : "password"} value={form.confirmPassword}
+                          onChange={(e) => set({ confirmPassword: e.target.value })}
+                          className={`pl-9 ${!passwordsMatch ? "border-red-400" : ""}`} required autoComplete="new-password" />
                       </div>
                       {!passwordsMatch && <p className="text-xs text-red-600">Passwords do not match.</p>}
                     </div>
                   </div>
                 </div>
-              </fieldset>
+              </Section>
+
+              {/* 4 — Track & category specific questions */}
+              {isHarbour ? (
+                <Section step={4} title="About you">
+                  <div className="space-y-4">
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <div className="space-y-1.5">
+                        <Label htmlFor="dob" className="text-slate-700">Date of birth</Label>
+                        <Input id="dob" type="date" value={form.dateOfBirth} onChange={(e) => set({ dateOfBirth: e.target.value })} required />
+                      </div>
+                      <div className="space-y-1.5">
+                        <Label htmlFor="idType" className="text-slate-700">Primary ID</Label>
+                        <Select value={form.idType} onValueChange={(v) => set({ idType: v })}>
+                          <SelectTrigger id="idType" className="w-full"><SelectValue /></SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Passport">Passport</SelectItem>
+                            <SelectItem value="National ID">National ID</SelectItem>
+                            <SelectItem value="Driver's licence">Driver&apos;s licence</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <div className="space-y-1.5">
+                        <Label htmlFor="sof" className="text-slate-700">Source of funds</Label>
+                        <Select value={form.sourceOfFunds} onValueChange={(v) => set({ sourceOfFunds: v })}>
+                          <SelectTrigger id="sof" className="w-full"><SelectValue /></SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Employment income">Employment income</SelectItem>
+                            <SelectItem value="Business income">Business income</SelectItem>
+                            <SelectItem value="Investment income">Investment income</SelectItem>
+                            <SelectItem value="Inheritance">Inheritance</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-1.5">
+                        <Label htmlFor="employment" className="text-slate-700">Employment status</Label>
+                        <Select value={form.employmentStatus} onValueChange={(v) => set({ employmentStatus: v })}>
+                          <SelectTrigger id="employment" className="w-full"><SelectValue /></SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Employed">Employed</SelectItem>
+                            <SelectItem value="Self-employed">Self-employed</SelectItem>
+                            <SelectItem value="Business owner">Business owner</SelectItem>
+                            <SelectItem value="Retired">Retired</SelectItem>
+                            <SelectItem value="Not currently employed">Not currently employed</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                  </div>
+                </Section>
+              ) : (
+                <>
+                  {isFamilyOffice && (
+                    <Section step={4} title="About your family office">
+                      <div className="space-y-4">
+                        <div className="grid gap-4 sm:grid-cols-2">
+                          <div className="space-y-1.5">
+                            <Label htmlFor="entityName" className="text-slate-700">Office / entity name</Label>
+                            <Input id="entityName" value={form.entityName} onChange={(e) => set({ entityName: e.target.value })}
+                              required placeholder="e.g. Okonkwo Family Office" />
+                          </div>
+                          <div className="space-y-1.5">
+                            <Label htmlFor="regNo" className="text-slate-700">Registration number</Label>
+                            <Input id="regNo" value={form.registrationNumber} onChange={(e) => set({ registrationNumber: e.target.value })}
+                              placeholder="If registered" />
+                          </div>
+                        </div>
+                        <div className="grid gap-4 sm:grid-cols-2">
+                          <div className="space-y-1.5">
+                            <Label htmlFor="aum" className="text-slate-700">Approximate AUM</Label>
+                            <Select value={form.aumRange} onValueChange={(v) => set({ aumRange: v })}>
+                              <SelectTrigger id="aum" className="w-full"><SelectValue /></SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="$1M – $10M">$1M – $10M</SelectItem>
+                                <SelectItem value="$10M – $50M">$10M – $50M</SelectItem>
+                                <SelectItem value="$50M – $200M">$50M – $200M</SelectItem>
+                                <SelectItem value="$200M+">$200M+</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div className="space-y-1.5">
+                            <Label htmlFor="dof" className="text-slate-700">Date of birth</Label>
+                            <Input id="dof" type="date" value={form.dateOfBirth} onChange={(e) => set({ dateOfBirth: e.target.value })} required />
+                          </div>
+                        </div>
+                      </div>
+                    </Section>
+                  )}
+
+                  {isInstitution && (
+                    <Section step={4} title="About your institution">
+                      <div className="space-y-4">
+                        <div className="grid gap-4 sm:grid-cols-2">
+                          <div className="space-y-1.5">
+                            <Label htmlFor="instType" className="text-slate-700">Institution type</Label>
+                            <Select value={form.institutionType} onValueChange={(v) => set({ institutionType: v })}>
+                              <SelectTrigger id="instType" className="w-full"><SelectValue /></SelectTrigger>
+                              <SelectContent>
+                                {INSTITUTION_TYPES.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div className="space-y-1.5">
+                            <Label htmlFor="instName" className="text-slate-700">Registered name</Label>
+                            <Input id="instName" value={form.institutionName} onChange={(e) => set({ institutionName: e.target.value })}
+                              required placeholder="e.g. Meridian Pension Fund" />
+                          </div>
+                        </div>
+                        <div className="grid gap-4 sm:grid-cols-2">
+                          <div className="space-y-1.5">
+                            <Label htmlFor="cac" className="text-slate-700">CAC registration number</Label>
+                            <div className="relative">
+                              <Landmark className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                              <Input id="cac" value={form.cacNumber} onChange={(e) => set({ cacNumber: e.target.value })}
+                                className="pl-9" required placeholder="RC 1234567" />
+                            </div>
+                          </div>
+                          <div className="space-y-1.5">
+                            <Label htmlFor="taxId" className="text-slate-700">Tax identification number</Label>
+                            <div className="relative">
+                              <IdCard className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                              <Input id="taxId" value={form.taxId} onChange={(e) => set({ taxId: e.target.value })}
+                                className="pl-9" required placeholder="TIN / LEI" />
+                            </div>
+                          </div>
+                        </div>
+                        <div className="space-y-1.5">
+                          <Label htmlFor="regulator" className="text-slate-700">Regulator (if applicable)</Label>
+                          <Input id="regulator" value={form.regulatorName} onChange={(e) => set({ regulatorName: e.target.value })}
+                            placeholder="e.g. SEC, NAICOM, CBN" />
+                        </div>
+                        <p className="flex items-start gap-2 rounded-lg border border-brand-200 bg-brand-50 p-3 text-xs text-brand-800">
+                          <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0" />
+                          After email verification you will complete institutional KYB: CAC verification,
+                          UBO identification and sanctions/PEP screening.
+                        </p>
+                      </div>
+                    </Section>
+                  )}
+
+                  <Section step={isInstitution || isFamilyOffice ? 5 : 4} title="Your investment profile">
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <div className="space-y-1.5">
+                        <Label htmlFor="ticket" className="text-slate-700">Typical allocation</Label>
+                        <Select value={form.ticketSize} onValueChange={(v) => set({ ticketSize: v })}>
+                          <SelectTrigger id="ticket" className="w-full"><SelectValue /></SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="₦200M – ₦500M">₦200M – ₦500M</SelectItem>
+                            <SelectItem value="₦500M – ₦1B">₦500M – ₦1B</SelectItem>
+                            <SelectItem value="₦1B – ₦5B">₦1B – ₦5B</SelectItem>
+                            <SelectItem value="₦5B+">₦5B+</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-1.5">
+                        <Label htmlFor="target" className="text-slate-700">Preferred assets</Label>
+                        <Select value={form.targetAssets} onValueChange={(v) => set({ targetAssets: v })}>
+                          <SelectTrigger id="target" className="w-full"><SelectValue /></SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Income-producing">Income-producing</SelectItem>
+                            <SelectItem value="Development">Development</SelectItem>
+                            <SelectItem value="Completed / stabilised">Completed / stabilised</SelectItem>
+                            <SelectItem value="Mixed portfolio">Mixed portfolio</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-1.5">
+                        <Label htmlFor="horizon" className="text-slate-700">Investment horizon</Label>
+                        <Select value={form.horizon} onValueChange={(v) => set({ horizon: v })}>
+                          <SelectTrigger id="horizon" className="w-full"><SelectValue /></SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="1 – 3 years">1 – 3 years</SelectItem>
+                            <SelectItem value="3 – 5 years">3 – 5 years</SelectItem>
+                            <SelectItem value="5 – 10 years">5 – 10 years</SelectItem>
+                            <SelectItem value="10+ years">10+ years</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-1.5">
+                        <Label htmlFor="structure" className="text-slate-700">Preferred structure</Label>
+                        <Select value={form.structure} onValueChange={(v) => set({ structure: v })}>
+                          <SelectTrigger id="structure" className="w-full"><SelectValue /></SelectTrigger>
+                          <SelectContent>
+                            {STRUCTURES.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                  </Section>
+                </>
+              )}
 
               <label className="flex cursor-pointer items-start gap-2.5">
-                <input
-                  type="checkbox"
-                  checked={agreed}
-                  onChange={(e) => setAgreed(e.target.checked)}
-                  className="mt-0.5 h-4 w-4 rounded border-line text-brand-600 focus:ring-brand-500"
-                />
+                <input type="checkbox" checked={agreed} onChange={(e) => setAgreed(e.target.checked)}
+                  className="mt-0.5 h-4 w-4 rounded border-line text-brand-600 focus:ring-brand-500" />
                 <span className="text-xs leading-relaxed text-slate-600">
                   I agree to the <span className="font-semibold text-brand-700">Terms of Service</span> and{" "}
                   <span className="font-semibold text-brand-700">Privacy Policy</span>, and I consent to identity
@@ -261,13 +489,8 @@ function SignupContent() {
                 </span>
               </label>
 
-              <Button
-                type="submit"
-                size="lg"
-                isLoading={isLoading}
-                disabled={!agreed || !passwordsMatch}
-                className="w-full shadow-lg shadow-brand-600/20"
-              >
+              <Button type="submit" size="lg" isLoading={isLoading} disabled={!agreed || !passwordsMatch}
+                className="w-full shadow-lg shadow-brand-600/20">
                 Create account <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </form>

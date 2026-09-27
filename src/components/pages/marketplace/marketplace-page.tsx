@@ -67,8 +67,8 @@ export default function MarketplacePage() {
           {(
             [
               { key: "all", label: "All" },
-              { key: "foundry", label: "Institutional", icon: Crown },
-              { key: "harbor", label: "Fractional", icon: Anchor },
+              { key: "foundry", label: "Urbco Foundry", icon: Crown },
+              { key: "harbor", label: "Urbco Harbour", icon: Anchor },
             ] as { key: "all" | "foundry" | "harbor"; label: string; icon?: typeof Crown }[]
           ).map((t) => (
             <button
@@ -176,7 +176,7 @@ export default function MarketplacePage() {
         <p>
           Showing <span className="font-bold text-slate-900">{filteredProperties.length}</span> properties
           {trackFilter !== "all" && (
-            <span> in <strong className="text-brand-700">{trackFilter === "foundry" ? "Institutional" : "Fractional"}</strong></span>
+            <span> in <strong className="text-brand-700">{trackFilter === "foundry" ? "Urbco Foundry" : "Urbco Harbour"}</strong></span>
           )}
           {stageFilter !== "all" && (
             <span> (<strong className="text-brand-700">{stageFilter.replace("-", " ")}</strong> stage)</span>
@@ -185,12 +185,12 @@ export default function MarketplacePage() {
 
         {trackFilter === "foundry" && (
           <span className="rounded-full border border-accent-200 bg-accent-50 px-3 py-1 text-xs font-medium text-accent-800">
-            Institutional track — mega assets from ₦200M
+            Urbco Foundry — mega assets from ₦200M
           </span>
         )}
         {trackFilter === "harbor" && (
           <span className="rounded-full border border-brand-200 bg-brand-50 px-3 py-1 text-xs font-medium text-brand-700">
-            Fractional track — entry from ₦100K
+            Urbco Harbour — entry from ₦100K
           </span>
         )}
       </div>
@@ -248,9 +248,9 @@ export default function MarketplacePage() {
                         }
                       >
                         {property.targetTrack === "foundry"
-                          ? "Institutional"
+                          ? "Urbco Foundry"
                           : property.targetTrack === "harbor"
-                          ? "Fractional"
+                          ? "Urbco Harbour"
                           : "Both tracks"}
                       </Badge>
                       {property.buyingPaths.some((p) => p.type === "investment") && (
@@ -346,7 +346,7 @@ export default function MarketplacePage() {
                       <div className="flex-1 p-6">
                         <div className="mb-3 flex flex-wrap items-center gap-1.5">
                           <Badge className={property.targetTrack === "foundry" ? "bg-accent-100 text-accent-800" : property.targetTrack === "harbor" ? "bg-brand-50 text-brand-700" : "bg-slate-100 text-slate-700"}>
-                            {property.targetTrack === "foundry" ? "Institutional" : property.targetTrack === "harbor" ? "Fractional" : "Both tracks"}
+                            {property.targetTrack === "foundry" ? "Urbco Foundry" : property.targetTrack === "harbor" ? "Urbco Harbour" : "Both tracks"}
                           </Badge>
                           {property.buyingPaths.some((p) => p.type === "investment") && (
                             <Badge variant="secondary" className="font-normal">Investment</Badge>
