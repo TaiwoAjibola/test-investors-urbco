@@ -6,9 +6,121 @@ export interface User {
   country: string;
   investmentExperience: "beginner" | "intermediate" | "advanced";
   riskAppetite: "low" | "medium" | "high";
-  kycStatus: "pending" | "verified" | "rejected";
+  kycStatus: "pending" | "under_review" | "verified" | "failed" | "remediation_required";
+  kycSubmittedAt?: Date;
+  kycVerifiedAt?: Date;
+  kycRemediationItems?: string[];
+  investorTrack?: "foundry" | "harbor";
+  entityType?: "individual" | "family-office" | "institution";
   avatar?: string;
   createdAt: Date;
+}
+
+export interface UnitType {
+  id: string;
+  name: string;
+  type: "studio" | "1-bed" | "2-bed" | "3-bed" | "4-bed" | "penthouse" | "office" | "retail" | "custom";
+  count: number;
+  sizeSqm: number;
+  bedrooms?: number;
+  bathrooms?: number;
+  basePrice?: number;
+}
+
+export interface Milestone {
+  id: string;
+  name: string;
+  targetDate: Date;
+  releasePct: number;
+  description?: string;
+  status: "pending" | "in_progress" | "completed" | "verified";
+}
+
+export interface FractionTier {
+  id: string;
+  name: string;
+  totalFractions: number;
+  pricePerFraction: number;
+  minInvestment: number;
+  maxInvestment?: number;
+  benefits?: string[];
+}
+
+export interface BuyingPath {
+  type: "investment" | "ownership" | "both";
+  // Investment path
+  interestStructure?: "single-ticket" | "fractional";
+  instrument?: string;
+  minimumInvestment?: number;
+  totalFundingRequired?: number;
+  investmentWindow?: { open: Date; close: Date };
+  investorRights?: string;
+  exitRedemptionTerms?: string;
+  fractionBreakdown?: FractionTier[];
+  // Ownership path
+  releaseBasis?: "milestone" | "scheduled";
+  milestones?: Milestone[];
+  titleTerms?: string;
+}
+
+export interface PaymentOption {
+  type: "one-time" | "investment-window" | "scheduled-tranche" | "milestone-based";
+  label: string;
+  description: string;
+  downPaymentPct?: number;
+  trancheCount?: number;
+  tranchePeriodMonths?: number;
+  windowOpen?: Date;
+  windowClose?: Date;
+}
+
+export interface StageDiscount {
+  stage: "pre-development" | "post-development";
+  discountPct: number;
+  description: string;
+}
+
+export interface ReturnsProjection {
+  projectedRentalIncome: number;
+  frequency: "monthly" | "quarterly" | "annually";
+  operatingCosts: number;
+  capitalAppreciation: number;
+  firstPayoutDate: Date;
+  yieldRange: [number, number];
+  appreciationRange: [number, number];
+  totalReturnRange: [number, number];
+}
+
+export interface RiskAssessment {
+  constructionProgress: number;
+  riskLevel: "low" | "medium" | "high";
+  riskFactors: string[];
+  offPlanSecurity: string;
+  exitLiquidity: string;
+  managementMode: string;
+}
+
+export interface DocumentFile {
+  id: string;
+  name: string;
+  type: "legal" | "financial" | "technical" | "marketing" | "other";
+  url: string;
+  uploadedAt: Date;
+  size: number;
+}
+
+export interface VirtualTour {
+  id: string;
+  title: string;
+  url: string;
+  thumbnail: string;
+}
+
+export interface CommissionStructure {
+  leadPct: number;
+  closerPct: number;
+  totalPct: number;
+  calculatedAmount: number;
 }
 
 export interface Property {
@@ -27,24 +139,66 @@ export interface Property {
   furnishingStatus: "furnished" | "unfurnished" | "partially-furnished";
   constructionStatus: "completed" | "ongoing" | "planned";
   constructionTimeline?: string;
-  
-  // Financial
+  developmentStage: "pre-development" | "post-development";
+  targetTrack: "foundry" | "harbor" | "both";
+  minimumInvestment?: number;
+
+  // Step 1 — Identity & Status
+  referenceCode: string;
+  developerCompany: string;
+  projectStatus: "planning" | "approved" | "under-construction" | "completed" | "operational";
+
+  // Step 2 — Physical & Functional
+  landSizeSqm: number;
+  builtSizeSqm: number;
+  constructionStartDate: Date;
+  constructionEndDate: Date;
+  totalUnits: number;
+  availableUnits: number;
+  unitConfiguration: UnitType[];
+  facilityManagement: boolean;
+
+  // Step 3 — Investment Program & Buying Paths
+  investmentProgram: "foundry" | "harbor";
+  buyingPaths: BuyingPath[];
+
+  // Step 4 — Pricing & Payment Logic
+  pricing: {
+    basePrice: number;
+    markupPct: number;
+    finalSellingPrice: number;
+    paymentOptions: PaymentOption[];
+    discounts: StageDiscount[];
+  };
+
+  // Step 5 — Returns & Projections
+  returns: ReturnsProjection;
+
+  // Step 6 — Risk & Management Assessment
+  risk: RiskAssessment;
+
+  // Step 7 — Media & Documentation
+  documents: DocumentFile[];
+  virtualTours: VirtualTour[];
+
+  // Step 8 — Commission Setup
+  commission: CommissionStructure;
+
+  // Financial (existing)
   propertyValue: number;
   investmentAvailable: number;
   costPerFraction: number;
   totalFractions: number;
   fractionsSold: number;
   investorsCount: number;
-  
-  // Returns
+
   rentalYield: number;
   rentPerQuarter: number;
   capitalAppreciation: number;
   firstDividendDate: string;
   projectedROI: number;
-  
-  // Status
-  status: "open" | "funding" | "closed" | "completed";
+
+  status: "draft" | "active" | "archived" | "open" | "funding" | "closed" | "completed";
   fundingProgress: number;
   featured: boolean;
   createdAt: Date;
@@ -60,13 +214,15 @@ export interface Investment {
   currentValuation: number;
   roi: number;
   paymentSchedule: PaymentSchedule;
+  buyingPath: "investment" | "ownership";
   status: "active" | "completed" | "pending";
   purchaseDate: Date;
   nextDividendDate: string;
+  milestonesCompleted?: string[];
 }
 
 export interface PaymentSchedule {
-  type: "full" | "3-months" | "6-months" | "12-months" | "custom";
+  type: "full" | "3-months" | "6-months" | "12-months" | "custom" | "investment-window" | "milestone-based" | "scheduled-tranche";
   totalAmount: number;
   paidAmount: number;
   remainingAmount: number;
@@ -80,6 +236,7 @@ export interface Installment {
   paidAmount: number;
   status: "paid" | "pending" | "overdue";
   paidDate?: string;
+  milestoneId?: string;
 }
 
 export interface Dividend {
@@ -158,4 +315,121 @@ export interface FilterOptions {
   rentalYield?: [number, number];
   minInvestment?: number;
   constructionStatus?: string;
+  developmentStage?: string;
+  targetTrack?: string;
+  buyingPath?: string;
+}
+
+export interface InstitutionalProfile {
+  id: string;
+  userId: string;
+  companyName: string;
+  tradingName?: string;
+  cacNumber: string;
+  companyType: "Ltd" | "PLC" | "LLP" | "Other";
+  incorporationDate: Date;
+  industry: string;
+  natureOfBusiness: string;
+  countryOfRegistration: string;
+  registeredAddress: Address;
+  operatingAddress: Address;
+  officialEmail: string;
+  officialPhone: string;
+  website?: string;
+  institutionType: "pension-fund" | "asset-manager" | "insurance" | "bank" | "private-equity" | "family-office" | "corporate" | "dfi" | "government" | "reit" | "other";
+  ownershipType: "private" | "public" | "government" | "joint-venture";
+  authorisedRep: AuthorisedRep;
+  investmentProfile: InvestmentProfile;
+  onboardingDocuments: string[];
+  status: "onboarding_submitted" | "kyc_kb_pending" | "kyc_remediation" | "kyc_verified" | "kyc_failed";
+  kycData?: InstitutionalKYC;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface Address {
+  address: string;
+  city: string;
+  lga?: string;
+  state: string;
+  country: string;
+}
+
+export interface AuthorisedRep {
+  fullName: string;
+  position: string;
+  department: string;
+  email: string;
+  phone: string;
+}
+
+export interface InvestmentProfile {
+  investmentObjective: string;
+  preferredSectors: string[];
+  preferredProjectTypes: string[];
+  geographicPreference: string[];
+  minimumInvestment: number;
+  maximumInvestment: number;
+  typicalTicketSize: number;
+  investmentHorizon: string;
+  preferredStructure: ("equity" | "debt" | "revenue-share" | "jv")[];
+  preferredCurrency: string;
+}
+
+export interface InstitutionalKYC {
+  corporateDocuments: {
+    cacCertificate: DocumentFile;
+    cacExtract: DocumentFile;
+    memorandumArticles: DocumentFile;
+    taxId: DocumentFile;
+    addressProof: DocumentFile;
+    regulatoryLicense?: DocumentFile;
+  };
+  directors: Director[];
+  shareholders: Shareholder[];
+  ubos: UBO[];
+  authorisedRepVerification: DocumentFile;
+  authorisedSignatoryVerification: DocumentFile;
+  screenings: {
+    sanctions: ScreeningResult;
+    pep: ScreeningResult;
+    adverseMedia: ScreeningResult;
+    amlRisk: ScreeningResult;
+  };
+}
+
+export interface Director {
+  fullName: string;
+  position: string;
+  nationality: string;
+  idDocument: DocumentFile;
+  isUBO: boolean;
+}
+
+export interface Shareholder {
+  name: string;
+  percentage: number;
+  type: "individual" | "corporate";
+  idDocument?: DocumentFile;
+}
+
+export interface UBO {
+  fullName: string;
+  nationality: string;
+  percentage: number;
+  idDocument: DocumentFile;
+  sourceOfWealth: string;
+}
+
+export interface ScreeningResult {
+  status: "clear" | "match" | "pending";
+  details?: string;
+  checkedAt: Date;
+}
+
+export interface KYCProgress {
+  step: number;
+  title: string;
+  status: "pending" | "in_progress" | "completed" | "failed";
+  documents?: DocumentFile[];
 }

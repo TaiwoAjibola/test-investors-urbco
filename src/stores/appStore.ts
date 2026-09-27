@@ -1,12 +1,12 @@
 import { create } from "zustand";
-import { User, Property, Investment, Dividend, Transaction, Notification, Wallet, Referral } from "@/types";
+import { User, Property, Investment, Dividend, Transaction, Notification, Wallet, Referral, InstitutionalProfile } from "@/types";
 import { currentUser, wallet as initialWallet, properties, investments, dividends, transactions, notifications, referral } from "@/data/mockData";
 
 interface AppState {
   // User
   user: User | null;
   isAuthenticated: boolean;
-  
+
   // Data
   properties: Property[];
   investments: Investment[];
@@ -15,11 +15,14 @@ interface AppState {
   notifications: Notification[];
   wallet: Wallet;
   referral: Referral;
-  
+
+  // Institutional onboarding
+  institutionalProfile: InstitutionalProfile | null;
+
   // UI State
   isSidebarOpen: boolean;
   theme: "light" | "dark";
-  
+
   // Actions
   setUser: (user: User | null) => void;
   login: (email: string, password: string) => Promise<boolean>;
@@ -31,6 +34,8 @@ interface AppState {
   addTransaction: (transaction: Transaction) => void;
   addInvestment: (investment: Investment) => void;
   updateWallet: (balance: number) => void;
+  setKycStatus: (status: User["kycStatus"], remediationItems?: string[]) => void;
+  saveInstitutionalProfile: (profile: InstitutionalProfile) => void;
 }
 
 export const useAppStore = create<AppState>((set) => ({
@@ -48,6 +53,8 @@ export const useAppStore = create<AppState>((set) => ({
   
   isSidebarOpen: true,
   theme: "light",
+
+  institutionalProfile: null,
   
   // Actions
   setUser: (user) => set({ user, isAuthenticated: !!user }),
@@ -94,4 +101,19 @@ export const useAppStore = create<AppState>((set) => ({
     set((state) => ({
       wallet: { ...state.wallet, balance },
     })),
+
+  setKycStatus: (status, remediationItems) =>
+    set((state) => ({
+      user: state.user
+        ? {
+            ...state.user,
+            kycStatus: status,
+            kycSubmittedAt: status !== "pending" ? state.user.kycSubmittedAt ?? new Date() : state.user.kycSubmittedAt,
+            kycVerifiedAt: status === "verified" ? new Date() : state.user.kycVerifiedAt,
+            kycRemediationItems: remediationItems ?? state.user.kycRemediationItems,
+          }
+        : state.user,
+    })),
+
+  saveInstitutionalProfile: (profile) => set({ institutionalProfile: profile }),
 }));

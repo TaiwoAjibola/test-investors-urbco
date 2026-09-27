@@ -1,6 +1,235 @@
-import { Property, Investment, Dividend, Transaction, Notification, Referral, DashboardMetrics } from "@/types";
+import { Property, Investment, Dividend, Transaction, Notification, Referral, DashboardMetrics, UnitType, BuyingPath, Milestone, FractionTier, PaymentOption, StageDiscount, ReturnsProjection, RiskAssessment, DocumentFile, VirtualTour, CommissionStructure } from "@/types";
 
-export const properties: Property[] = [
+type AdminSeed = {
+  targetTrack: "foundry" | "harbor" | "both";
+  developmentStage: "pre-development" | "post-development";
+  propertyValue: number;
+  investmentAvailable: number;
+  minimumInvestment?: number;
+  fundingProgress: number;
+  firstDividendDate: string;
+  rentalYield: number;
+  capitalAppreciation: number;
+  squareMeters: number;
+  rooms: number;
+};
+
+function deriveAdmin(p: AdminSeed) {
+  const track = p.targetTrack;
+  const investmentProgram: "foundry" | "harbor" = track === "harbor" ? "harbor" : "foundry";
+  const isPre = p.developmentStage === "pre-development";
+  const refPrefix = track === "harbor" ? "URB-H" : "URB-F";
+  const totalUnits = Math.max(8, Math.round(p.rooms / 2) || 20);
+  const availableUnits = Math.max(1, Math.round(totalUnits * (1 - p.fundingProgress / 100)));
+
+  const unitConfiguration: UnitType[] = [
+    { id: "uc-1", name: "Standard Unit", type: "custom", count: totalUnits, sizeSqm: Math.round(p.squareMeters / totalUnits), bedrooms: 2, bathrooms: 2, basePrice: p.propertyValue },
+    { id: "uc-2", name: "Premium Unit", type: "custom", count: Math.round(totalUnits / 4), sizeSqm: Math.round(p.squareMeters / totalUnits) * 2, bedrooms: 3, bathrooms: 3, basePrice: Math.round(p.propertyValue * 1.4) },
+  ];
+
+  const investmentPath: BuyingPath = {
+    type: "investment",
+    interestStructure: "fractional",
+    instrument: investmentProgram === "foundry" ? "Opco Foundry Debenture" : "Opco Harbor Profit Note",
+    minimumInvestment: p.minimumInvestment ?? 1000000,
+    totalFundingRequired: p.investmentAvailable,
+    investmentWindow: { open: new Date("2026-01-01"), close: new Date("2026-12-31") },
+    investorRights: "Quarterly income distributions, proportional voting on asset-level decisions, priority redemption queue.",
+    exitRedemptionTerms: investmentProgram === "foundry"
+      ? "Early exit via secondary transfer window opening 12 months post-close; 5% liquidity fee."
+      : "Title-linked exit on milestone completion; settlement via trustee within 30 days of request.",
+    fractionBreakdown: [
+      { id: "ft-1", name: "Tier 1 — Lead Allocation", totalFractions: 200, pricePerFraction: p.minimumInvestment ?? 1000000, minInvestment: 0, maxInvestment: 50000000, benefits: ["Priority allotment", "Founder investor badge"] },
+      { id: "ft-2", name: "Tier 2 — General", totalFractions: 600, pricePerFraction: Math.round((p.minimumInvestment ?? 1000000) * 1.05), minInvestment: 50000000, benefits: ["Standard allocation"] },
+    ] as FractionTier[],
+  };
+
+  const ownershipPath: BuyingPath = {
+    type: "ownership",
+    releaseBasis: "milestone",
+    milestones: [
+      { id: "ms-1", name: "Foundation & Substructure", targetDate: new Date("2026-06-30"), releasePct: 25, description: "Groundworks and foundation complete, independently verified.", status: "pending" },
+      { id: "ms-2", name: "Superstructure Topping Out", targetDate: new Date("2026-12-31"), releasePct: 35, description: "Structural frame complete to roof level.", status: "pending" },
+      { id: "ms-3", name: "Fit-Out & Commissioning", targetDate: new Date("2027-06-30"), releasePct: 25, description: "Internal fit-out and services commissioned.", status: "pending" },
+      { id: "ms-4", name: "Handover & Title Perfection", targetDate: new Date("2027-12-31"), releasePct: 15, description: "Final handover and registered title perfection.", status: "pending" },
+    ] as Milestone[],
+    titleTerms: "Legal title held by Urbco Trustee in escrow, perfected and assigned to investor pro-rata on final milestone clearance.",
+  };
+
+  const buyingPaths: BuyingPath[] =
+    track === "both" ? [investmentPath, ownershipPath]
+    : track === "harbor" ? [ownershipPath]
+    : [investmentPath];
+
+  const paymentOptions: PaymentOption[] =
+    track === "harbor"
+      ? [
+          { type: "milestone-based", label: "Milestone-Linked Tranches", description: "Capital released in line with verified construction milestones.", downPaymentPct: 25 },
+          { type: "scheduled-tranche", label: "Scheduled Tranche", description: "Equal quarterly tranches across the build period.", downPaymentPct: 20, trancheCount: 4, tranchePeriodMonths: 3 },
+        ]
+      : [
+          { type: "investment-window", label: "Investment Window", description: "Single allocation within the open funding window.", downPaymentPct: 100 },
+          { type: "one-time", label: "One-Time Settlement", description: "Full settlement at point of subscription." },
+        ];
+
+  const discounts: StageDiscount[] = [
+    { stage: "pre-development", discountPct: isPre ? 8 : 0, description: "Early-bird allocation discount for pre-development subscribers." },
+    { stage: "post-development", discountPct: isPre ? 0 : 3, description: "Completed-asset volume discount." },
+  ];
+
+  const pricing = {
+    basePrice: Math.round(p.propertyValue / 1.12),
+    markupPct: 12,
+    finalSellingPrice: p.propertyValue,
+    paymentOptions,
+    discounts,
+  };
+
+  const grossRental = Math.round((p.rentalYield / 100) * p.propertyValue);
+  const returns: ReturnsProjection = {
+    projectedRentalIncome: grossRental,
+    frequency: "quarterly",
+    operatingCosts: Math.round(grossRental * 0.25),
+    capitalAppreciation: p.capitalAppreciation,
+    firstPayoutDate: new Date(p.firstDividendDate),
+    yieldRange: [Number((p.rentalYield - 1).toFixed(1)), Number((p.rentalYield + 1).toFixed(1))],
+    appreciationRange: [p.capitalAppreciation - 2, p.capitalAppreciation + 3],
+    totalReturnRange: [Number((p.rentalYield + p.capitalAppreciation - 3).toFixed(1)), Number((p.rentalYield + p.capitalAppreciation + 4).toFixed(1))],
+  };
+
+  const risk: RiskAssessment = {
+    constructionProgress: p.fundingProgress,
+    riskLevel: isPre ? "medium" : "low",
+    riskFactors: isPre
+      ? ["Off-plan delivery timing", "Macro liquidity", "Construction cost inflation"]
+      : ["Tenant concentration", "Market rental softening", "FX exposure on operating costs"],
+    offPlanSecurity: "All capital held in Urbco Trustee escrow; released only against verified milestone certificates.",
+    exitLiquidity: investmentProgram === "foundry" ? "Secondary transfer window, 12-month lock." : "Milestone-gated title exit via trustee.",
+    managementMode: "Program-Managed by Urbco Trustee & Asset Management",
+  };
+
+  const documents: DocumentFile[] = [
+    { id: "doc-1", name: "Title Deed / Governor's Consent", type: "legal", url: "#", uploadedAt: new Date("2024-09-01"), size: 2400000 },
+    { id: "doc-2", name: "Project Appraisal Report", type: "financial", url: "#", uploadedAt: new Date("2024-09-10"), size: 3100000 },
+    { id: "doc-3", name: "Architectural Drawings", type: "technical", url: "#", uploadedAt: new Date("2024-09-15"), size: 8800000 },
+  ];
+  const virtualTours: VirtualTour[] = [
+    { id: "vt-1", title: "Walkthrough Tour", url: "#", thumbnail: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=600&q=80" },
+  ];
+
+  const commission: CommissionStructure = {
+    leadPct: 3,
+    closerPct: 2,
+    totalPct: 5,
+    calculatedAmount: Math.round((p.minimumInvestment ?? 1000000) * 0.05),
+  };
+
+  return {
+    referenceCode: `${refPrefix}-${Math.floor(1000 + Math.random() * 9000)}`,
+    developerCompany: "Urbco Development Partners Ltd",
+    projectStatus: (isPre ? "under-construction" : "operational") as Property["projectStatus"],
+    landSizeSqm: Math.round(p.squareMeters * 2.2),
+    builtSizeSqm: p.squareMeters,
+    constructionStartDate: new Date(isPre ? "2026-01-01" : "2023-01-01"),
+    constructionEndDate: new Date(isPre ? "2027-12-31" : "2025-06-30"),
+    totalUnits,
+    availableUnits,
+    unitConfiguration,
+    facilityManagement: true,
+    investmentProgram,
+    buyingPaths,
+    pricing,
+    returns,
+    risk,
+    documents,
+    virtualTours,
+    commission,
+    publishStatus: "active" as const,
+  };
+}
+
+const rawProperties: Omit<Property, "referenceCode" | "developerCompany" | "projectStatus" | "landSizeSqm" | "builtSizeSqm" | "constructionStartDate" | "constructionEndDate" | "totalUnits" | "availableUnits" | "unitConfiguration" | "facilityManagement" | "investmentProgram" | "buyingPaths" | "pricing" | "returns" | "risk" | "documents" | "virtualTours" | "commission" | "publishStatus">[] = [
+  {
+    id: "prop-000-foundry-1",
+    name: "Opco Foundry Eko Atlantic Waterfront Towers",
+    location: "Eko Atlantic City, Lagos",
+    fullAddress: "Plot 1-5 Financial District, Eko Atlantic, Lagos State",
+    propertyType: "mixed-use",
+    description: "An ultra-luxury institutional mega-development situated in Eko Atlantic's Financial Center. Designed exclusively for Opco Foundry high-net-worth investors, family offices, and institutional syndicates. Spanning twin 45-storey ultra-modern glass towers with private helipads, marina docks, and high-yield commercial/residential leases.",
+    images: [
+      "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1200&q=80",
+      "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200&q=80",
+      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&q=80",
+    ],
+    videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    rooms: 180,
+    bathrooms: 210,
+    squareMeters: 14500,
+    amenities: ["Helipad", "Private Marina", "Institutional Security", "Sky Lounge", "Concierge", "High-Speed Fiber", "Full Backups", "Gold LEED Certified"],
+    furnishingStatus: "furnished",
+    constructionStatus: "planned",
+    constructionTimeline: "Q4 2026",
+    developmentStage: "pre-development",
+    targetTrack: "foundry",
+    minimumInvestment: 250000000, // ₦250 Million
+    
+    propertyValue: 320000000000, // ₦320 Billion (~$215M)
+    investmentAvailable: 220000000000,
+    costPerFraction: 250000000,
+    totalFractions: 880,
+    fractionsSold: 120,
+    investorsCount: 4,
+    
+    rentalYield: 14.8,
+    rentPerQuarter: 9250000,
+    capitalAppreciation: 22,
+    firstDividendDate: "2026-06-30",
+    projectedROI: 36.8,
+    
+    status: "open",
+    fundingProgress: 13.6,
+    featured: true,
+    createdAt: new Date("2024-09-01"),
+  },
+  {
+    id: "prop-000-foundry-2",
+    name: "Opco Foundry Victoria Island Financial Hub",
+    location: "Victoria Island, Lagos",
+    fullAddress: "88 Ahmadu Bello Way, Victoria Island, Lagos State",
+    propertyType: "commercial",
+    description: "A completed Grade-A corporate tower fully tenanted by international financial firms, global tech hubs, and multinational headquarters. Dedicated to Opco Foundry institutional investors seeking immediate high-volume quarterly rental cashflow and long-term capital preservation.",
+    images: [
+      "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200&q=80",
+      "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&q=80",
+    ],
+    rooms: 95,
+    bathrooms: 120,
+    squareMeters: 9800,
+    amenities: ["Auditorium", "Executive Suites", "Helicopter Pad", "Level 4 Security", "Solar Grid Backup", "Underground Parking"],
+    furnishingStatus: "furnished",
+    constructionStatus: "completed",
+    developmentStage: "post-development",
+    targetTrack: "foundry",
+    minimumInvestment: 200000000, // ₦200 Million
+    
+    propertyValue: 260000000000, // ₦260 Billion (~$175M)
+    investmentAvailable: 180000000000,
+    costPerFraction: 200000000,
+    totalFractions: 900,
+    fractionsSold: 540,
+    investorsCount: 12,
+    
+    rentalYield: 12.5,
+    rentPerQuarter: 6250000,
+    capitalAppreciation: 16,
+    firstDividendDate: "2025-03-31",
+    projectedROI: 28.5,
+    
+    status: "funding",
+    fundingProgress: 60.0,
+    featured: true,
+    createdAt: new Date("2024-08-15"),
+  },
   {
     id: "prop-001",
     name: "Islet-Majaro",
@@ -22,6 +251,9 @@ export const properties: Property[] = [
     amenities: ["Gym", "Laundry", "Reception", "Furnished Spaces", "24/7 Security", "Power Backup", "Water Treatment", "Parking", "Elevator", "Swimming Pool"],
     furnishingStatus: "furnished",
     constructionStatus: "completed",
+    developmentStage: "post-development",
+    targetTrack: "harbor",
+    minimumInvestment: 1375000,
     
     propertyValue: 561000000,
     investmentAvailable: 450000000,
@@ -59,6 +291,9 @@ export const properties: Property[] = [
     amenities: ["Conference Rooms", "24/7 Security", "Backup Generator", "High-Speed Elevators", "Parking", "Cafeteria", "Gym"],
     furnishingStatus: "partially-furnished",
     constructionStatus: "completed",
+    developmentStage: "post-development",
+    targetTrack: "both",
+    minimumInvestment: 2000000,
     
     propertyValue: 850000000,
     investmentAvailable: 600000000,
@@ -80,11 +315,11 @@ export const properties: Property[] = [
   },
   {
     id: "prop-003",
-    name: "Ikoyi Heights",
+    name: "Ikoyi Heights Luxury Towers",
     location: "Ikoyi, Lagos",
     fullAddress: "15 Kingsway Road, Ikoyi, Lagos State",
     propertyType: "residential",
-    description: "Luxury residential towers offering panoramic views of Lagos. This iconic development features premium finishes and amenities for the discerning investor.",
+    description: "Luxury residential towers offering panoramic views of Lagos lagoon. Featuring pre-development pricing for high-net-worth investors and family offices looking for high capital appreciation.",
     images: [
       "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1200&q=80",
       "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&q=80",
@@ -97,22 +332,25 @@ export const properties: Property[] = [
     furnishingStatus: "furnished",
     constructionStatus: "ongoing",
     constructionTimeline: "Q3 2025",
+    developmentStage: "pre-development",
+    targetTrack: "foundry",
+    minimumInvestment: 50000000,
     
-    propertyValue: 1200000000,
-    investmentAvailable: 800000000,
-    costPerFraction: 4000000,
-    totalFractions: 200,
+    propertyValue: 12000000000,
+    investmentAvailable: 8000000000,
+    costPerFraction: 50000000,
+    totalFractions: 160,
     fractionsSold: 45,
     investorsCount: 28,
     
     rentalYield: 9.5,
-    rentPerQuarter: 950000,
+    rentPerQuarter: 1187500,
     capitalAppreciation: 18,
     firstDividendDate: "2025-06-01",
     projectedROI: 27.5,
     
     status: "open",
-    fundingProgress: 22.5,
+    fundingProgress: 28.1,
     featured: true,
     createdAt: new Date("2024-10-01"),
   },
@@ -122,7 +360,7 @@ export const properties: Property[] = [
     location: "Central Business District, Abuja",
     fullAddress: "Plot 1234, Herbert Macaulay Way, CBD, Abuja",
     propertyType: "mixed-use",
-    description: "Strategic mixed-use development in Abuja's CBD combining retail, office, and residential spaces. Perfect for diversified investment exposure.",
+    description: "Strategic mixed-use pre-development project in Abuja's CBD combining retail, office, and residential spaces. Perfect for diversified institutional and retail allocation.",
     images: [
       "https://images.unsplash.com/photo-1582407972990-cd97287e6a09?w=1200&q=80",
       "https://images.unsplash.com/photo-1554469384-e58fac16e23a?w=1200&q=80",
@@ -134,6 +372,9 @@ export const properties: Property[] = [
     furnishingStatus: "unfurnished",
     constructionStatus: "planned",
     constructionTimeline: "Q1 2026",
+    developmentStage: "pre-development",
+    targetTrack: "both",
+    minimumInvestment: 5000000,
     
     propertyValue: 2000000000,
     investmentAvailable: 1500000000,
@@ -155,11 +396,11 @@ export const properties: Property[] = [
   },
   {
     id: "prop-005",
-    name: "Port Harcourt Marina",
+    name: "Port Harcourt Marina Waterfront",
     location: "GRA Phase 2, Port Harcourt",
     fullAddress: "18 Aba Road, GRA Phase 2, Port Harcourt, Rivers State",
     propertyType: "residential",
-    description: "Waterfront residential development with stunning marina views. Premium apartments designed for modern living with exceptional rental demand.",
+    description: "Waterfront post-development residential property with stunning marina views. Premium apartments designed for steady rental yields and retail investor accessibility.",
     images: [
       "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=80",
       "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=1200&q=80",
@@ -170,6 +411,9 @@ export const properties: Property[] = [
     amenities: ["Marina Access", "Boat Dock", "Gym", "Pool", "Security", "Clubhouse", "Tennis Court"],
     furnishingStatus: "furnished",
     constructionStatus: "completed",
+    developmentStage: "post-development",
+    targetTrack: "harbor",
+    minimumInvestment: 1000000,
     
     propertyValue: 420000000,
     investmentAvailable: 300000000,
@@ -191,11 +435,11 @@ export const properties: Property[] = [
   },
   {
     id: "prop-006",
-    name: "Ibadan Tech Hub",
+    name: "Ibadan Tech Hub & Commercial Center",
     location: "Bodija, Ibadan",
     fullAddress: "25 University Road, Bodija, Ibadan, Oyo State",
     propertyType: "commercial",
-    description: "Modern tech hub and co-working space catering to the growing tech ecosystem in Ibadan. High occupancy rates with quality tenants.",
+    description: "Modern tech hub and co-working space catering to the growing tech ecosystem in Ibadan. High occupancy rates with quality tenants, accessible via Opco Harbor.",
     images: [
       "https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=1200&q=80",
       "https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=1200&q=80",
@@ -206,6 +450,9 @@ export const properties: Property[] = [
     amenities: ["Co-working Spaces", "Meeting Rooms", "High-Speed Internet", "Cafeteria", "Parking", "Backup Power", "Event Space"],
     furnishingStatus: "furnished",
     constructionStatus: "completed",
+    developmentStage: "post-development",
+    targetTrack: "harbor",
+    minimumInvestment: 500000,
     
     propertyValue: 280000000,
     investmentAvailable: 200000000,
@@ -227,12 +474,15 @@ export const properties: Property[] = [
   },
 ];
 
+export const properties: Property[] = rawProperties.map((p) => ({ ...p, ...deriveAdmin(p) }));
+
 export const investments: Investment[] = [
   {
     id: "inv-001",
     userId: "user-001",
     propertyId: "prop-001",
     property: properties[0],
+    buyingPath: "investment",
     fractionsOwned: 5,
     amountInvested: 6875000,
     currentValuation: 7562500,
@@ -257,6 +507,7 @@ export const investments: Investment[] = [
     userId: "user-001",
     propertyId: "prop-002",
     property: properties[1],
+    buyingPath: "investment",
     fractionsOwned: 3,
     amountInvested: 6000000,
     currentValuation: 6480000,
@@ -279,6 +530,7 @@ export const investments: Investment[] = [
     userId: "user-001",
     propertyId: "prop-005",
     property: properties[4],
+    buyingPath: "ownership",
     fractionsOwned: 10,
     amountInvested: 10000000,
     currentValuation: 10800000,
