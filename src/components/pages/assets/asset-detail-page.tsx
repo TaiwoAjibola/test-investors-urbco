@@ -4,7 +4,8 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import {
   MapPin, Building2, Bed, Bath, Maximize, DollarSign, TrendingUp, Calendar,
-  Users, CheckCircle, Play, X, Calculator, Heart, Share2, Info
+  Users, CheckCircle, Play, X, Calculator, Heart, Share2, Info, Crown, Anchor,
+  FileText, ShieldCheck, Layers, CalendarClock, Receipt, Landmark, SplitSquareHorizontal
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -18,10 +19,12 @@ import { properties } from "@/data/mockData";
 import { formatCurrency, formatPercentage, calculateDividend, calculateROI } from "@/lib/utils";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
+import { useAppStore } from "@/stores/appStore";
 
 export default function AssetDetailPage() {
   const params = useParams();
   const router = useRouter();
+  const { user } = useAppStore();
   const property = properties.find((p) => p.id === params.id) || properties[0];
   
   const [selectedFractions, setSelectedFractions] = useState(1);
@@ -36,6 +39,14 @@ export default function AssetDetailPage() {
   const quarterlyDividend = calculateDividend(investmentValue, property.rentalYield, "quarterly");
   const annualDividend = quarterlyDividend * 4;
   const totalROI = calculateROI(investmentValue, property.projectedROI, holdingPeriod);
+
+  const handleInvest = () => {
+    if (user && user.kycStatus !== "verified") {
+      router.push("/profile/kyc");
+      return;
+    }
+    router.push(`/checkout/${property.id}?fractions=${selectedFractions}`);
+  };
 
   const handleFractionChange = (fractions: number) => {
     setSelectedFractions(fractions);
@@ -257,6 +268,239 @@ export default function AssetDetailPage() {
             </CardContent>
           </Card>
 
+          {/* Asset Identity & Status */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Asset Identity &amp; Status</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div>
+                  <div className="text-xs text-slate-500 mb-1">Reference Code</div>
+                  <div className="font-bold text-slate-900">{property.referenceCode}</div>
+                </div>
+                <div>
+                  <div className="text-xs text-slate-500 mb-1">Developer / Partner</div>
+                  <div className="font-bold text-slate-900">{property.developerCompany}</div>
+                </div>
+                <div>
+                  <div className="text-xs text-slate-500 mb-1">Project Status</div>
+                  <div className="font-bold text-slate-900 capitalize">{property.projectStatus.replace("-", " ")}</div>
+                </div>
+                <div>
+                  <div className="text-xs text-slate-500 mb-1">Investment Program</div>
+                  <div className="font-bold text-slate-900 capitalize">{property.investmentProgram}</div>
+                </div>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <Badge
+                  className={
+                    property.targetTrack === "foundry"
+                      ? "bg-amber-400 text-black font-bold"
+                      : property.targetTrack === "harbor"
+                      ? "bg-cyan-400 text-black font-bold"
+                      : "bg-slate-200 text-black font-bold"
+                  }
+                >
+                  {property.targetTrack === "foundry" ? "Opco Foundry" : property.targetTrack === "harbor" ? "Opco Harbor" : "Opco Foundry & Harbor"}
+                </Badge>
+                {property.facilityManagement && (
+                  <Badge variant="secondary" className="px-3 py-1.5">
+                    <CheckCircle className="h-3 w-3 mr-1 text-emerald-600" />
+                    Facility Management
+                  </Badge>
+                )}
+                <Badge variant="secondary" className="px-3 py-1.5 capitalize">
+                  {property.developmentStage.replace("-", " ")}
+                </Badge>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Investment Program & Buying Paths */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <SplitSquareHorizontal className="h-5 w-5 text-emerald-600" />
+                Investment Program &amp; Buying Paths
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {property.buyingPaths.map((bp, i) =>
+                bp.type === "investment" ? (
+                  <div key={i} className="rounded-2xl border border-indigo-200 bg-indigo-50/40 p-5">
+                    <div className="flex items-center gap-2 mb-4">
+                      <Badge className="bg-indigo-600 text-white font-bold">Investment Path</Badge>
+                      <Badge variant="secondary" className="capitalize border border-indigo-300 text-indigo-700">
+                        {bp.interestStructure === "fractional" ? "Fractional Interest" : "Single-Ticket"}
+                      </Badge>
+                    </div>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
+                      <div>
+                        <div className="text-xs text-slate-500 mb-1">Instrument</div>
+                        <div className="font-semibold text-slate-900">{bp.instrument}</div>
+                      </div>
+                      <div>
+                        <div className="text-xs text-slate-500 mb-1">Min Investment</div>
+                        <div className="font-semibold text-slate-900">{formatCurrency(bp.minimumInvestment || 0)}</div>
+                      </div>
+                      <div>
+                        <div className="text-xs text-slate-500 mb-1">Total Funding Required</div>
+                        <div className="font-semibold text-slate-900">{formatCurrency(bp.totalFundingRequired || 0)}</div>
+                      </div>
+                      {bp.investmentWindow && (
+                        <div>
+                          <div className="text-xs text-slate-500 mb-1">Investment Window</div>
+                          <div className="font-semibold text-slate-900 flex items-center gap-1">
+                            <CalendarClock className="h-3.5 w-3.5 text-indigo-500" />
+                            {new Date(bp.investmentWindow.open).toLocaleDateString("en-US", { month: "short", year: "numeric" })} –{" "}
+                            {new Date(bp.investmentWindow.close).toLocaleDateString("en-US", { month: "short", year: "numeric" })}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    <div className="space-y-2 text-sm">
+                      <div>
+                        <span className="text-slate-500">Investor Rights: </span>
+                        <span className="text-slate-800">{bp.investorRights}</span>
+                      </div>
+                      <div>
+                        <span className="text-slate-500">Exit / Redemption: </span>
+                        <span className="text-slate-800">{bp.exitRedemptionTerms}</span>
+                      </div>
+                    </div>
+                    {bp.fractionBreakdown && bp.fractionBreakdown.length > 0 && (
+                      <div className="mt-4">
+                        <div className="text-xs font-semibold text-slate-600 mb-2">Fraction Tiers</div>
+                        <div className="overflow-x-auto">
+                          <table className="w-full text-sm">
+                            <thead>
+                              <tr className="text-left text-slate-500 border-b border-slate-200">
+                                <th className="py-2 pr-4 font-medium">Tier</th>
+                                <th className="py-2 pr-4 font-medium">Fractions</th>
+                                <th className="py-2 pr-4 font-medium">Price / Fraction</th>
+                                <th className="py-2 font-medium">Benefits</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {bp.fractionBreakdown.map((tier) => (
+                                <tr key={tier.id} className="border-b border-slate-100">
+                                  <td className="py-2 pr-4 font-medium text-slate-900">{tier.name}</td>
+                                  <td className="py-2 pr-4 text-slate-700">{tier.totalFractions}</td>
+                                  <td className="py-2 pr-4 text-slate-700">{formatCurrency(tier.pricePerFraction)}</td>
+                                  <td className="py-2 text-slate-600">
+                                    {tier.benefits?.map((b) => (
+                                      <span key={b} className="inline-block mr-2 text-xs bg-slate-100 rounded px-2 py-0.5">{b}</span>
+                                    ))}
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ) : bp.type === "ownership" ? (
+                  <div key={i} className="rounded-2xl border border-teal-200 bg-teal-50/40 p-5">
+                    <div className="flex items-center gap-2 mb-4">
+                      <Badge className="bg-teal-600 text-white font-bold">Ownership Path</Badge>
+                      <Badge variant="secondary" className="capitalize border border-teal-300 text-teal-700">
+                        {bp.releaseBasis === "milestone" ? "Milestone Release" : "Scheduled Release"}
+                      </Badge>
+                    </div>
+                    {bp.releaseBasis === "milestone" && bp.milestones && (
+                      <div className="space-y-3 mb-4">
+                        {bp.milestones.map((m) => (
+                          <div key={m.id} className="flex items-start gap-3">
+                            <div
+                              className={`mt-1 h-3 w-3 rounded-full flex-shrink-0 ${
+                                m.status === "completed" ? "bg-teal-600" : m.status === "in_progress" ? "bg-amber-500" : "bg-slate-300"
+                              }`}
+                            />
+                            <div className="flex-1">
+                              <div className="flex items-center justify-between">
+                                <span className="font-medium text-slate-900">{m.name}</span>
+                                <span className="text-xs font-bold text-teal-700">{m.releasePct}% release</span>
+                              </div>
+                              <div className="text-xs text-slate-500">
+                                {new Date(m.targetDate).toLocaleDateString("en-US", { month: "short", year: "numeric" })}
+                                {m.description ? ` · ${m.description}` : ""}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    {bp.titleTerms && (
+                      <div className="text-sm">
+                        <span className="text-slate-500">Title Terms: </span>
+                        <span className="text-slate-800">{bp.titleTerms}</span>
+                      </div>
+                    )}
+                  </div>
+                ) : null
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Pricing & Payment Logic */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Receipt className="h-5 w-5 text-emerald-600" />
+                Pricing &amp; Payment Logic
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-5">
+              <div className="grid grid-cols-3 gap-4">
+                <div className="p-4 bg-slate-50 rounded-xl">
+                  <div className="text-xs text-slate-500 mb-1">Base Price</div>
+                  <div className="text-lg font-bold text-slate-900">{formatCurrency(property.pricing.basePrice)}</div>
+                </div>
+                <div className="p-4 bg-amber-50 rounded-xl">
+                  <div className="text-xs text-amber-600 mb-1">Markup</div>
+                  <div className="text-lg font-bold text-amber-700">{property.pricing.markupPct}%</div>
+                </div>
+                <div className="p-4 bg-emerald-50 rounded-xl">
+                  <div className="text-xs text-emerald-600 mb-1">Final Selling Price</div>
+                  <div className="text-lg font-bold text-emerald-700">{formatCurrency(property.pricing.finalSellingPrice)}</div>
+                </div>
+              </div>
+
+              <div>
+                <h4 className="font-semibold text-slate-900 mb-3">Payment Options</h4>
+                <div className="grid sm:grid-cols-2 gap-3">
+                  {property.pricing.paymentOptions.map((po, i) => (
+                    <div key={i} className="rounded-xl border border-slate-200 p-4">
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="font-semibold text-slate-900">{po.label}</span>
+                        {po.downPaymentPct != null && (
+                          <Badge variant="secondary" className="text-xs">{po.downPaymentPct}% deposit</Badge>
+                        )}
+                      </div>
+                      <p className="text-xs text-slate-500">{po.description}</p>
+                      {po.trancheCount != null && (
+                        <p className="text-xs text-slate-600 mt-1">{po.trancheCount} tranches · {po.tranchePeriodMonths}-month intervals</p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <h4 className="font-semibold text-slate-900 mb-3">Stage Discounts</h4>
+                <div className="flex flex-wrap gap-2">
+                  {property.pricing.discounts.map((d, i) => (
+                    <Badge key={i} variant="secondary" className="capitalize border border-emerald-300 text-emerald-700">
+                      {d.stage.replace("-", " ")} · -{d.discountPct}% · {d.description}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
           {/* Returns Breakdown */}
           <Card>
             <CardHeader>
@@ -264,9 +508,10 @@ export default function AssetDetailPage() {
             </CardHeader>
             <CardContent>
               <Tabs defaultValue="rental">
-                <TabsList className="grid w-full grid-cols-2">
+                <TabsList className="grid w-full grid-cols-3">
                   <TabsTrigger value="rental">Rental Income</TabsTrigger>
                   <TabsTrigger value="appreciation">Capital Appreciation</TabsTrigger>
+                  <TabsTrigger value="projections">Projections</TabsTrigger>
                 </TabsList>
                 <TabsContent value="rental" className="mt-4">
                   <div className="grid md:grid-cols-3 gap-4">
@@ -301,7 +546,170 @@ export default function AssetDetailPage() {
                     </div>
                   </div>
                 </TabsContent>
+                <TabsContent value="projections" className="mt-4">
+                  <div className="grid md:grid-cols-3 gap-4 mb-4">
+                    <div className="p-4 bg-slate-50 rounded-xl">
+                      <div className="text-sm text-slate-500 mb-1">Projected Rental Income</div>
+                      <div className="text-2xl font-bold text-slate-900">{formatCurrency(property.returns.projectedRentalIncome)}</div>
+                      <div className="text-xs text-slate-500 mt-1 capitalize">{property.returns.frequency} distribution</div>
+                    </div>
+                    <div className="p-4 bg-slate-50 rounded-xl">
+                      <div className="text-sm text-slate-500 mb-1">Operating Costs</div>
+                      <div className="text-2xl font-bold text-slate-900">{formatCurrency(property.returns.operatingCosts)}</div>
+                      <div className="text-xs text-slate-500 mt-1">Annual estimate</div>
+                    </div>
+                    <div className="p-4 bg-emerald-50 rounded-xl">
+                      <div className="text-sm text-emerald-600 mb-1">First Payout</div>
+                      <div className="text-lg font-bold text-emerald-700">
+                        {new Date(property.returns.firstPayoutDate).toLocaleDateString("en-US", { month: "short", year: "numeric" })}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="grid md:grid-cols-3 gap-4">
+                    <div className="p-4 bg-teal-50 rounded-xl">
+                      <div className="text-sm text-teal-600 mb-1">Yield Range</div>
+                      <div className="text-xl font-bold text-teal-700">
+                        {property.returns.yieldRange[0]}% – {property.returns.yieldRange[1]}%
+                      </div>
+                    </div>
+                    <div className="p-4 bg-teal-50 rounded-xl">
+                      <div className="text-sm text-teal-600 mb-1">Appreciation Range</div>
+                      <div className="text-xl font-bold text-teal-700">
+                        +{property.returns.appreciationRange[0]}% – +{property.returns.appreciationRange[1]}%
+                      </div>
+                    </div>
+                    <div className="p-4 bg-teal-50 rounded-xl">
+                      <div className="text-sm text-teal-600 mb-1">Total Return Range</div>
+                      <div className="text-xl font-bold text-teal-700">
+                        {property.returns.totalReturnRange[0]}% – {property.returns.totalReturnRange[1]}%
+                      </div>
+                    </div>
+                  </div>
+                </TabsContent>
               </Tabs>
+            </CardContent>
+          </Card>
+
+          {/* Risk & Management */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <ShieldCheck className="h-5 w-5 text-emerald-600" />
+                Risk &amp; Management
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-5">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <div>
+                  <div className="text-xs text-slate-500 mb-1">Construction Progress</div>
+                  <div className="font-bold text-slate-900">{formatPercentage(property.risk.constructionProgress)}</div>
+                </div>
+                <div>
+                  <div className="text-xs text-slate-500 mb-1">Risk Level</div>
+                  <Badge
+                    className={
+                      property.risk.riskLevel === "low"
+                        ? "bg-emerald-600 text-white"
+                        : property.risk.riskLevel === "medium"
+                        ? "bg-amber-500 text-white"
+                        : "bg-red-600 text-white"
+                    }
+                  >
+                    {property.risk.riskLevel.toUpperCase()}
+                  </Badge>
+                </div>
+                <div>
+                  <div className="text-xs text-slate-500 mb-1">Management Mode</div>
+                  <div className="font-semibold text-slate-900">{property.risk.managementMode}</div>
+                </div>
+              </div>
+
+              <Progress value={property.risk.constructionProgress} className="h-2" />
+
+              <div>
+                <h4 className="font-semibold text-slate-900 mb-2">Risk Factors</h4>
+                <div className="flex flex-wrap gap-2">
+                  {property.risk.riskFactors.map((rf, i) => (
+                    <Badge key={i} variant="secondary" className="px-3 py-1.5">
+                      <ShieldCheck className="h-3 w-3 mr-1 text-slate-500" />
+                      {rf}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="p-4 bg-slate-50 rounded-xl">
+                  <div className="text-xs font-semibold text-slate-600 mb-1">Off-Plan Security</div>
+                  <p className="text-sm text-slate-700">{property.risk.offPlanSecurity}</p>
+                </div>
+                <div className="p-4 bg-slate-50 rounded-xl">
+                  <div className="text-xs font-semibold text-slate-600 mb-1">Exit &amp; Liquidity</div>
+                  <p className="text-sm text-slate-700">{property.risk.exitLiquidity}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Documents & Virtual Tours */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <FileText className="h-5 w-5 text-emerald-600" />
+                Documents &amp; Virtual Tours
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid sm:grid-cols-2 gap-3">
+                {property.documents.map((doc) => (
+                  <div key={doc.id} className="flex items-center gap-3 rounded-xl border border-slate-200 p-3">
+                    <FileText className="h-5 w-5 text-slate-400" />
+                    <div className="flex-1 min-w-0">
+                      <div className="font-medium text-slate-900 truncate">{doc.name}</div>
+                      <div className="text-xs text-slate-500 capitalize">{doc.type} document</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              {property.virtualTours.length > 0 && (
+                <div className="flex flex-wrap gap-3">
+                  {property.virtualTours.map((vt) => (
+                    <div key={vt.id} className="w-40">
+                      <img src={vt.thumbnail} alt={vt.title} className="w-full h-24 object-cover rounded-lg" />
+                      <div className="text-xs text-slate-600 mt-1 truncate">{vt.title}</div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Commission Structure */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Receipt className="h-5 w-5 text-emerald-600" />
+                Commission Structure
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-3 gap-4">
+                <div className="p-4 bg-slate-50 rounded-xl text-center">
+                  <div className="text-xs text-slate-500 mb-1">Lead</div>
+                  <div className="text-2xl font-bold text-slate-900">{property.commission.leadPct}%</div>
+                </div>
+                <div className="p-4 bg-slate-50 rounded-xl text-center">
+                  <div className="text-xs text-slate-500 mb-1">Closer</div>
+                  <div className="text-2xl font-bold text-slate-900">{property.commission.closerPct}%</div>
+                </div>
+                <div className="p-4 bg-amber-50 rounded-xl text-center">
+                  <div className="text-xs text-amber-600 mb-1">Total Commission</div>
+                  <div className="text-2xl font-bold text-amber-700">{property.commission.totalPct}%</div>
+                </div>
+              </div>
+              <p className="text-xs text-slate-500 mt-3">
+                Estimated commission impact per lead allocation: {formatCurrency(property.commission.calculatedAmount)}
+              </p>
             </CardContent>
           </Card>
 
@@ -467,11 +875,9 @@ export default function AssetDetailPage() {
               </div>
 
               {/* CTA Buttons */}
-              <Link href={`/checkout/${property.id}?fractions=${selectedFractions}`} className="block">
-                <Button variant="premium" className="w-full h-14 text-lg">
-                  Invest Now
-                </Button>
-              </Link>
+              <Button variant="premium" className="w-full h-14 text-lg" onClick={handleInvest}>
+                {user && user.kycStatus !== "verified" ? "Complete KYC to Invest" : "Invest Now"}
+              </Button>
               <Button
                 variant="outline"
                 className="w-full"
