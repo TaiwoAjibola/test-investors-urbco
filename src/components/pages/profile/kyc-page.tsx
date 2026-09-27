@@ -74,11 +74,11 @@ export default function KYCPage() {
   return (
     <div className="space-y-8 max-w-5xl">
       {/* Page Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900">KYC & Institutional Verification</h1>
-          <p className="text-slate-500">
-            Tailored compliance for Individual, Family Office, and Institutional tiers across Opco Foundry & Harbor
+          <h1 className="font-display text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">Identity verification</h1>
+          <p className="mt-1 text-sm text-slate-500">
+            Complete verification for your individual or family-office account.
           </p>
         </div>
 
@@ -188,7 +188,7 @@ export default function KYCPage() {
               </div>
               <p className="text-sm text-slate-600 mt-1">
                 {isVerified
-                  ? "Your entity status is fully verified. Unlimited access to Opco Foundry & Harbor allocations."
+                  ? "Your entity status is fully verified. Full access to institutional and fractional allocations."
                   : isFailed
                   ? "Your verification could not be completed. Please review the issues and resubmit your documents."
                   : isRemediation
@@ -364,8 +364,8 @@ export default function KYCPage() {
                     Target Investment Track
                   </label>
                   <select className="w-full rounded-xl border border-slate-200 px-3.5 py-2 text-sm focus:border-amber-500 focus:outline-none bg-slate-50">
-                    <option value="foundry">Opco Foundry (High Value & Institutional &gt; $200M)</option>
-                    <option value="harbor">Opco Harbor (Retail Fractional)</option>
+                    <option value="foundry">Institutional track (from ₦200M)</option>
+                    <option value="harbor">Fractional track (from ₦100K)</option>
                     <option value="both">Both Ecosystems</option>
                   </select>
                 </div>

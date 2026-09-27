@@ -12,19 +12,61 @@
   --font-display: var(--font-sora), var(--font-geist-sans), system-ui, sans-serif;
   --font-mono: var(--font-geist-mono);
 
-  /* Urbco brand colors - override emerald palette with purple */
-  --color-emerald-50: #FDF2FB;
-  --color-emerald-100: #FAE6F6;
-  --color-emerald-200: #F5CCED;
-  --color-emerald-400: #D980C8;
-  --color-emerald-500: #870F73;
-  --color-emerald-600: #6B0C5B;
-  --color-emerald-700: #580A4B;
-  --color-emerald-800: #4D0840;
+  /* ============================================================
+     URBCO BRAND SCALE  (canonical — use these in all new code)
+     brand = Urbco purple, accent = Urbco gold
+     ============================================================ */
+  --color-brand-50:  #FDF3FA;
+  --color-brand-100: #FAE6F4;
+  --color-brand-200: #F4CCE8;
+  --color-brand-300: #E5A3CE;
+  --color-brand-400: #D06FB0;
+  --color-brand-500: #A82A90;
+  --color-brand-600: #870F73;
+  --color-brand-700: #6B0C5B;
+  --color-brand-800: #520947;
+  --color-brand-900: #3B0632;
+
+  --color-accent-50:  #FDF8EF;
+  --color-accent-100: #FAEFD9;
+  --color-accent-200: #F4DEB2;
+  --color-accent-300: #E9C88A;
+  --color-accent-400: #DEB471;
+  --color-accent-500: #D4A065;
+  --color-accent-600: #B8934A;
+  --color-accent-700: #9C7A3B;
+  --color-accent-800: #7C602F;
+  --color-accent-900: #5C4823;
+
+  /* Neutral surface ramp (single light theme) */
+  --color-surface:        #FFFFFF;
+  --color-surface-sunken: #F7F6F9;
+  --color-surface-muted:  #F1EFF4;
+  --color-line:           #E7E4EC;
+  --color-line-strong:    #D5D1DD;
+
+  /* Semantic */
+  --color-success: #0E9F6E;
+  --color-success-soft: #E7F6F0;
+  --color-warning: #B45309;
+  --color-warning-soft: #FEF3E2;
+  --color-danger: #DC2626;
+  --color-danger-soft: #FEE2E2;
+  --color-info: #0369A1;
+  --color-info-soft: #E0F2FE;
+
+  /* Backwards-compatible aliases (legacy emerald/teal -> brand/accent) */
+  --color-emerald-50: #FDF3FA;
+  --color-emerald-100: #FAE6F4;
+  --color-emerald-200: #F4CCE8;
+  --color-emerald-400: #D06FB0;
+  --color-emerald-500: #A82A90;
+  --color-emerald-600: #870F73;
+  --color-emerald-700: #6B0C5B;
+  --color-emerald-800: #520947;
   --color-emerald-900: #3B0632;
 
-  /* Urbco brand colors - override teal palette with gold */
-  --color-teal-50: #FDF6EA;
+  --color-teal-50: #FDF8EF;
   --color-teal-500: #D4A065;
   --color-teal-600: #B8934A;
   --color-teal-700: #9C7A3B;
@@ -38,8 +80,8 @@
 }
 
 body {
-  background: #f8fafc;
-  color: #0f172a;
+  background: var(--color-surface-sunken);
+  color: var(--color-foreground);
   font-family: var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   font-size: 15px;
   letter-spacing: -0.011em;
@@ -50,6 +92,18 @@ body {
 h1, h2, h3, h4, .font-display {
   font-family: var(--font-sora), 'Inter', system-ui, sans-serif;
   letter-spacing: -0.02em;
+}
+
+/* Respect user motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* Custom scrollbar */

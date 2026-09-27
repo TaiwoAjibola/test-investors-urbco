@@ -23,7 +23,7 @@ export default function PortfolioPage() {
       {/* Page Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900">My Portfolio</h1>
+          <h1 className="font-display text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">My Portfolio</h1>
           <p className="text-slate-500">Track your real estate investments</p>
         </div>
       </div>

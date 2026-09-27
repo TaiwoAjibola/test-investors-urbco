@@ -21,6 +21,7 @@ export function Header() {
           size="icon"
           onClick={toggleSidebar}
           className="lg:hidden"
+          aria-label="Toggle navigation menu"
         >
           <Menu className="h-5 w-5" />
         </Button>

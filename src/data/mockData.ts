@@ -38,7 +38,7 @@ function deriveAdmin(p: AdminSeed) {
   const investmentPath: BuyingPath = {
     type: "investment",
     interestStructure: "fractional",
-    instrument: investmentProgram === "foundry" ? "Opco Foundry Debenture" : "Opco Harbor Profit Note",
+    instrument: investmentProgram === "foundry" ? "Urbco Institutional Note" : "Urbco Fractional Certificate",
     minimumInvestment: p.minimumInvestment ?? 1000000,
     totalFundingRequired: p.investmentAvailable,
     investmentWindow: { open: new Date("2026-01-01"), close: new Date("2026-12-31") },
@@ -161,11 +161,11 @@ function deriveAdmin(p: AdminSeed) {
 const rawProperties: Omit<Property, "referenceCode" | "developerCompany" | "projectStatus" | "landSizeSqm" | "builtSizeSqm" | "constructionStartDate" | "constructionEndDate" | "totalUnits" | "availableUnits" | "unitConfiguration" | "facilityManagement" | "investmentProgram" | "buyingPaths" | "pricing" | "returns" | "risk" | "documents" | "virtualTours" | "commission" | "publishStatus">[] = [
   {
     id: "prop-000-foundry-1",
-    name: "Opco Foundry Eko Atlantic Waterfront Towers",
+    name: "Eko Atlantic Waterfront Towers",
     location: "Eko Atlantic City, Lagos",
     fullAddress: "Plot 1-5 Financial District, Eko Atlantic, Lagos State",
     propertyType: "mixed-use",
-    description: "An ultra-luxury institutional mega-development situated in Eko Atlantic's Financial Center. Designed exclusively for Opco Foundry high-net-worth investors, family offices, and institutional syndicates. Spanning twin 45-storey ultra-modern glass towers with private helipads, marina docks, and high-yield commercial/residential leases.",
+    description: "An ultra-luxury institutional mega-development situated in Eko Atlantic's Financial Center. Designed exclusively for high-net-worth investors, family offices, and institutional syndicates. Spanning twin 45-storey ultra-modern glass towers with private helipads, marina docks, and high-yield commercial/residential leases.",
     images: [
       "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1200&q=80",
       "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200&q=80",
@@ -203,11 +203,11 @@ const rawProperties: Omit<Property, "referenceCode" | "developerCompany" | "proj
   },
   {
     id: "prop-000-foundry-2",
-    name: "Opco Foundry Victoria Island Financial Hub",
+    name: "Victoria Island Financial Hub",
     location: "Victoria Island, Lagos",
     fullAddress: "88 Ahmadu Bello Way, Victoria Island, Lagos State",
     propertyType: "commercial",
-    description: "A completed Grade-A corporate tower fully tenanted by international financial firms, global tech hubs, and multinational headquarters. Dedicated to Opco Foundry institutional investors seeking immediate high-volume quarterly rental cashflow and long-term capital preservation.",
+    description: "A completed Grade-A corporate tower fully tenanted by international financial firms, global tech hubs, and multinational headquarters. Dedicated to institutional investors seeking immediate high-volume quarterly rental cashflow and long-term capital preservation.",
     images: [
       "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200&q=80",
       "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&q=80",
@@ -449,7 +449,7 @@ const rawProperties: Omit<Property, "referenceCode" | "developerCompany" | "proj
     location: "Bodija, Ibadan",
     fullAddress: "25 University Road, Bodija, Ibadan, Oyo State",
     propertyType: "commercial",
-    description: "Modern tech hub and co-working space catering to the growing tech ecosystem in Ibadan. High occupancy rates with quality tenants, accessible via Opco Harbor.",
+    description: "Modern tech hub and co-working space catering to the growing tech ecosystem in Ibadan. High occupancy rates with quality tenants, accessible via the fractional track.",
     images: [
       "https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=1200&q=80",
       "https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=1200&q=80",

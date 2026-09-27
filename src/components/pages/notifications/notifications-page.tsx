@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Bell, Check, CheckCheck, Trash2, Filter } from "lucide-react";
+import { Bell, Check, CheckCheck, Trash2, Filter, Banknote, CreditCard, Building2, TrendingUp, AlertTriangle } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -21,19 +21,22 @@ export default function NotificationsPage() {
   });
 
   const getNotificationIcon = (type: string) => {
+    const wrap = (icon: React.ReactNode, bg: string) => (
+      <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${bg}`}>{icon}</div>
+    );
     switch (type) {
       case "dividend":
-        return <div className="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center"><span className="text-2xl">💰</span></div>;
+        return wrap(<Banknote className="h-5 w-5 text-brand-700" />, "bg-brand-50");
       case "payment":
-        return <div className="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center"><span className="text-2xl">💳</span></div>;
+        return wrap(<CreditCard className="h-5 w-5 text-accent-700" />, "bg-accent-50");
       case "opportunity":
-        return <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center"><span className="text-2xl">🏢</span></div>;
+        return wrap(<Building2 className="h-5 w-5 text-info" />, "bg-info-soft");
       case "asset":
-        return <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center"><span className="text-2xl">📊</span></div>;
+        return wrap(<TrendingUp className="h-5 w-5 text-brand-700" />, "bg-brand-50");
       case "alert":
-        return <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center"><span className="text-2xl">⚠️</span></div>;
+        return wrap(<AlertTriangle className="h-5 w-5 text-danger" />, "bg-danger-soft");
       default:
-        return <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center"><Bell className="h-6 w-6 text-slate-600" /></div>;
+        return wrap(<Bell className="h-5 w-5 text-slate-500" />, "bg-surface-muted");
     }
   };
 
@@ -42,7 +45,7 @@ export default function NotificationsPage() {
       {/* Page Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900">Notifications</h1>
+          <h1 className="font-display text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">Notifications</h1>
           <p className="text-slate-500">Stay updated with your investments</p>
         </div>
         <div className="flex space-x-2">

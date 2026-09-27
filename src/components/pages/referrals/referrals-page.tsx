@@ -17,7 +17,7 @@ export default function ReferralsPage() {
     <div className="space-y-8">
       {/* Page Header */}
       <div>
-        <h1 className="text-3xl font-bold text-slate-900">Refer & Earn</h1>
+        <h1 className="font-display text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">Refer & Earn</h1>
         <p className="text-slate-500">Invite friends and earn rewards</p>
       </div>
 

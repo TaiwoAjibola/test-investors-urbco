@@ -43,18 +43,22 @@ export default function ServicesPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 bg-white/85 backdrop-blur-xl border-b border-slate-100">
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+      <nav className="sticky top-0 z-50 w-full border-b border-line bg-white/85 backdrop-blur-xl">
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
           <Link href="/" className="flex items-center">
             <img src="/urbco-logo.svg" alt="Urbco" className="h-9" />
           </Link>
-          <div className="hidden md:flex items-center gap-8">
-            <Link href="/marketplace" className="text-sm font-medium text-slate-600 hover:text-emerald-600 transition-colors">Own-a-Fraction</Link>
-            <Link href="/services" className="text-sm font-medium text-emerald-600 transition-colors">Services</Link>
-            <Link href="/about" className="text-sm font-medium text-slate-600 hover:text-emerald-600 transition-colors">About Us</Link>
-            <Link href="/auth/login" className="text-sm font-medium text-slate-600 hover:text-emerald-600 transition-colors">Login</Link>
+          <div className="hidden items-center gap-1 md:flex">
+            <Link href="/" className="rounded-lg px-3.5 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-brand-50 hover:text-brand-700">Home</Link>
+            <Link href="/services" className="rounded-lg bg-brand-50 px-3.5 py-2 text-sm font-medium text-brand-700 transition-colors">Services</Link>
+            <Link href="/about" className="rounded-lg px-3.5 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-brand-50 hover:text-brand-700">About Us</Link>
+          </div>
+          <div className="flex items-center gap-2">
+            <Link href="/auth/login" className="hidden sm:block">
+              <Button variant="ghost" size="sm">Log in</Button>
+            </Link>
             <Link href="/auth/signup">
-              <Button variant="premium" size="sm">Get Started</Button>
+              <Button size="sm">Get Started</Button>
             </Link>
           </div>
         </div>
@@ -130,15 +134,15 @@ export default function ServicesPage() {
             <div>
               <h4 className="font-semibold mb-4">Platform</h4>
               <ul className="space-y-2 text-slate-400 text-sm">
-                <li><Link href="/marketplace" className="hover:text-white">Own-a-Fraction</Link></li>
-                <li><Link href="/services" className="hover:text-white">Services</Link></li>
-                <li><Link href="/about" className="hover:text-white">About Us</Link></li>
+                <li><Link href="/" className="transition-colors hover:text-accent-400">Home</Link></li>
+                <li><Link href="/services" className="transition-colors hover:text-accent-400">Services</Link></li>
+                <li><Link href="/about" className="transition-colors hover:text-accent-400">About Us</Link></li>
               </ul>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Company</h4>
               <ul className="space-y-2 text-slate-400 text-sm">
-                <li><Link href="/about" className="hover:text-white">About Us</Link></li>
+                <li><Link href="/about" className="transition-colors hover:text-accent-400">About Us</Link></li>
                 <li><Link href="/about#careers" className="hover:text-white">Careers</Link></li>
                 <li><Link href="/about#contact" className="hover:text-white">Contact</Link></li>
               </ul>

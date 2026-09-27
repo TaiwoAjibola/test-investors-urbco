@@ -1,493 +1,498 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import {
-  Building2,
-  TrendingUp,
-  Users,
-  Shield,
-  ArrowRight,
-  CheckCircle2,
-  Sparkles,
-  MapPin,
-  Award,
-  LineChart,
-  Wallet,
-  Compass,
-  Crown,
-  Anchor,
-  Layers,
-  ChevronRight,
-  Briefcase,
-  Building,
-  Check,
-  Calculator,
-  ArrowUpRight,
+  Building2, Shield, Crown, Anchor, ArrowRight, Calculator, CheckCircle, MapPin,
+  TrendingUp, Landmark, Briefcase, Users, Menu, X, Sparkles, FileCheck, Wallet, Globe,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { useAppStore } from "@/stores/appStore";
 import { formatCurrency, formatPercentage, formatCompactNumber } from "@/lib/utils";
 import Link from "next/link";
-import { useState } from "react";
+
+const NAV_LINKS = [
+  { label: "Home", href: "/" },
+  { label: "Services", href: "/services" },
+  { label: "About Us", href: "/about" },
+];
 
 export default function LandingPage() {
-  const [activeTrack, setActiveTrack] = useState<"all" | "foundry" | "harbor">("all");
-  const [investmentAmount, setInvestmentAmount] = useState<number>(50000000); // default ₦50M
-  const [calculatorTrack, setCalculatorTrack] = useState<"foundry" | "harbor">("foundry");
-
   const { properties } = useAppStore();
+  const [activeTrack, setActiveTrack] = useState<"all" | "foundry" | "harbor">("all");
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [calcAmount, setCalcAmount] = useState(50000000);
+  const [calcTerm, setCalcTerm] = useState(3);
+
   const foundryProperties = properties.filter((p) => p.targetTrack === "foundry" || p.targetTrack === "both");
   const harborProperties = properties.filter((p) => p.targetTrack === "harbor" || p.targetTrack === "both");
   const displayedProperties = activeTrack === "foundry" ? foundryProperties : activeTrack === "harbor" ? harborProperties : properties.slice(0, 4);
 
-  // ROI Calculator Math
-  const annualYield = calculatorTrack === "foundry" ? 0.28 : 0.18; // 28% for Foundry vs 18% for Harbor
-  const calculateReturn = (amount: number, years: number) => {
-    return Math.round(amount * Math.pow(1 + annualYield, years) - amount);
-  };
-
-  const yearScenarios = [1, 3, 5].map((years) => {
-    const returns = calculateReturn(investmentAmount, years);
-    return { years, returns, total: investmentAmount + returns };
-  });
+  const calcYield = activeTrack === "harbor" ? 18 : 28;
+  const calcReturn = Math.round(calcAmount * (calcYield / 100) * calcTerm);
 
   const stats = [
-    { label: "Institutional Assets Managed", value: "₦580B+", sub: "> $380M Portfolio Scale", icon: Building2 },
-    { label: "Trustee-Secured Capital", value: "₦45B+", sub: "Zero Principal Loss Record", icon: Shield },
-    { label: "Opco Foundry Target Ticket", value: "₦200M+", sub: "HNWI & Institutional Scale", icon: Crown },
-    { label: "Opco Harbor Entry Ticket", value: "₦100K", sub: "Accessible Retail Fractional", icon: Anchor },
+    { label: "Assets Under Management", value: "₦580B+", sub: "Across Lagos, Abuja & PH", icon: Building2 },
+    { label: "Trustee-Secured Capital", value: "₦45B+", sub: "Held in independent escrow", icon: Shield },
+    { label: "Average Term Yield", value: "18–28%", sub: "Paid quarterly in-app", icon: TrendingUp },
+    { label: "Principal Loss Record", value: "Zero", sub: "Since inception", icon: CheckCircle },
   ];
 
   return (
-    <div className="min-h-screen bg-[#07050A] text-slate-100 font-sans selection:bg-[#D4A065] selection:text-black">
-      {/* ============ HEADER NAVIGATION ============ */}
-      <header className="fixed inset-x-0 top-0 z-50">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 pt-4">
-          <div className="flex h-16 items-center justify-between rounded-2xl border border-white/10 bg-[#120F1A]/85 px-6 shadow-[0_8px_30px_rgb(0_0_0/0.45)] backdrop-blur-xl">
-            <Link href="/" className="flex items-center gap-3">
-              <img src="/urbco-logo-white.svg" alt="Urbco" className="h-9" />
+    <div className="min-h-screen bg-surface-sunken font-sans selection:bg-brand-600 selection:text-white">
+      {/* ============ HEADER ============ */}
+      <header className="sticky top-0 z-50 border-b border-line bg-white/85 backdrop-blur-xl">
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
+          <Link href="/" className="flex shrink-0 items-center gap-2.5" aria-label="Urbco home">
+            <img src="/urbco-logo.svg" alt="Urbco" className="h-8 w-auto" />
+          </Link>
+
+          {/* Desktop nav */}
+          <nav className="hidden items-center gap-1 md:flex" aria-label="Main">
+            {NAV_LINKS.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="rounded-lg px-3.5 py-2 text-sm font-medium text-slate-600 transition-colors duration-200 hover:bg-brand-50 hover:text-brand-700"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+
+          <div className="flex items-center gap-2">
+            <Link href="/auth/login" className="hidden sm:block">
+              <Button variant="ghost" size="sm">Log in</Button>
             </Link>
-
-            <nav className="hidden items-center gap-8 md:flex">
-              <Link href="#ecosystems" className="text-sm font-medium text-slate-300 transition-colors hover:text-[#D4A065]">
-                Ecosystems
-              </Link>
-              <Link href="#foundry" className="text-sm font-medium text-amber-300/90 transition-colors hover:text-amber-200 flex items-center gap-1.5">
-                <Crown className="h-3.5 w-3.5 text-amber-400" />
-                Opco Foundry
-              </Link>
-              <Link href="#harbor" className="text-sm font-medium text-cyan-300/90 transition-colors hover:text-cyan-200 flex items-center gap-1.5">
-                <Anchor className="h-3.5 w-3.5 text-cyan-400" />
-                Opco Harbor
-              </Link>
-              <Link href="/marketplace" className="text-sm font-medium text-slate-300 transition-colors hover:text-white">
-                Marketplace
-              </Link>
-              <Link href="/about" className="text-sm font-medium text-slate-300 transition-colors hover:text-white">
-                About Us
-              </Link>
-            </nav>
-
-            <div className="flex items-center gap-3">
-              <Link href="/auth/login" className="hidden text-sm font-medium text-slate-300 transition-colors hover:text-white sm:block">
-                Sign In
-              </Link>
-              <Link href="/auth/signup">
-                <Button variant="premium" size="sm" className="rounded-xl px-4 font-semibold shadow-lg shadow-amber-500/10">
-                  Create Account
-                </Button>
-              </Link>
-            </div>
+            <Link href="/auth/signup" className="hidden sm:block">
+              <Button size="sm" className="px-4">Get Started</Button>
+            </Link>
+            <Link href="/auth/signup" className="sm:hidden">
+              <Button size="sm">Get Started</Button>
+            </Link>
+            <button
+              onClick={() => setMobileOpen((v) => !v)}
+              className="inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg border border-line bg-white text-slate-700 transition-colors hover:bg-slate-50 md:hidden"
+              aria-label={mobileOpen ? "Close menu" : "Open menu"}
+              aria-expanded={mobileOpen}
+            >
+              {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
           </div>
         </div>
+
+        {/* Mobile nav */}
+        {mobileOpen && (
+          <div className="border-t border-line bg-white md:hidden">
+            <nav className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-3" aria-label="Mobile">
+              {NAV_LINKS.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setMobileOpen(false)}
+                  className="rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 transition-colors hover:bg-brand-50 hover:text-brand-700"
+                >
+                  {link.label}
+                </Link>
+              ))}
+              <div className="mt-2 grid grid-cols-2 gap-2 border-t border-line pt-3">
+                <Link href="/auth/login">
+                  <Button variant="outline" className="w-full">Log in</Button>
+                </Link>
+                <Link href="/auth/signup">
+                  <Button className="w-full">Get Started</Button>
+                </Link>
+              </div>
+            </nav>
+          </div>
+        )}
       </header>
 
       <main>
-        {/* ============ DUAL HERO SECTION ============ */}
-        <section className="relative overflow-hidden pt-36 pb-24 md:pt-44 md:pb-32">
-          {/* Ambient Glow Effects */}
-          <div className="pointer-events-none absolute -top-40 left-1/2 h-[600px] w-[1000px] -translate-x-1/2 rounded-full bg-gradient-to-tr from-amber-600/15 via-purple-900/10 to-cyan-600/15 blur-[140px]" />
-          <div className="pointer-events-none absolute top-1/4 right-0 h-[450px] w-[450px] rounded-full bg-[#D4A065]/10 blur-[130px]" />
-          <div className="pointer-events-none absolute bottom-10 left-0 h-[450px] w-[450px] rounded-full bg-cyan-500/10 blur-[130px]" />
-
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 text-center relative z-10">
-            {/* Top Pill Switcher */}
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 p-1.5 backdrop-blur-md mb-8"
-            >
-              <button
-                onClick={() => setActiveTrack("all")}
-                className={`rounded-full px-4 py-1.5 text-xs font-semibold transition-all ${
-                  activeTrack === "all" ? "bg-white/15 text-white shadow-inner" : "text-slate-400 hover:text-white"
-                }`}
+        {/* ============ HERO ============ */}
+        <section className="relative overflow-hidden border-b border-line bg-white">
+          <div
+            className="pointer-events-none absolute -top-40 left-1/2 h-[320px] w-[90vw] max-w-[900px] -translate-x-1/2 rounded-full opacity-60 blur-[100px] sm:h-[520px]"
+            style={{ background: "radial-gradient(closest-side, rgba(135,15,115,0.16), rgba(212,160,101,0.10), transparent)" }}
+          />
+          <div className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:py-28">
+            <div className="mx-auto max-w-4xl text-center">
+              <motion.div
+                initial={{ opacity: 0, y: -12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.45 }}
+                className="mb-6 inline-flex items-center gap-2 rounded-full border border-brand-200 bg-brand-50 px-3.5 py-1.5 text-xs font-semibold text-brand-700"
               >
-                All Ecosystems
-              </button>
-              <button
-                onClick={() => setActiveTrack("foundry")}
-                className={`flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-semibold transition-all ${
-                  activeTrack === "foundry"
-                    ? "bg-gradient-to-r from-amber-500 to-yellow-600 text-black font-bold shadow-lg shadow-amber-500/20"
-                    : "text-amber-400/80 hover:text-amber-300"
-                }`}
+                <Shield className="h-3.5 w-3.5" />
+                Trustee-secured real estate investing
+              </motion.div>
+
+              <motion.h1
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.55 }}
+                className="font-display text-4xl font-extrabold leading-[1.1] tracking-tight text-slate-900 sm:text-5xl lg:text-6xl"
               >
-                <Crown className="h-3.5 w-3.5" />
-                Opco Foundry (HNWI & Institutional)
-              </button>
-              <button
-                onClick={() => setActiveTrack("harbor")}
-                className={`flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-semibold transition-all ${
-                  activeTrack === "harbor"
-                    ? "bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold shadow-lg shadow-cyan-500/20"
-                    : "text-cyan-400/80 hover:text-cyan-300"
-                }`}
+                Institutional-grade real estate,{" "}
+                <span className="bg-gradient-to-r from-brand-600 to-accent-600 bg-clip-text text-transparent">
+                  accessible to everyone
+                </span>
+              </motion.h1>
+
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.55, delay: 0.08 }}
+                className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-slate-600 sm:text-lg"
               >
-                <Anchor className="h-3.5 w-3.5" />
-                Opco Harbor (Retail Fractional)
-              </button>
-            </motion.div>
+                Urbco gives you two ways to own Nigerian real estate — a high-value institutional track for
+                large capital, and a fractional track for building wealth steadily. Capital is held by an
+                independent trustee and released against verified milestones.
+              </motion.p>
 
-            {/* Main Headline */}
-            <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7 }}
-              className="font-display text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight leading-[1.08] text-white max-w-5xl mx-auto"
-            >
-              Two Premier Investment Tracks.{" "}
-              <br className="hidden sm:block" />
-              <span className="bg-gradient-to-r from-amber-200 via-amber-400 to-yellow-500 bg-clip-text text-transparent">
-                Opco Foundry
-              </span>{" "}
-              &{" "}
-              <span className="bg-gradient-to-r from-cyan-300 via-teal-300 to-emerald-400 bg-clip-text text-transparent">
-                Opco Harbor
-              </span>
-            </motion.h1>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.55, delay: 0.16 }}
+                className="mt-9 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center"
+              >
+                <Link href="/auth/signup" className="sm:w-auto">
+                  <Button size="lg" className="w-full shadow-lg shadow-brand-600/20 sm:w-auto">
+                    Get Started <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
+                <Link href="/services" className="sm:w-auto">
+                  <Button size="lg" variant="outline" className="w-full sm:w-auto">
+                    Explore our services
+                  </Button>
+                </Link>
+              </motion.div>
 
-            <motion.p
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.15 }}
-              className="mt-6 text-lg sm:text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed"
-            >
-              Whether you are a High-Net-Worth Individual, Family Office, or Institution deploying{" "}
-              <span className="text-amber-300 font-semibold">$200M+ mega tickets</span> in <span className="text-white font-medium">Opco Foundry</span>, or a retail investor building wealth with fractional real estate in <span className="text-cyan-300 font-semibold">Opco Harbor</span> — Urbco powers trustee-backed real estate opportunities.
-            </motion.p>
-
-            {/* CTAs */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.25 }}
-              className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4"
-            >
-              <Link href="/auth/signup?track=foundry">
-                <Button
-                  size="lg"
-                  className="w-full sm:w-auto bg-gradient-to-r from-amber-500 via-amber-600 to-yellow-600 hover:from-amber-400 hover:to-yellow-500 text-black font-bold px-8 py-6 rounded-2xl shadow-xl shadow-amber-500/20 text-base"
-                >
-                  <Crown className="mr-2 h-5 w-5" />
-                  Explore Opco Foundry
-                </Button>
-              </Link>
-              <Link href="/auth/signup?track=harbor">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="w-full sm:w-auto border-cyan-500/40 bg-cyan-950/30 text-cyan-200 hover:bg-cyan-900/40 hover:text-white px-8 py-6 rounded-2xl text-base"
-                >
-                  <Anchor className="mr-2 h-5 w-5 text-cyan-400" />
-                  Join Opco Harbor Retail
-                </Button>
-              </Link>
-            </motion.div>
-
-            {/* Trust Badges */}
-            <div className="mt-12 flex flex-wrap justify-center items-center gap-6 text-xs sm:text-sm text-slate-400">
-              <div className="flex items-center gap-2">
-                <CheckCircle2 className="h-4 w-4 text-emerald-400" />
-                <span>Trustee-Protected Escrow</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <CheckCircle2 className="h-4 w-4 text-emerald-400" />
-                <span>Pre & Post-Development Assets</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <CheckCircle2 className="h-4 w-4 text-emerald-400" />
-                <span>Audited Institutional Reporting</span>
+              <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs font-medium text-slate-500">
+                <span className="inline-flex items-center gap-1.5"><CheckCircle className="h-3.5 w-3.5 text-brand-600" />CAC-registered trustee custody</span>
+                <span className="inline-flex items-center gap-1.5"><CheckCircle className="h-3.5 w-3.5 text-brand-600" />SEC-compliant onboarding</span>
+                <span className="inline-flex items-center gap-1.5"><CheckCircle className="h-3.5 w-3.5 text-brand-600" />Quarterly distributions</span>
               </div>
             </div>
           </div>
         </section>
 
-        {/* ============ STATS BAR ============ */}
-        <section className="border-y border-white/10 bg-[#0E0C17] py-10">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((stat, i) => (
-              <div key={i} className="text-center md:text-left border-r last:border-r-0 border-white/5 pr-4">
-                <div className="flex items-center justify-center md:justify-start gap-2 text-[#D4A065] mb-1">
-                  <stat.icon className="h-5 w-5" />
-                  <span className="text-xs uppercase font-bold tracking-wider text-slate-400">{stat.label}</span>
-                </div>
-                <div className="text-2xl sm:text-3xl font-extrabold text-white">{stat.value}</div>
-                <div className="text-xs text-slate-400 mt-1">{stat.sub}</div>
+        {/* ============ STATS ============ */}
+        <section className="border-b border-line bg-white">
+          <div className="mx-auto grid max-w-7xl grid-cols-2 gap-px overflow-hidden bg-line px-0 lg:grid-cols-4">
+            {stats.map((s) => (
+              <div key={s.label} className="bg-white p-5 sm:p-6">
+                <s.icon className="mb-3 h-5 w-5 text-brand-600" />
+                <div className="font-display text-2xl font-extrabold text-slate-900 sm:text-3xl">{s.value}</div>
+                <div className="mt-1 text-xs font-semibold text-slate-700">{s.label}</div>
+                <div className="mt-0.5 text-xs text-slate-500">{s.sub}</div>
               </div>
             ))}
           </div>
         </section>
 
-        {/* ============ ECOSYSTEM COMPARISON SECTION ============ */}
-        <section id="ecosystems" className="py-24 relative overflow-hidden bg-[#0A0812]">
+        {/* ============ TWO TRACKS ============ */}
+        <section id="tracks" className="border-b border-line bg-surface-sunken py-20 sm:py-24">
           <div className="mx-auto max-w-7xl px-4 sm:px-6">
-            <div className="text-center max-w-3xl mx-auto mb-16">
-              <Badge className="mb-4 bg-purple-500/10 text-purple-300 border-purple-500/30 px-4 py-1">
-                Architected for Diverse Investor Needs
-              </Badge>
-              <h2 className="text-3xl sm:text-5xl font-extrabold text-white">
-                Choose Your Preferred Investment Track
+            <div className="mx-auto max-w-2xl text-center">
+              <Badge variant="secondary" className="mb-4 border-brand-200 bg-brand-50 text-brand-700">Two ways to invest</Badge>
+              <h2 className="font-display text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+                Choose the track that fits your capital
               </h2>
-              <p className="mt-4 text-slate-400 text-base sm:text-lg">
-                Urbco segments high-end real estate opportunities so every investor tier gets maximum returns with structured security.
+              <p className="mt-4 text-slate-600">
+                Both tracks are trustee-secured and pay quarterly. The difference is ticket size, structure,
+                and how you participate in the asset.
               </p>
             </div>
 
-            <div className="grid lg:grid-cols-2 gap-8">
-              {/* ============ OPCO FOUNDRY CARD ============ */}
-              <motion.div
-                whileHover={{ y: -5 }}
-                className="relative rounded-3xl border border-amber-500/30 bg-gradient-to-b from-[#18130B] via-[#120E08] to-[#0A0805] p-8 sm:p-10 shadow-2xl shadow-amber-950/30 overflow-hidden group"
-              >
-                <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
-                <div className="flex items-center justify-between mb-6">
-                  <div className="inline-flex items-center gap-2 rounded-xl bg-amber-500/10 border border-amber-500/30 px-3.5 py-1.5 text-amber-400 text-xs font-bold uppercase tracking-wider">
-                    <Crown className="h-4 w-4" />
-                    Ultra High-Value Ecosystem
+            <div className="mt-14 grid gap-6 lg:grid-cols-2">
+              {/* Foundry */}
+              <Card className="flex flex-col border-line hover:border-accent-300 hover:shadow-lifted">
+                <CardContent className="flex flex-1 flex-col p-6 sm:p-8">
+                  <div className="flex items-center gap-2">
+                    <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-accent-100 text-accent-700">
+                      <Crown className="h-4.5 w-4.5" />
+                    </span>
+                    <Badge className="bg-accent-500 text-slate-900">High-value track</Badge>
                   </div>
-                  <Badge className="bg-amber-400 text-black font-bold">25% — 38%+ ROI</Badge>
-                </div>
+                  <h3 className="mt-5 font-display text-2xl font-bold text-slate-900">Institutional Track</h3>
+                  <p className="mt-1 text-sm font-semibold text-accent-700">Tickets from ₦200M</p>
+                  <p className="mt-4 text-sm leading-relaxed text-slate-600">
+                    For family offices, HNWIs and institutions deploying large capital into completed and
+                    near-completion assets. Positions are held as notes with defined exit terms and direct
+                    asset-level reporting.
+                  </p>
+                  <ul className="mt-6 space-y-3 text-sm">
+                    {[
+                      "₦200M+ minimum allocation",
+                      "Single-ticket or structured notes",
+                      "Priority secondary-transfer window",
+                      "Dedicated advisor and tax reporting",
+                    ].map((f) => (
+                      <li key={f} className="flex items-start gap-2.5">
+                        <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-accent-600" />
+                        <span className="text-slate-700">{f}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <Link href="/auth/signup?track=foundry" className="mt-auto pt-8">
+                    <Button variant="outline" className="w-full border-accent-400 text-accent-800 hover:bg-accent-50">
+                      Apply for institutional access <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
 
-                <h3 className="text-3xl font-extrabold text-white mb-2">Opco Foundry</h3>
-                <p className="text-amber-200/80 text-sm font-medium mb-6">
-                  For High-Net-Worth Individuals (HNWIs), Family Offices & Institutional Funds
-                </p>
-                <p className="text-slate-300 text-sm leading-relaxed mb-8">
-                  Engineered specifically for mega-tickets starting at <span className="text-amber-300 font-bold">₦200M+ ($200M+ USD portfolio scale)</span>. Gain priority access to multi-billion landmark developments, bespoke syndicate structures, and early pre-development land allocations.
-                </p>
-
-                <div className="space-y-4 mb-8 text-sm">
-                  <div className="flex items-start gap-3">
-                    <div className="mt-1 flex h-5 w-5 items-center justify-center rounded-full bg-amber-500/20 text-amber-400">
-                      <Check className="h-3.5 w-3.5" />
-                    </div>
-                    <div>
-                      <strong className="text-white block">Pre & Post-Development Asset Access</strong>
-                      <span className="text-slate-400 text-xs">Participate from early off-plan land acquisition to fully tenanted commercial towers.</span>
-                    </div>
+              {/* Harbor */}
+              <Card className="flex flex-col border-line hover:border-brand-300 hover:shadow-lifted">
+                <CardContent className="flex flex-1 flex-col p-6 sm:p-8">
+                  <div className="flex items-center gap-2">
+                    <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-brand-50 text-brand-700">
+                      <Anchor className="h-4.5 w-4.5" />
+                    </span>
+                    <Badge className="bg-brand-600 text-white">Fractional track</Badge>
                   </div>
-                  <div className="flex items-start gap-3">
-                    <div className="mt-1 flex h-5 w-5 items-center justify-center rounded-full bg-amber-500/20 text-amber-400">
-                      <Check className="h-3.5 w-3.5" />
-                    </div>
-                    <div>
-                      <strong className="text-white block">Dedicated Institutional Trustee Security</strong>
-                      <span className="text-slate-400 text-xs">Independent trustee-held escrow with milestone-based fund releases.</span>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <div className="mt-1 flex h-5 w-5 items-center justify-center rounded-full bg-amber-500/20 text-amber-400">
-                      <Check className="h-3.5 w-3.5" />
-                    </div>
-                    <div>
-                      <strong className="text-white block">Tailored Syndicate & Family Office Portal</strong>
-                      <span className="text-slate-400 text-xs">Custom governance, multi-signatory approvals, and tax-optimized structures.</span>
-                    </div>
-                  </div>
-                </div>
-
-                <Link href="/auth/signup?track=foundry">
-                  <Button className="w-full bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-400 hover:to-yellow-500 text-black font-bold py-6 rounded-2xl text-base shadow-lg shadow-amber-500/20">
-                    Apply for Opco Foundry Access <ArrowRight className="ml-2 h-5 w-5" />
-                  </Button>
-                </Link>
-              </motion.div>
-
-              {/* ============ OPCO HARBOR CARD ============ */}
-              <motion.div
-                whileHover={{ y: -5 }}
-                className="relative rounded-3xl border border-cyan-500/30 bg-gradient-to-b from-[#0B151A] via-[#081014] to-[#05080A] p-8 sm:p-10 shadow-2xl shadow-cyan-950/30 overflow-hidden group"
-              >
-                <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
-                <div className="flex items-center justify-between mb-6">
-                  <div className="inline-flex items-center gap-2 rounded-xl bg-cyan-500/10 border border-cyan-500/30 px-3.5 py-1.5 text-cyan-400 text-xs font-bold uppercase tracking-wider">
-                    <Anchor className="h-4 w-4" />
-                    Retail & Wealth-Building Ecosystem
-                  </div>
-                  <Badge className="bg-cyan-400 text-black font-bold">16% — 22% ROI</Badge>
-                </div>
-
-                <h3 className="text-3xl font-extrabold text-white mb-2">Opco Harbor</h3>
-                <p className="text-cyan-200/80 text-sm font-medium mb-6">
-                  For Retail Investors, Wealth Builders & Everyday Professionals
-                </p>
-                <p className="text-slate-300 text-sm leading-relaxed mb-8">
-                  Designed to democratize real estate wealth. Own fractional shares of prime residential and commercial real estate starting from as low as <span className="text-cyan-300 font-bold">₦100,000 / $250</span> with automated quarterly rental dividends.
-                </p>
-
-                <div className="space-y-4 mb-8 text-sm">
-                  <div className="flex items-start gap-3">
-                    <div className="mt-1 flex h-5 w-5 items-center justify-center rounded-full bg-cyan-500/20 text-cyan-400">
-                      <Check className="h-3.5 w-3.5" />
-                    </div>
-                    <div>
-                      <strong className="text-white block">Accessible Low-Ticket Fractional Ownership</strong>
-                      <span className="text-slate-400 text-xs">Build a diversified real estate portfolio across multiple prime locations.</span>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <div className="mt-1 flex h-5 w-5 items-center justify-center rounded-full bg-cyan-500/20 text-cyan-400">
-                      <Check className="h-3.5 w-3.5" />
-                    </div>
-                    <div>
-                      <strong className="text-white block">Automated Quarterly Wallet Dividends</strong>
-                      <span className="text-slate-400 text-xs">Rental income disbursed directly into your in-app wallet every quarter.</span>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <div className="mt-1 flex h-5 w-5 items-center justify-center rounded-full bg-cyan-500/20 text-cyan-400">
-                      <Check className="h-3.5 w-3.5" />
-                    </div>
-                    <div>
-                      <strong className="text-white block">Secondary Marketplace Liquidity</strong>
-                      <span className="text-slate-400 text-xs">Buy and trade your fractional units whenever you choose.</span>
-                    </div>
-                  </div>
-                </div>
-
-                <Link href="/auth/signup?track=harbor">
-                  <Button className="w-full bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-400 hover:to-teal-400 text-black font-bold py-6 rounded-2xl text-base shadow-lg shadow-cyan-500/20">
-                    Get Started with Opco Harbor <ArrowRight className="ml-2 h-5 w-5" />
-                  </Button>
-                </Link>
-              </motion.div>
+                  <h3 className="mt-5 font-display text-2xl font-bold text-slate-900">Fractional Track</h3>
+                  <p className="mt-1 text-sm font-semibold text-brand-700">Entry from ₦100K</p>
+                  <p className="mt-4 text-sm leading-relaxed text-slate-600">
+                    For individuals and families building wealth over time. Buy fractions of income-producing
+                    assets, collect quarterly dividends in-app, and watch your position appreciate.
+                  </p>
+                  <ul className="mt-6 space-y-3 text-sm">
+                    {[
+                      "₦100K minimum entry ticket",
+                      "Fractional ownership certificates",
+                      "Quarterly wallet dividends",
+                      "Milestone-gated title on request",
+                    ].map((f) => (
+                      <li key={f} className="flex items-start gap-2.5">
+                        <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-600" />
+                        <span className="text-slate-700">{f}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <Link href="/auth/signup?track=harbor" className="mt-auto pt-8">
+                    <Button className="w-full">
+                      Start fractional investing <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </section>
 
-        {/* ============ PRE-DEV VS POST-DEV ASSET FEATURE ============ */}
-        <section className="py-24 bg-[#08060F] border-t border-white/5">
+        {/* ============ ASSET PREVIEW ============ */}
+        <section className="border-b border-line bg-white py-20 sm:py-24">
           <div className="mx-auto max-w-7xl px-4 sm:px-6">
-            <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
-              <div>
-                <Badge className="mb-3 bg-indigo-500/10 text-indigo-300 border-indigo-500/30">
-                  Asset Lifecycle Tagging
-                </Badge>
-                <h2 className="text-3xl sm:text-4xl font-extrabold text-white">
-                  Pre-Development vs Post-Development Assets
+            <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+              <div className="max-w-xl">
+                <h2 className="font-display text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+                  Currently open for allocation
                 </h2>
-                <p className="text-slate-400 text-sm sm:text-base mt-2 max-w-2xl">
-                  Filter assets by stage: lock in higher capital appreciation in <span className="text-amber-300">Pre-Development</span> projects or immediate cashflow from <span className="text-emerald-300">Post-Development</span> completed buildings.
+                <p className="mt-3 text-slate-600">
+                  A sample of live assets. Sign in to see funding progress, documents and milestone schedules.
                 </p>
               </div>
 
-              <div className="flex items-center gap-3">
-                <Link href="/marketplace">
-                  <Button variant="outline" className="border-white/10 bg-white/5 text-slate-200 hover:bg-white/10">
-                    View All Assets <ArrowUpRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </Link>
+              {/* Track filter */}
+              <div className="inline-flex w-full shrink-0 gap-1 rounded-xl border border-line bg-surface-sunken p-1 sm:w-auto" role="tablist" aria-label="Filter assets by track">
+                {([
+                  { key: "all", label: "All" },
+                  { key: "foundry", label: "Institutional" },
+                  { key: "harbor", label: "Fractional" },
+                ] as const).map((t) => (
+                  <button
+                    key={t.key}
+                    onClick={() => setActiveTrack(t.key)}
+                    role="tab"
+                    aria-selected={activeTrack === t.key}
+                    className={`flex-1 cursor-pointer rounded-lg px-3.5 py-2 text-xs font-semibold transition-colors duration-200 sm:flex-none ${
+                      activeTrack === t.key ? "bg-white text-slate-900 shadow-soft" : "text-slate-500 hover:text-slate-900"
+                    }`}
+                  >
+                    {t.label}
+                  </button>
+                ))}
               </div>
             </div>
 
-            {/* Asset Cards Grid */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {displayedProperties.map((property) => (
-                <Card
-                  key={property.id}
-                  className="bg-[#110E1B] border-white/10 overflow-hidden hover:border-amber-500/40 transition-all duration-300 group"
-                >
-                  <div className="relative h-56 overflow-hidden">
+            <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {displayedProperties.map((p) => (
+                <Card key={p.id} className="group cursor-pointer overflow-hidden border-line transition-shadow hover:shadow-lifted">
+                  <div className="relative h-40 overflow-hidden bg-surface-muted">
                     <img
-                      src={property.images[0]}
-                      alt={property.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      src={p.images[0]}
+                      alt={p.name}
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#110E1B] via-transparent to-black/40" />
-
-                    {/* Stage Badge */}
-                    <div className="absolute top-4 left-4 flex gap-2 flex-wrap">
+                    <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">
                       <Badge
                         className={
-                          property.developmentStage === "pre-development"
-                            ? "bg-purple-600/90 text-white font-semibold"
-                            : "bg-emerald-600/90 text-white font-semibold"
+                          p.developmentStage === "pre-development"
+                            ? "bg-brand-600 text-white"
+                            : "bg-emerald-600 text-white"
                         }
                       >
-                        {property.developmentStage === "pre-development" ? "Pre-Development" : "Post-Development"}
-                      </Badge>
-                      <Badge
-                        className={
-                          property.targetTrack === "foundry"
-                            ? "bg-amber-500 text-black font-bold"
-                            : property.targetTrack === "harbor"
-                            ? "bg-cyan-500 text-black font-bold"
-                            : "bg-slate-200 text-black font-bold"
-                        }
-                      >
-                        {property.targetTrack === "foundry" ? "Foundry" : property.targetTrack === "harbor" ? "Harbor" : "Foundry & Harbor"}
+                        {p.developmentStage === "pre-development" ? "Pre-dev" : "Post-dev"}
                       </Badge>
                     </div>
-
-                    {/* ROI Badge */}
-                    <div className="absolute top-4 right-4 bg-black/70 backdrop-blur-md px-3 py-1 rounded-full border border-white/10">
-                      <span className="text-xs font-bold text-emerald-400">{formatPercentage(property.projectedROI)} ROI</span>
-                    </div>
-
-                    {/* Title overlay */}
-                    <div className="absolute bottom-3 left-4 right-4">
-                      <h4 className="text-lg font-bold text-white group-hover:text-amber-300 transition-colors">
-                        {property.name}
-                      </h4>
-                      <p className="text-xs text-slate-300 flex items-center gap-1 mt-0.5">
-                        <MapPin className="h-3 w-3 text-slate-400" />
-                        {property.location}
-                      </p>
+                    <div className="absolute right-3 top-3 rounded-full bg-white/95 px-2.5 py-1 shadow-soft backdrop-blur">
+                      <span className="text-xs font-bold text-emerald-700">{formatPercentage(p.projectedROI)} ROI</span>
                     </div>
                   </div>
-
-                  <CardContent className="p-5 space-y-4">
-                    <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed">
-                      {property.description}
+                  <CardContent className="p-4">
+                    <h3 className="line-clamp-2 font-display text-sm font-bold leading-snug text-slate-900">{p.name}</h3>
+                    <p className="mt-1 flex items-center text-xs text-slate-500">
+                      <MapPin className="mr-1 h-3 w-3" />{p.location}
                     </p>
-
-                    <div className="grid grid-cols-2 gap-3 pt-3 border-t border-white/5 text-xs">
+                    <div className="mt-3 flex items-baseline justify-between border-t border-line pt-3">
                       <div>
-                        <span className="text-slate-500 block">Valuation Scale</span>
-                        <strong className="text-slate-200">{formatCompactNumber(property.propertyValue)}</strong>
+                        <div className="text-[11px] text-slate-500">From</div>
+                        <div className="text-sm font-bold text-slate-900">{formatCurrency(p.minimumInvestment || p.costPerFraction)}</div>
                       </div>
-                      <div>
-                        <span className="text-slate-500 block">Min Entry Ticket</span>
-                        <strong className="text-amber-400">{formatCurrency(property.minimumInvestment || property.costPerFraction)}</strong>
-                      </div>
-                      <div>
-                        <span className="text-slate-500 block">Rental Yield</span>
-                        <strong className="text-emerald-400">{formatPercentage(property.rentalYield)}</strong>
-                      </div>
-                      <div>
-                        <span className="text-slate-500 block">Capital Appreciation</span>
-                        <strong className="text-purple-300">+{property.capitalAppreciation}%</strong>
+                      <div className="text-right">
+                        <div className="text-[11px] text-slate-500">Valuation</div>
+                        <div className="text-sm font-semibold text-slate-700">{formatCompactNumber(p.propertyValue)}</div>
                       </div>
                     </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
 
-                    <Link href={`/assets/${property.id}`} className="block pt-2">
-                      <Button variant="outline" size="sm" className="w-full border-white/10 bg-white/5 text-white hover:bg-white/10">
-                        View Details & Allocate
-                      </Button>
+            <div className="mt-10 text-center">
+              <Link href="/auth/signup">
+                <Button size="lg" variant="outline">
+                  Sign in to browse all assets <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* ============ CALCULATOR ============ */}
+        <section className="border-b border-line bg-surface-sunken py-20 sm:py-24">
+          <div className="mx-auto max-w-4xl px-4 sm:px-6">
+            <div className="text-center">
+              <h2 className="font-display text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+                Estimate your returns
+              </h2>
+              <p className="mt-3 text-slate-600">
+                Indicative projections across both tracks. Actual returns vary by asset.
+              </p>
+            </div>
+
+            <Card className="mt-12 border-line shadow-card">
+              <CardContent className="p-6 sm:p-8">
+                <div className="grid gap-6 sm:grid-cols-2">
+                  <div>
+                    <Label htmlFor="calc-amount">Capital (₦)</Label>
+                    <Input
+                      id="calc-amount"
+                      type="number"
+                      value={calcAmount}
+                      onChange={(e) => setCalcAmount(Number(e.target.value))}
+                      className="mt-2"
+                      min={0}
+                      step={500000}
+                    />
+                    <div className="mt-2 flex flex-wrap gap-1.5">
+                      {[5000000, 25000000, 50000000, 200000000].map((v) => (
+                        <button
+                          key={v}
+                          onClick={() => setCalcAmount(v)}
+                          className="cursor-pointer rounded-full border border-line px-2.5 py-1 text-[11px] font-semibold text-slate-600 transition-colors hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700"
+                        >
+                          {formatCompactNumber(v)}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <Label>Term</Label>
+                    <div className="mt-2 grid grid-cols-3 gap-2">
+                      {[1, 3, 5].map((y) => (
+                        <button
+                          key={y}
+                          onClick={() => setCalcTerm(y)}
+                          className={`cursor-pointer rounded-lg border px-3 py-2 text-sm font-semibold transition-colors ${
+                            calcTerm === y
+                              ? "border-brand-600 bg-brand-600 text-white"
+                              : "border-line bg-white text-slate-600 hover:border-brand-300"
+                          }`}
+                        >
+                          {y} {y === 1 ? "yr" : "yrs"}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-8 grid gap-4 sm:grid-cols-3">
+                  <div className="rounded-xl border border-line bg-surface-sunken p-5">
+                    <div className="text-xs font-semibold text-slate-500">Track yield</div>
+                    <div className="mt-1 font-display text-2xl font-extrabold text-slate-900">{calcYield}%</div>
+                    <div className="mt-0.5 text-xs text-slate-500">
+                      {activeTrack === "harbor" ? "Fractional" : activeTrack === "foundry" ? "Institutional" : "Blended average"}
+                    </div>
+                  </div>
+                  <div className="rounded-xl border border-line bg-surface-sunken p-5">
+                    <div className="text-xs font-semibold text-slate-500">Est. total return</div>
+                    <div className="mt-1 font-display text-2xl font-extrabold text-brand-700">{formatCurrency(calcReturn)}</div>
+                    <div className="mt-0.5 text-xs text-slate-500">Over {calcTerm} {calcTerm === 1 ? "year" : "years"}</div>
+                  </div>
+                  <div className="rounded-xl border border-brand-200 bg-brand-50 p-5">
+                    <div className="text-xs font-semibold text-brand-700">Payout cadence</div>
+                    <div className="mt-1 font-display text-2xl font-extrabold text-brand-800">Quarterly</div>
+                    <div className="mt-0.5 text-xs text-brand-700/80">Credited to your wallet</div>
+                  </div>
+                </div>
+
+                <p className="mt-5 text-xs leading-relaxed text-slate-500">
+                  Projections are illustrative and not a guarantee of returns. Capital is at risk. See our
+                  services page for full terms and risk disclosures.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
+        {/* ============ INVESTOR TYPES ============ */}
+        <section className="bg-white py-20 sm:py-24">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6">
+            <div className="mx-auto max-w-2xl text-center">
+              <h2 className="font-display text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+                Built for every kind of investor
+              </h2>
+              <p className="mt-3 text-slate-600">
+                Verification requirements scale with how you invest — so individuals onboard in minutes and
+                institutions get a full KYB review.
+              </p>
+            </div>
+
+            <div className="mt-14 grid gap-6 md:grid-cols-3">
+              {[
+                { icon: Sparkles, title: "Individuals", body: "Complete identity verification in-app and start from ₦100K. No paperwork queues.", cta: "Start with ₦100K" },
+                { icon: Briefcase, title: "Family Offices", body: "Dedicated onboarding with AUM evidence, trustee documentation and a named advisor.", cta: "Talk to an advisor" },
+                { icon: Landmark, title: "Institutions", body: "Full KYB: CAC verification, UBO identification and sanctions/PEP screening.", cta: "Institutional onboarding" },
+              ].map((t) => (
+                <Card key={t.title} className="border-line">
+                  <CardContent className="p-6">
+                    <span className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-brand-50 text-brand-700">
+                      <t.icon className="h-5 w-5" />
+                    </span>
+                    <h3 className="mt-5 font-display text-lg font-bold text-slate-900">{t.title}</h3>
+                    <p className="mt-2 text-sm leading-relaxed text-slate-600">{t.body}</p>
+                    <Link
+                      href="/auth/signup"
+                      className="mt-5 inline-flex items-center text-sm font-semibold text-brand-700 transition-colors hover:text-brand-800"
+                    >
+                      {t.cta} <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
                     </Link>
                   </CardContent>
                 </Card>
@@ -496,176 +501,101 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* ============ DYNAMIC ROI CALCULATOR ============ */}
-        <section className="py-24 bg-[#0A0713] border-t border-white/5">
+        {/* ============ HOW IT WORKS ============ */}
+        <section className="border-t border-line bg-surface-sunken py-20 sm:py-24">
           <div className="mx-auto max-w-7xl px-4 sm:px-6">
-            <div className="grid lg:grid-cols-12 gap-12 items-center">
-              <div className="lg:col-span-5 space-y-6">
-                <Badge className="bg-amber-500/10 text-amber-300 border-amber-500/30">
-                  <Calculator className="mr-1.5 h-3.5 w-3.5" />
-                  Yield Simulator
-                </Badge>
-                <h2 className="text-3xl sm:text-5xl font-extrabold text-white leading-tight">
-                  Calculate Your Projected Returns
-                </h2>
-                <p className="text-slate-300 text-base leading-relaxed">
-                  Test your potential earnings across fixed investment terms for both <span className="text-amber-300 font-semibold">Opco Foundry</span> and <span className="text-cyan-300 font-semibold">Opco Harbor</span>.
-                </p>
-
-                {/* Track Switch for Calculator */}
-                <div className="flex items-center gap-3 p-1.5 rounded-2xl bg-white/5 border border-white/10">
-                  <button
-                    onClick={() => {
-                      setCalculatorTrack("foundry");
-                      setInvestmentAmount(100000000);
-                    }}
-                    className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
-                      calculatorTrack === "foundry"
-                        ? "bg-amber-500 text-black shadow-lg shadow-amber-500/20"
-                        : "text-slate-400 hover:text-white"
-                    }`}
-                  >
-                    <Crown className="h-4 w-4" />
-                    Opco Foundry (28% Avg Yield)
-                  </button>
-                  <button
-                    onClick={() => {
-                      setCalculatorTrack("harbor");
-                      setInvestmentAmount(5000000);
-                    }}
-                    className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
-                      calculatorTrack === "harbor"
-                        ? "bg-cyan-500 text-black shadow-lg shadow-cyan-500/20"
-                        : "text-slate-400 hover:text-white"
-                    }`}
-                  >
-                    <Anchor className="h-4 w-4" />
-                    Opco Harbor (18% Avg Yield)
-                  </button>
-                </div>
-              </div>
-
-              {/* Calculator Box */}
-              <div className="lg:col-span-7 rounded-3xl border border-white/10 bg-[#120E1F] p-8 shadow-2xl">
-                <div className="space-y-6">
-                  <div>
-                    <div className="flex justify-between items-center mb-2">
-                      <label className="text-sm text-slate-300 font-medium">Select Capital Allocation</label>
-                      <span className="text-xl font-bold text-amber-400">{formatCurrency(investmentAmount)}</span>
-                    </div>
-                    <input
-                      type="range"
-                      min={calculatorTrack === "foundry" ? 10000000 : 100000}
-                      max={calculatorTrack === "foundry" ? 500000000 : 50000000}
-                      step={calculatorTrack === "foundry" ? 10000000 : 500000}
-                      value={investmentAmount}
-                      onChange={(e) => setInvestmentAmount(Number(e.target.value))}
-                      className="w-full accent-amber-500 cursor-pointer h-2 rounded-lg bg-white/10"
-                    />
-                  </div>
-
-                  <div className="grid sm:grid-cols-3 gap-4 pt-4">
-                    {yearScenarios.map((scenario) => (
-                      <div key={scenario.years} className="rounded-2xl border border-white/10 bg-white/5 p-4 text-center">
-                        <div className="text-xs text-slate-400 font-medium">{scenario.years} Year Term</div>
-                        <div className="text-xl font-extrabold text-white mt-1">{formatCompactNumber(scenario.total)}</div>
-                        <div className="text-xs text-emerald-400 font-bold mt-1">
-                          +{formatCompactNumber(scenario.returns)} Net Gain
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="pt-4 border-t border-white/10 flex items-center justify-between text-xs text-slate-400">
-                    <span>* Projections based on historical performance & verified lease yields.</span>
-                    <Link href="/auth/signup">
-                      <Button size="sm" variant="premium" className="rounded-xl">
-                        Deploy Now
-                      </Button>
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ============ TAILORED ENTITY TYPES SECTION ============ */}
-        <section className="py-24 bg-[#07050A]">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6">
-            <div className="text-center max-w-3xl mx-auto mb-16">
-              <Badge className="mb-4 bg-cyan-500/10 text-cyan-300 border-cyan-500/30">
-                Institutional-Grade Governance
-              </Badge>
-              <h2 className="text-3xl sm:text-5xl font-extrabold text-white">
-                Built For Every Entity Type
+            <div className="mx-auto max-w-2xl text-center">
+              <h2 className="font-display text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+                How your money is protected
               </h2>
-              <p className="mt-4 text-slate-400 text-base">
-                Tailored onboarding, document verification, and portfolio management workflows.
-              </p>
+              <p className="mt-3 text-slate-600">A four-step custody chain on every single allocation.</p>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-8">
-              <div className="rounded-3xl border border-white/10 bg-[#0E0C17] p-8 hover:border-amber-500/40 transition-all">
-                <div className="w-12 h-12 rounded-2xl bg-amber-500/10 flex items-center justify-center text-amber-400 mb-6">
-                  <Users className="h-6 w-6" />
-                </div>
-                <h3 className="text-xl font-bold text-white mb-2">High-Net-Worth Individuals</h3>
-                <p className="text-sm text-slate-400 leading-relaxed mb-4">
-                  Deploy large individual capital tickets in Opco Foundry or build passive income streams in Opco Harbor. Direct tax-efficient reporting and dedicated advisor support.
-                </p>
-                <div className="text-xs text-amber-400 font-semibold">Individual KYC Flow Included →</div>
-              </div>
-
-              <div className="rounded-3xl border border-white/10 bg-[#0E0C17] p-8 hover:border-purple-500/40 transition-all">
-                <div className="w-12 h-12 rounded-2xl bg-purple-500/10 flex items-center justify-center text-purple-400 mb-6">
-                  <Briefcase className="h-6 w-6" />
-                </div>
-                <h3 className="text-xl font-bold text-white mb-2">Family Offices</h3>
-                <p className="text-sm text-slate-400 leading-relaxed mb-4">
-                  Multi-generational capital preservation. Multi-signatory approvals, custom AUM verification, trustee oversight, and multi-asset syndicate allocation.
-                </p>
-                <div className="text-xs text-purple-400 font-semibold">Family Office KYC Flow Included →</div>
-              </div>
-
-              <div className="rounded-3xl border border-white/10 bg-[#0E0C17] p-8 hover:border-cyan-500/40 transition-all">
-                <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 flex items-center justify-center text-cyan-400 mb-6">
-                  <Building className="h-6 w-6" />
-                </div>
-                <h3 className="text-xl font-bold text-white mb-2">Institutions & Corporates</h3>
-                <p className="text-sm text-slate-400 leading-relaxed mb-4">
-                  Corporate treasury allocation, fund management, board resolutions, LEI / TIN compliance, and automated API-driven dividend settlements.
-                </p>
-                <div className="text-xs text-cyan-400 font-semibold">Institutional KYC Flow Included →</div>
-              </div>
-            </div>
+            <ol className="mt-14 grid gap-6 md:grid-cols-4">
+              {[
+                { icon: FileCheck, step: "01", title: "Terms accepted", body: "You sign the offering terms and payment instruction for your allocation." },
+                { icon: Wallet, step: "02", title: "Payment received", body: "Funds are confirmed and lodged with the independent trustee." },
+                { icon: Shield, step: "03", title: "Reconciled", body: "An independent reviewer reconciles funds against the units issued." },
+                { icon: Landmark, step: "04", title: "Released", body: "Capital and title release only against verified milestones." },
+              ].map((s) => (
+                <li key={s.step} className="relative rounded-xl border border-line bg-white p-6">
+                  <div className="flex items-center justify-between">
+                    <span className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-brand-50 text-brand-700">
+                      <s.icon className="h-5 w-5" />
+                    </span>
+                    <span className="font-display text-2xl font-extrabold text-slate-200">{s.step}</span>
+                  </div>
+                  <h3 className="mt-4 font-display text-base font-bold text-slate-900">{s.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-slate-600">{s.body}</p>
+                </li>
+              ))}
+            </ol>
           </div>
         </section>
 
-        {/* ============ FOOTER CTA ============ */}
-        <section className="py-20 relative overflow-hidden bg-gradient-to-b from-[#0E0B18] to-black border-t border-white/10">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 text-center relative z-10">
-            <h2 className="text-4xl sm:text-6xl font-extrabold text-white tracking-tight">
-              Ready to Allocate Your Capital?
+        {/* ============ FINAL CTA ============ */}
+        <section className="border-t border-line bg-white py-20 sm:py-24">
+          <div className="mx-auto max-w-3xl px-4 text-center sm:px-6">
+            <h2 className="font-display text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+              Ready to own a piece of Nigeria&apos;s growth?
             </h2>
-            <p className="mt-4 text-slate-300 max-w-xl mx-auto text-base sm:text-lg">
-              Select your track — Opco Foundry for high-value mega assets or Opco Harbor for retail fractional entry.
+            <p className="mx-auto mt-4 max-w-xl text-slate-600">
+              Create an account, complete verification, and start allocating in minutes.
             </p>
-
-            <div className="mt-8 flex flex-wrap justify-center gap-4">
+            <div className="mt-9 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
               <Link href="/auth/signup">
-                <Button size="lg" variant="premium" className="px-8 py-6 rounded-2xl text-base font-bold shadow-xl">
-                  Get Started Now <ArrowRight className="ml-2 h-5 w-5" />
+                <Button size="lg" className="w-full shadow-lg shadow-brand-600/20 sm:w-auto">
+                  Create your account <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
+              </Link>
+              <Link href="/services">
+                <Button size="lg" variant="outline" className="w-full sm:w-auto">Read our services</Button>
               </Link>
             </div>
           </div>
         </section>
       </main>
 
-      {/* Footer copyright */}
-      <footer className="py-8 bg-black border-t border-white/10 text-center text-xs text-slate-500">
-        <p>© 2026 Urbco Investors App. Opco Foundry & Opco Harbor are registered investment ecosystems.</p>
+      {/* ============ FOOTER ============ */}
+      <footer className="border-t border-line bg-surface-sunken">
+        <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6">
+          <div className="flex flex-col gap-8 md:flex-row md:justify-between">
+            <div className="max-w-xs">
+              <img src="/urbco-logo.svg" alt="Urbco" className="h-8 w-auto" />
+              <p className="mt-4 text-sm leading-relaxed text-slate-600">
+                Trustee-secured real estate investing for individuals, family offices and institutions in Nigeria.
+              </p>
+            </div>
+            <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">
+              <div>
+                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900">Explore</h3>
+                <ul className="mt-3 space-y-2 text-sm">
+                  {NAV_LINKS.map((l) => (
+                    <li key={l.href}><Link href={l.href} className="text-slate-600 transition-colors hover:text-brand-700">{l.label}</Link></li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900">Account</h3>
+                <ul className="mt-3 space-y-2 text-sm">
+                  <li><Link href="/auth/login" className="text-slate-600 transition-colors hover:text-brand-700">Log in</Link></li>
+                  <li><Link href="/auth/signup" className="text-slate-600 transition-colors hover:text-brand-700">Get started</Link></li>
+                </ul>
+              </div>
+              <div>
+                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900">Legal</h3>
+                <ul className="mt-3 space-y-2 text-sm">
+                  <li><span className="text-slate-400">Trustee disclosure</span></li>
+                  <li><span className="text-slate-400">Risk factors</span></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div className="mt-10 flex flex-col items-center justify-between gap-2 border-t border-line pt-6 text-xs text-slate-500 sm:flex-row">
+            <p>© 2026 Urbco. All rights reserved.</p>
+            <p>Capital is at risk. Past performance is not indicative of future results.</p>
+          </div>
+        </div>
       </footer>
     </div>
   );

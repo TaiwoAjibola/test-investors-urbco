@@ -79,19 +79,19 @@ export default function CheckoutPage() {
       <div className="max-w-4xl mx-auto">
         {/* Progress Steps */}
         <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
+          <div className="mb-4 flex items-center">
             {steps.map((step, index) => (
-              <div key={step.number} className="flex items-center">
-                <div className={`flex items-center justify-center w-10 h-10 rounded-full font-semibold transition-all ${
+              <div key={step.number} className={`flex items-center ${index < steps.length - 1 ? "flex-1" : ""}`}>
+                <div className={`flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full text-sm font-semibold transition-all sm:h-10 sm:w-10 ${
                   currentStep >= step.number
-                    ? "bg-emerald-600 text-white"
-                    : "bg-slate-200 text-slate-500"
+                    ? "bg-brand-600 text-white"
+                    : "bg-surface-muted text-slate-500"
                 }`}>
-                  {currentStep > step.number ? <CheckCircle className="h-6 w-6" /> : step.number}
+                  {currentStep > step.number ? <CheckCircle className="h-5 w-5" /> : step.number}
                 </div>
                 {index < steps.length - 1 && (
-                  <div className={`w-24 md:w-32 h-1 mx-2 rounded ${
-                    currentStep > step.number ? "bg-emerald-600" : "bg-slate-200"
+                  <div className={`mx-2 h-1 min-w-0 flex-1 rounded sm:mx-3 ${
+                    currentStep > step.number ? "bg-brand-600" : "bg-slate-200"
                   }`} />
                 )}
               </div>
@@ -101,7 +101,7 @@ export default function CheckoutPage() {
             {steps.map((step) => (
               <span
                 key={step.number}
-                className={`hidden md:block ${currentStep >= step.number ? "text-emerald-600 font-medium" : "text-slate-500"}`}
+                className={`hidden md:block ${currentStep >= step.number ? "text-brand-700 font-medium" : "text-slate-500"}`}
               >
                 {step.title}
               </span>

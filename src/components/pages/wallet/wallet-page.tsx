@@ -27,7 +27,7 @@ export default function WalletPage() {
       {/* Page Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900">Wallet</h1>
+          <h1 className="font-display text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">Wallet</h1>
           <p className="text-slate-500">Manage your funds and transactions</p>
         </div>
       </div>
@@ -140,7 +140,7 @@ export default function WalletPage() {
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="all">
-            <TabsList>
+            <TabsList className="grid h-auto w-full grid-cols-4">
               <TabsTrigger value="all">All</TabsTrigger>
               <TabsTrigger value="investment">Investments</TabsTrigger>
               <TabsTrigger value="dividend">Dividends</TabsTrigger>

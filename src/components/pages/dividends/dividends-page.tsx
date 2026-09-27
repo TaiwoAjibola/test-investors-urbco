@@ -30,7 +30,7 @@ export default function DividendsPage() {
       {/* Page Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900">Dividends</h1>
+          <h1 className="font-display text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">Dividends</h1>
           <p className="text-slate-500">Track your rental income and returns</p>
         </div>
         <Button variant="outline">

@@ -120,13 +120,13 @@ export default function InstitutionalOnboardingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100 px-4 py-10">
+    <div className="min-h-screen bg-surface-sunken px-4 py-10">
       <div className="max-w-3xl mx-auto">
         <Link href="/" className="flex items-center justify-center mb-6">
-          <img src="/urbco-logo-white.svg" alt="Urbco" className="h-10" />
+          <img src="/urbco-logo.svg" alt="Urbco" className="h-10" />
         </Link>
         <h1 className="text-2xl font-bold text-center mb-1">Institutional Onboarding</h1>
-        <p className="text-center text-slate-400 text-sm mb-8">
+        <p className="text-center text-slate-600 text-sm mb-8">
           KYC / KYB compliance for corporate & institutional investors (Nigeria)
         </p>
 
@@ -141,12 +141,12 @@ export default function InstitutionalOnboardingPage() {
                 <div className="flex flex-col items-center">
                   <div
                     className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
-                      done ? "bg-emerald-500 text-white" : active ? "bg-amber-500 text-black" : "bg-white/10 text-slate-400"
+                      done ? "bg-emerald-500 text-slate-900" : active ? "bg-amber-500 text-black" : "bg-white/10 text-slate-600"
                     }`}
                   >
                     {done ? <CheckCircle className="h-5 w-5" /> : <Icon className="h-5 w-5" />}
                   </div>
-                  <span className={`text-[10px] mt-1 ${active ? "text-amber-400" : "text-slate-400"} whitespace-nowrap`}>{s.title}</span>
+                  <span className={`text-[10px] mt-1 ${active ? "text-amber-400" : "text-slate-600"} whitespace-nowrap`}>{s.title}</span>
                 </div>
                 {i < STEPS.length - 1 && <ChevronRight className="h-4 w-4 text-slate-600 mx-1" />}
               </div>
@@ -177,7 +177,7 @@ export default function InstitutionalOnboardingPage() {
               Continue <ArrowRight className="h-4 w-4 ml-1" />
             </Button>
           ) : (
-            <Button onClick={handleSubmit} className="rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-bold">
+            <Button onClick={handleSubmit} className="rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-slate-900 font-bold">
               Submit Onboarding <ShieldCheck className="h-4 w-4 ml-1" />
             </Button>
           )}
@@ -198,26 +198,26 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 
 function CompanyInfo({ form, set }: { form: any; set: any }) {
   return (
-    <Card className="border border-white/10 bg-slate-900/80 backdrop-blur-xl text-slate-100">
+    <Card className="border border-line shadow-card">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-white"><Building2 className="h-5 w-5 text-amber-400" /> Company Information & CAC</CardTitle>
-        <CardDescription className="text-slate-400">Legal entity identity and registered details.</CardDescription>
+        <CardTitle className="flex items-center gap-2 text-slate-900"><Building2 className="h-5 w-5 text-amber-400" /> Company Information & CAC</CardTitle>
+        <CardDescription className="text-slate-600">Legal entity identity and registered details.</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid md:grid-cols-2 gap-4">
           <Field label="Registered Company Name">
-            <Input className="bg-white/5 border-white/10 text-white" value={form.companyName} onChange={(e) => set({ companyName: e.target.value })} placeholder="Apex Capital Partners Ltd" />
+            <Input className="bg-white border-line text-slate-900" value={form.companyName} onChange={(e) => set({ companyName: e.target.value })} placeholder="Apex Capital Partners Ltd" />
           </Field>
           <Field label="Trading Name (optional)">
-            <Input className="bg-white/5 border-white/10 text-white" value={form.tradingName} onChange={(e) => set({ tradingName: e.target.value })} />
+            <Input className="bg-white border-line text-slate-900" value={form.tradingName} onChange={(e) => set({ tradingName: e.target.value })} />
           </Field>
           <Field label="CAC Registration Number">
-            <Input className="bg-white/5 border-white/10 text-white" value={form.cacNumber} onChange={(e) => set({ cacNumber: e.target.value })} placeholder="RC 123456" />
+            <Input className="bg-white border-line text-slate-900" value={form.cacNumber} onChange={(e) => set({ cacNumber: e.target.value })} placeholder="RC 123456" />
           </Field>
           <Field label="Company Type">
             <Select value={form.companyType} onValueChange={(v) => set({ companyType: v })}>
-              <SelectTrigger className="bg-white/5 border-white/10 text-white"><SelectValue /></SelectTrigger>
-              <SelectContent className="bg-slate-900 border-white/10 text-white">
+              <SelectTrigger className="bg-white border-line text-slate-900"><SelectValue /></SelectTrigger>
+              <SelectContent className="bg-white">
                 <SelectItem value="Ltd">Limited (Ltd)</SelectItem>
                 <SelectItem value="PLC">Public Limited (PLC)</SelectItem>
                 <SelectItem value="LLP">LLP</SelectItem>
@@ -226,34 +226,34 @@ function CompanyInfo({ form, set }: { form: any; set: any }) {
             </Select>
           </Field>
           <Field label="Date of Incorporation">
-            <Input type="date" className="bg-white/5 border-white/10 text-white" value={form.incorporationDate} onChange={(e) => set({ incorporationDate: e.target.value })} />
+            <Input type="date" className="bg-white border-line text-slate-900" value={form.incorporationDate} onChange={(e) => set({ incorporationDate: e.target.value })} />
           </Field>
           <Field label="Industry / Sector">
-            <Input className="bg-white/5 border-white/10 text-white" value={form.industry} onChange={(e) => set({ industry: e.target.value })} placeholder="Asset Management" />
+            <Input className="bg-white border-line text-slate-900" value={form.industry} onChange={(e) => set({ industry: e.target.value })} placeholder="Asset Management" />
           </Field>
         </div>
         <Field label="Nature of Business">
-          <Input className="bg-white/5 border-white/10 text-white" value={form.natureOfBusiness} onChange={(e) => set({ natureOfBusiness: e.target.value })} placeholder="Real estate investment & advisory" />
+          <Input className="bg-white border-line text-slate-900" value={form.natureOfBusiness} onChange={(e) => set({ natureOfBusiness: e.target.value })} placeholder="Real estate investment & advisory" />
         </Field>
         <div className="grid md:grid-cols-2 gap-4">
           <Field label="Official Email">
-            <Input type="email" className="bg-white/5 border-white/10 text-white" value={form.officialEmail} onChange={(e) => set({ officialEmail: e.target.value })} placeholder="compliance@apex.com" />
+            <Input type="email" className="bg-white border-line text-slate-900" value={form.officialEmail} onChange={(e) => set({ officialEmail: e.target.value })} placeholder="compliance@apex.com" />
           </Field>
           <Field label="Official Phone">
-            <Input className="bg-white/5 border-white/10 text-white" value={form.officialPhone} onChange={(e) => set({ officialPhone: e.target.value })} placeholder="+234 ..." />
+            <Input className="bg-white border-line text-slate-900" value={form.officialPhone} onChange={(e) => set({ officialPhone: e.target.value })} placeholder="+234 ..." />
           </Field>
         </div>
         <Field label="Website (optional)">
-          <Input className="bg-white/5 border-white/10 text-white" value={form.website} onChange={(e) => set({ website: e.target.value })} placeholder="https://apex.com" />
+          <Input className="bg-white border-line text-slate-900" value={form.website} onChange={(e) => set({ website: e.target.value })} placeholder="https://apex.com" />
         </Field>
 
         <div className="pt-2">
           <h4 className="text-sm font-semibold text-slate-200 mb-2">Registered Address</h4>
           <div className="grid md:grid-cols-2 gap-3">
-            <Input className="bg-white/5 border-white/10 text-white" placeholder="Street address" value={form.registeredAddress.address} onChange={(e) => set({ registeredAddress: { ...form.registeredAddress, address: e.target.value } })} />
-            <Input className="bg-white/5 border-white/10 text-white" placeholder="City" value={form.registeredAddress.city} onChange={(e) => set({ registeredAddress: { ...form.registeredAddress, city: e.target.value } })} />
-            <Input className="bg-white/5 border-white/10 text-white" placeholder="State" value={form.registeredAddress.state} onChange={(e) => set({ registeredAddress: { ...form.registeredAddress, state: e.target.value } })} />
-            <Input className="bg-white/5 border-white/10 text-white" placeholder="Country" value={form.registeredAddress.country} onChange={(e) => set({ registeredAddress: { ...form.registeredAddress, country: e.target.value } })} />
+            <Input className="bg-white border-line text-slate-900" placeholder="Street address" value={form.registeredAddress.address} onChange={(e) => set({ registeredAddress: { ...form.registeredAddress, address: e.target.value } })} />
+            <Input className="bg-white border-line text-slate-900" placeholder="City" value={form.registeredAddress.city} onChange={(e) => set({ registeredAddress: { ...form.registeredAddress, city: e.target.value } })} />
+            <Input className="bg-white border-line text-slate-900" placeholder="State" value={form.registeredAddress.state} onChange={(e) => set({ registeredAddress: { ...form.registeredAddress, state: e.target.value } })} />
+            <Input className="bg-white border-line text-slate-900" placeholder="Country" value={form.registeredAddress.country} onChange={(e) => set({ registeredAddress: { ...form.registeredAddress, country: e.target.value } })} />
           </div>
         </div>
       </CardContent>
@@ -263,16 +263,16 @@ function CompanyInfo({ form, set }: { form: any; set: any }) {
 
 function Classification({ form, set }: { form: any; set: any }) {
   return (
-    <Card className="border border-white/10 bg-slate-900/80 backdrop-blur-xl text-slate-100">
+    <Card className="border border-line shadow-card">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-white"><Landmark className="h-5 w-5 text-amber-400" /> Investor Classification</CardTitle>
-        <CardDescription className="text-slate-400">Tell us about your institution type and ownership.</CardDescription>
+        <CardTitle className="flex items-center gap-2 text-slate-900"><Landmark className="h-5 w-5 text-amber-400" /> Investor Classification</CardTitle>
+        <CardDescription className="text-slate-600">Tell us about your institution type and ownership.</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <Field label="Institution Type">
           <Select value={form.institutionType} onValueChange={(v) => set({ institutionType: v })}>
-            <SelectTrigger className="bg-white/5 border-white/10 text-white"><SelectValue /></SelectTrigger>
-            <SelectContent className="bg-slate-900 border-white/10 text-white">
+            <SelectTrigger className="bg-white border-line text-slate-900"><SelectValue /></SelectTrigger>
+            <SelectContent className="bg-white">
               <SelectItem value="pension-fund">Pension Fund</SelectItem>
               <SelectItem value="asset-manager">Asset Manager</SelectItem>
               <SelectItem value="insurance">Insurance</SelectItem>
@@ -289,8 +289,8 @@ function Classification({ form, set }: { form: any; set: any }) {
         </Field>
         <Field label="Ownership Type">
           <Select value={form.ownershipType} onValueChange={(v) => set({ ownershipType: v })}>
-            <SelectTrigger className="bg-white/5 border-white/10 text-white"><SelectValue /></SelectTrigger>
-            <SelectContent className="bg-slate-900 border-white/10 text-white">
+            <SelectTrigger className="bg-white border-line text-slate-900"><SelectValue /></SelectTrigger>
+            <SelectContent className="bg-white">
               <SelectItem value="private">Private</SelectItem>
               <SelectItem value="public">Public</SelectItem>
               <SelectItem value="government">Government</SelectItem>
@@ -307,27 +307,27 @@ function AuthorisedRepForm({ form, set }: { form: any; set: any }) {
   const rep = form.authorisedRep;
   const setRep = (patch: Partial<AuthorisedRep>) => set({ authorisedRep: { ...rep, ...patch } });
   return (
-    <Card className="border border-white/10 bg-slate-900/80 backdrop-blur-xl text-slate-100">
+    <Card className="border border-line shadow-card">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-white"><User className="h-5 w-5 text-amber-400" /> Authorised Representative</CardTitle>
-        <CardDescription className="text-slate-400">The signatory authorised to act on behalf of the institution.</CardDescription>
+        <CardTitle className="flex items-center gap-2 text-slate-900"><User className="h-5 w-5 text-amber-400" /> Authorised Representative</CardTitle>
+        <CardDescription className="text-slate-600">The signatory authorised to act on behalf of the institution.</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid md:grid-cols-2 gap-4">
           <Field label="Full Name">
-            <Input className="bg-white/5 border-white/10 text-white" value={rep.fullName} onChange={(e) => setRep({ fullName: e.target.value })} />
+            <Input className="bg-white border-line text-slate-900" value={rep.fullName} onChange={(e) => setRep({ fullName: e.target.value })} />
           </Field>
           <Field label="Position / Title">
-            <Input className="bg-white/5 border-white/10 text-white" value={rep.position} onChange={(e) => setRep({ position: e.target.value })} placeholder="Chief Investment Officer" />
+            <Input className="bg-white border-line text-slate-900" value={rep.position} onChange={(e) => setRep({ position: e.target.value })} placeholder="Chief Investment Officer" />
           </Field>
           <Field label="Department">
-            <Input className="bg-white/5 border-white/10 text-white" value={rep.department} onChange={(e) => setRep({ department: e.target.value })} placeholder="Investments" />
+            <Input className="bg-white border-line text-slate-900" value={rep.department} onChange={(e) => setRep({ department: e.target.value })} placeholder="Investments" />
           </Field>
           <Field label="Email">
-            <Input type="email" className="bg-white/5 border-white/10 text-white" value={rep.email} onChange={(e) => setRep({ email: e.target.value })} />
+            <Input type="email" className="bg-white border-line text-slate-900" value={rep.email} onChange={(e) => setRep({ email: e.target.value })} />
           </Field>
           <Field label="Phone">
-            <Input className="bg-white/5 border-white/10 text-white" value={rep.phone} onChange={(e) => setRep({ phone: e.target.value })} />
+            <Input className="bg-white border-line text-slate-900" value={rep.phone} onChange={(e) => setRep({ phone: e.target.value })} />
           </Field>
         </div>
       </CardContent>
@@ -344,7 +344,7 @@ function MultiChips({ options, selected, onToggle }: { options: string[]; select
           type="button"
           onClick={() => onToggle(o)}
           className={`rounded-full px-3 py-1.5 text-xs font-medium border transition-all ${
-            selected.includes(o) ? "bg-amber-500 text-black border-amber-500" : "bg-white/5 text-slate-300 border-white/10 hover:border-white/30"
+            selected.includes(o) ? "bg-amber-500 text-black border-amber-500" : "bg-white/5 text-slate-300 border-line hover:border-white/30"
           }`}
         >
           {o}
@@ -358,14 +358,14 @@ function InvestmentProfileForm({ form, set }: { form: any; set: any }) {
   const ip = form.investmentProfile;
   const setIp = (patch: Partial<InvestmentProfile>) => set({ investmentProfile: { ...ip, ...patch } });
   return (
-    <Card className="border border-white/10 bg-slate-900/80 backdrop-blur-xl text-slate-100">
+    <Card className="border border-line shadow-card">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-white"><Target className="h-5 w-5 text-amber-400" /> Investment Profile</CardTitle>
-        <CardDescription className="text-slate-400">Your mandate, preferences and ticket sizing.</CardDescription>
+        <CardTitle className="flex items-center gap-2 text-slate-900"><Target className="h-5 w-5 text-amber-400" /> Investment Profile</CardTitle>
+        <CardDescription className="text-slate-600">Your mandate, preferences and ticket sizing.</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <Field label="Investment Objective">
-          <Input className="bg-white/5 border-white/10 text-white" value={ip.investmentObjective} onChange={(e) => setIp({ investmentObjective: e.target.value })} placeholder="Capital preservation with steady yield" />
+          <Input className="bg-white border-line text-slate-900" value={ip.investmentObjective} onChange={(e) => setIp({ investmentObjective: e.target.value })} placeholder="Capital preservation with steady yield" />
         </Field>
         <Field label="Preferred Sectors">
           <MultiChips options={SECTORS} selected={ip.preferredSectors} onToggle={(v) => setIp({ preferredSectors: toggle(ip.preferredSectors, v) })} />
@@ -378,17 +378,17 @@ function InvestmentProfileForm({ form, set }: { form: any; set: any }) {
         </Field>
         <div className="grid md:grid-cols-3 gap-4">
           <Field label="Minimum Investment (₦)">
-            <Input type="number" className="bg-white/5 border-white/10 text-white" value={ip.minimumInvestment || ""} onChange={(e) => setIp({ minimumInvestment: Number(e.target.value) })} />
+            <Input type="number" className="bg-white border-line text-slate-900" value={ip.minimumInvestment || ""} onChange={(e) => setIp({ minimumInvestment: Number(e.target.value) })} />
           </Field>
           <Field label="Typical Ticket Size (₦)">
-            <Input type="number" className="bg-white/5 border-white/10 text-white" value={ip.typicalTicketSize || ""} onChange={(e) => setIp({ typicalTicketSize: Number(e.target.value) })} />
+            <Input type="number" className="bg-white border-line text-slate-900" value={ip.typicalTicketSize || ""} onChange={(e) => setIp({ typicalTicketSize: Number(e.target.value) })} />
           </Field>
           <Field label="Maximum Investment (₦)">
-            <Input type="number" className="bg-white/5 border-white/10 text-white" value={ip.maximumInvestment || ""} onChange={(e) => setIp({ maximumInvestment: Number(e.target.value) })} />
+            <Input type="number" className="bg-white border-line text-slate-900" value={ip.maximumInvestment || ""} onChange={(e) => setIp({ maximumInvestment: Number(e.target.value) })} />
           </Field>
         </div>
         <Field label="Investment Horizon">
-          <Input className="bg-white/5 border-white/10 text-white" value={ip.investmentHorizon} onChange={(e) => setIp({ investmentHorizon: e.target.value })} placeholder="3-5 years" />
+          <Input className="bg-white border-line text-slate-900" value={ip.investmentHorizon} onChange={(e) => setIp({ investmentHorizon: e.target.value })} placeholder="3-5 years" />
         </Field>
         <Field label="Preferred Structure">
           <MultiChips options={[...STRUCTURES]} selected={ip.preferredStructure} onToggle={(v) => setIp({ preferredStructure: toggle(ip.preferredStructure, v) as InvestmentProfile["preferredStructure"] })} />
@@ -410,15 +410,15 @@ function DocumentsForm() {
     { name: "Authorised Signatory Verification", required: true },
   ];
   return (
-    <Card className="border border-white/10 bg-slate-900/80 backdrop-blur-xl text-slate-100">
+    <Card className="border border-line shadow-card">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-white"><FileText className="h-5 w-5 text-amber-400" /> Compliance Documents</CardTitle>
-        <CardDescription className="text-slate-400">Upload corporate & KYB documentation.</CardDescription>
+        <CardTitle className="flex items-center gap-2 text-slate-900"><FileText className="h-5 w-5 text-amber-400" /> Compliance Documents</CardTitle>
+        <CardDescription className="text-slate-600">Upload corporate & KYB documentation.</CardDescription>
       </CardHeader>
       <CardContent className="grid md:grid-cols-2 gap-3">
         {docs.map((d) => (
-          <div key={d.name} className="border-2 border-dashed border-white/10 rounded-2xl p-4 text-center hover:border-amber-400 transition-colors cursor-pointer">
-            <Upload className="h-7 w-7 text-slate-400 mx-auto mb-2" />
+          <div key={d.name} className="border-2 border-dashed border-line rounded-2xl p-4 text-center hover:border-amber-400 transition-colors cursor-pointer">
+            <Upload className="h-7 w-7 text-slate-600 mx-auto mb-2" />
             <p className="text-sm font-medium text-slate-200">{d.name}</p>
             <p className="text-[11px] text-slate-500 mt-1">{d.required ? "Required" : "Optional"} · PDF/PNG ≤ 15MB</p>
           </div>
@@ -430,29 +430,29 @@ function DocumentsForm() {
 
 function ReviewForm({ form }: { form: any }) {
   return (
-    <Card className="border border-white/10 bg-slate-900/80 backdrop-blur-xl text-slate-100">
+    <Card className="border border-line shadow-card">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-white"><ShieldCheck className="h-5 w-5 text-amber-400" /> Review & Submit</CardTitle>
-        <CardDescription className="text-slate-400">Confirm the information below is accurate.</CardDescription>
+        <CardTitle className="flex items-center gap-2 text-slate-900"><ShieldCheck className="h-5 w-5 text-amber-400" /> Review & Submit</CardTitle>
+        <CardDescription className="text-slate-600">Confirm the information below is accurate.</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4 text-sm">
         <div>
-          <div className="text-slate-400">Company</div>
-          <div className="font-semibold text-white">{form.companyName} · {form.cacNumber}</div>
+          <div className="text-slate-600">Company</div>
+          <div className="font-semibold text-slate-900">{form.companyName} · {form.cacNumber}</div>
         </div>
         <div>
-          <div className="text-slate-400">Classification</div>
-          <div className="font-semibold text-white capitalize">{form.institutionType} · {form.ownershipType}</div>
+          <div className="text-slate-600">Classification</div>
+          <div className="font-semibold text-slate-900 capitalize">{form.institutionType} · {form.ownershipType}</div>
         </div>
         <div>
-          <div className="text-slate-400">Authorised Rep</div>
-          <div className="font-semibold text-white">{form.authorisedRep.fullName} — {form.authorisedRep.position}</div>
+          <div className="text-slate-600">Authorised Rep</div>
+          <div className="font-semibold text-slate-900">{form.authorisedRep.fullName} — {form.authorisedRep.position}</div>
         </div>
         <div>
-          <div className="text-slate-400">Ticket Range</div>
-          <div className="font-semibold text-white">₦{form.investmentProfile.minimumInvestment.toLocaleString()} – ₦{form.investmentProfile.maximumInvestment.toLocaleString()} (typical ₦{form.investmentProfile.typicalTicketSize.toLocaleString()})</div>
+          <div className="text-slate-600">Ticket Range</div>
+          <div className="font-semibold text-slate-900">₦{form.investmentProfile.minimumInvestment.toLocaleString()} – ₦{form.investmentProfile.maximumInvestment.toLocaleString()} (typical ₦{form.investmentProfile.typicalTicketSize.toLocaleString()})</div>
         </div>
-        <div className="p-3 bg-amber-500/10 border border-amber-500/30 rounded-xl text-amber-200 text-xs">
+        <div className="rounded-xl border border-accent-200 bg-accent-50 p-3 text-xs text-accent-800">
           On submit, your profile enters KYC / KYB review: CAC verification, UBO identification, and sanctions / PEP / adverse-media / AML screening. You will be notified of the outcome.
         </div>
       </CardContent>
@@ -471,13 +471,13 @@ function StatusView({ stage, setStage, profile }: { stage: any; setStage: any; p
   const currentIndex = stages.findIndex((s) => s.key === stage);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100 px-4 py-10">
+    <div className="min-h-screen bg-surface-sunken px-4 py-10">
       <div className="max-w-2xl mx-auto">
-        <img src="/urbco-logo-white.svg" alt="Urbco" className="h-10 mx-auto mb-6" />
+        <img src="/urbco-logo.svg" alt="Urbco" className="h-10 mx-auto mb-6" />
         <h1 className="text-2xl font-bold text-center mb-2">KYC / KYB Status</h1>
-        <p className="text-center text-slate-400 text-sm mb-8">{profile.companyName || "Your institution"} · {profile.cacNumber}</p>
+        <p className="text-center text-slate-600 text-sm mb-8">{profile.companyName || "Your institution"} · {profile.cacNumber}</p>
 
-        <Card className="border border-white/10 bg-slate-900/80 backdrop-blur-xl text-slate-100">
+        <Card className="border border-line shadow-card">
           <CardContent className="p-6 space-y-4">
             {stages.map((s, i) => {
               const Icon = s.icon;
@@ -485,10 +485,10 @@ function StatusView({ stage, setStage, profile }: { stage: any; setStage: any; p
               const active = i === currentIndex && stage !== "verified";
               return (
                 <div key={s.key} className="flex items-center gap-3">
-                  <div className={`w-9 h-9 rounded-full flex items-center justify-center ${done ? "bg-emerald-500 text-white" : active ? "bg-amber-500 text-black animate-pulse" : "bg-white/10 text-slate-500"}`}>
+                  <div className={`w-9 h-9 rounded-full flex items-center justify-center ${done ? "bg-emerald-500 text-slate-900" : active ? "bg-amber-500 text-black animate-pulse" : "bg-white/10 text-slate-500"}`}>
                     <Icon className="h-5 w-5" />
                   </div>
-                  <span className={`text-sm ${done ? "text-white" : active ? "text-amber-300 font-semibold" : "text-slate-500"}`}>{s.label}</span>
+                  <span className={`text-sm ${done ? "text-slate-900" : active ? "text-amber-300 font-semibold" : "text-slate-500"}`}>{s.label}</span>
                   {active && <Badge className="ml-auto bg-amber-500 text-black">In Progress</Badge>}
                   {done && <Badge variant="secondary" className="ml-auto">Cleared</Badge>}
                 </div>
@@ -498,8 +498,8 @@ function StatusView({ stage, setStage, profile }: { stage: any; setStage: any; p
             {stage === "verified" && (
               <div className="pt-2 text-center">
                 <CheckCircle className="h-10 w-10 text-emerald-500 mx-auto mb-2" />
-                <p className="text-emerald-300 font-semibold">Your institution is fully verified.</p>
-                <Link href="/marketplace"><Button className="mt-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white">Browse Allocations</Button></Link>
+                <p className="font-semibold text-brand-700">Your institution is fully verified.</p>
+                <Link href="/marketplace"><Button className="mt-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-slate-900">Browse Allocations</Button></Link>
               </div>
             )}
           </CardContent>

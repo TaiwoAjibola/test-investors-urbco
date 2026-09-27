@@ -69,73 +69,84 @@ export default function AssetDetailPage() {
       {/* Hero Section */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Left Content */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className="min-w-0 space-y-6 lg:col-span-2">
           {/* Image Gallery */}
           <Card className="overflow-hidden">
-            <div className="relative h-96 overflow-hidden">
+            <div className="relative aspect-[16/10] w-full overflow-hidden bg-surface-muted sm:aspect-[16/9]">
               <img
                 src={property.images[activeImageIndex]}
-                alt={property.name}
-                className="w-full h-full object-cover"
+                alt={`${property.name} — image ${activeImageIndex + 1} of ${property.images.length}`}
+                className="h-full w-full object-cover"
               />
-              
-              {/* Video Tour Button */}
+
+              {/* Video tour */}
               {property.videoUrl && (
                 <Dialog open={showVideo} onOpenChange={setShowVideo}>
                   <DialogTrigger asChild>
                     <Button
                       variant="premium"
                       size="icon"
-                      className="absolute top-4 right-4 rounded-full"
+                      className="absolute right-4 top-4 rounded-full shadow-lifted"
+                      aria-label="Play video tour"
                     >
                       <Play className="h-5 w-5" />
                     </Button>
                   </DialogTrigger>
-                  <DialogContent className="max-w-4xl">
-                    <div className="aspect-video bg-slate-900 rounded-lg flex items-center justify-center">
-                      <p className="text-white">Video Tour Placeholder</p>
+                  <DialogContent className="max-w-3xl">
+                    <div className="flex aspect-video items-center justify-center rounded-xl border border-line bg-surface-sunken">
+                      <div className="text-center">
+                        <Play className="mx-auto h-10 w-10 text-brand-600" />
+                        <p className="mt-3 text-sm font-medium text-slate-600">Video tour for {property.name}</p>
+                      </div>
                     </div>
                   </DialogContent>
                 </Dialog>
               )}
 
-              {/* Status Badge */}
-              <div className="absolute top-4 left-4">
-                <Badge variant={property.status === "open" ? "success" : "warning"} className="text-sm px-4 py-2">
-                  {property.status === "open" ? "Open for Investment" : "Funding in Progress"}
+              {/* Status badge */}
+              <div className="absolute left-4 top-4">
+                <Badge variant={property.status === "open" ? "success" : "warning"} className="px-3 py-1.5 text-xs font-semibold">
+                  {property.status === "open" ? "Open for investment" : "Funding in progress"}
                 </Badge>
               </div>
 
-              {/* Wishlist & Share */}
-              <div className="absolute bottom-4 right-4 flex space-x-2">
+              {/* Wishlist & share */}
+              <div className="absolute bottom-4 right-4 flex gap-2">
                 <Button
                   variant="secondary"
                   size="icon"
-                  className="rounded-full"
+                  className="rounded-full shadow-lifted"
                   onClick={() => setIsWishlisted(!isWishlisted)}
+                  aria-label={isWishlisted ? "Remove from wishlist" : "Save to wishlist"}
                 >
                   <Heart className={`h-5 w-5 ${isWishlisted ? "fill-red-500 text-red-500" : ""}`} />
                 </Button>
-                <Button variant="secondary" size="icon" className="rounded-full">
+                <Button variant="secondary" size="icon" className="rounded-full shadow-lifted" aria-label="Share asset">
                   <Share2 className="h-5 w-5" />
                 </Button>
               </div>
             </div>
 
-            {/* Thumbnail Grid */}
-            <div className="flex gap-2 p-4 overflow-x-auto">
-              {property.images.map((image, index) => (
-                <button
-                  key={index}
-                  onClick={() => setActiveImageIndex(index)}
-                  className={`relative flex-shrink-0 w-24 h-24 rounded-lg overflow-hidden transition-all ${
-                    activeImageIndex === index ? "ring-2 ring-emerald-500" : "opacity-70 hover:opacity-100"
-                  }`}
-                >
-                  <img src={image} alt={`${property.name} ${index + 1}`} className="w-full h-full object-cover" />
-                </button>
-              ))}
-            </div>
+            {/* Thumbnails */}
+            {property.images.length > 1 && (
+              <div className="flex gap-2.5 overflow-x-auto p-4">
+                {property.images.map((image, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setActiveImageIndex(index)}
+                    aria-label={`View image ${index + 1}`}
+                    aria-current={activeImageIndex === index}
+                    className={`h-14 w-20 flex-shrink-0 cursor-pointer overflow-hidden rounded-lg border-2 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 sm:h-16 sm:w-24 ${
+                      activeImageIndex === index
+                        ? "border-brand-600 opacity-100"
+                        : "border-transparent opacity-60 hover:opacity-100"
+                    }`}
+                  >
+                    <img src={image} alt="" className="h-full w-full object-cover" />
+                  </button>
+                ))}
+              </div>
+            )}
           </Card>
 
           {/* Property Info */}
@@ -177,7 +188,7 @@ export default function AssetDetailPage() {
                   <Maximize className="h-6 w-6 text-emerald-600" />
                   <div>
                     <div className="text-2xl font-bold text-slate-900">{property.squareMeters.toLocaleString()}</div>
-                    <div className="text-sm text-slate-500">Square Meters</div>
+                    <div className="text-sm text-slate-500 whitespace-nowrap">Sq m</div>
                   </div>
                 </div>
                 <div className="flex items-center space-x-3 p-4 bg-slate-50 rounded-xl">
@@ -250,7 +261,7 @@ export default function AssetDetailPage() {
               </div>
 
               {/* Investor Stats */}
-              <div className="grid grid-cols-3 gap-4 mt-6 pt-6 border-t border-slate-100">
+              <div className="mt-6 grid grid-cols-3 gap-4 border-t border-line pt-6">
                 <div className="text-center">
                   <div className="text-2xl font-bold text-slate-900">{property.fractionsSold}</div>
                   <div className="text-sm text-slate-500">Fractions Sold</div>
@@ -301,7 +312,7 @@ export default function AssetDetailPage() {
                       : "bg-slate-200 text-black font-bold"
                   }
                 >
-                  {property.targetTrack === "foundry" ? "Opco Foundry" : property.targetTrack === "harbor" ? "Opco Harbor" : "Opco Foundry & Harbor"}
+                  {property.targetTrack === "foundry" ? "Institutional track" : property.targetTrack === "harbor" ? "Fractional track" : "Both tracks"}
                 </Badge>
                 {property.facilityManagement && (
                   <Badge variant="secondary" className="px-3 py-1.5">
@@ -484,7 +495,7 @@ export default function AssetDetailPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-5">
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <div className="p-4 bg-slate-50 rounded-xl">
                   <div className="text-xs text-slate-500 mb-1">Base Price</div>
                   <div className="text-lg font-bold text-slate-900">{formatCurrency(property.pricing.basePrice)}</div>
@@ -724,7 +735,7 @@ export default function AssetDetailPage() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <div className="p-4 bg-slate-50 rounded-xl text-center">
                   <div className="text-xs text-slate-500 mb-1">Lead</div>
                   <div className="text-2xl font-bold text-slate-900">{property.commission.leadPct}%</div>
@@ -763,6 +774,7 @@ export default function AssetDetailPage() {
                         variant="outline"
                         size="icon"
                         onClick={() => handleFractionChange(Math.max(1, selectedFractions - 1))}
+                        aria-label="Decrease fractions"
                       >
                         -
                       </Button>
@@ -778,6 +790,7 @@ export default function AssetDetailPage() {
                         variant="outline"
                         size="icon"
                         onClick={() => handleFractionChange(Math.min(fractionsRemaining, selectedFractions + 1))}
+                        aria-label="Increase fractions"
                       >
                         +
                       </Button>
@@ -797,15 +810,15 @@ export default function AssetDetailPage() {
                 {/* Holding Period */}
                 <div>
                   <Label>Holding Period (Years)</Label>
-                  <div className="flex items-center space-x-2 mt-2">
+                  <div className="mt-2 grid grid-cols-4 gap-2">
                     {[1, 3, 5, 10].map((years) => (
                       <Button
                         key={years}
                         variant={holdingPeriod === years ? "premium" : "outline"}
                         onClick={() => setHoldingPeriod(years)}
-                        className="flex-1"
+                        className="w-full px-1 text-xs sm:text-sm"
                       >
-                        {years} {years === 1 ? "Year" : "Years"}
+                        {years === 1 ? "1 yr" : `${years} yrs`}
                       </Button>
                     ))}
                   </div>
@@ -832,7 +845,7 @@ export default function AssetDetailPage() {
         </div>
 
         {/* Right Sidebar - Investment CTA */}
-        <div className="lg:col-span-1">
+        <div className="min-w-0 lg:col-span-1">
           <Card className="sticky top-24">
             <CardHeader>
               <CardTitle>Invest in This Property</CardTitle>
@@ -862,6 +875,7 @@ export default function AssetDetailPage() {
                     variant="outline"
                     size="icon"
                     onClick={() => handleFractionChange(Math.max(1, selectedFractions - 1))}
+                    aria-label="Decrease fractions"
                   >
                     -
                   </Button>
@@ -877,6 +891,7 @@ export default function AssetDetailPage() {
                     variant="outline"
                     size="icon"
                     onClick={() => handleFractionChange(Math.min(fractionsRemaining, selectedFractions + 1))}
+                    aria-label="Increase fractions"
                   >
                     +
                   </Button>
@@ -906,7 +921,7 @@ export default function AssetDetailPage() {
               </div>
 
               {/* CTA Buttons */}
-              <Button variant="premium" className="w-full h-14 text-lg" onClick={handleInvest}>
+              <Button variant="premium" className="h-14 w-full text-base sm:text-lg" onClick={handleInvest}>
                 {user && user.kycStatus !== "verified" ? "Complete KYC to Invest" : "Invest Now"}
               </Button>
               <Button

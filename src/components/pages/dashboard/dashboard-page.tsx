@@ -20,20 +20,20 @@ export default function DashboardPage() {
   return (
     <div className="space-y-8">
       {/* Page Header */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900">Dashboard</h1>
-          <p className="text-slate-500">Welcome back! Here&apos;s your investment overview</p>
+          <h1 className="font-display text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">Dashboard</h1>
+          <p className="mt-1 text-sm text-slate-500">Here&apos;s your investment overview</p>
         </div>
-        <div className="flex items-center gap-3">
-          <Link href="/marketplace">
-            <Button variant="outline">
-              <Building2 className="mr-2 h-4 w-4" /> Browse Properties
+        <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center">
+          <Link href="/marketplace" className="w-full sm:w-auto">
+            <Button variant="outline" className="w-full sm:w-auto">
+              <Building2 className="mr-2 h-4 w-4" /> Browse properties
             </Button>
           </Link>
-          <Link href="/wallet">
-            <Button variant="premium">
-              <Wallet className="mr-2 h-4 w-4" /> Add Funds
+          <Link href="/wallet" className="w-full sm:w-auto">
+            <Button className="w-full sm:w-auto">
+              <Wallet className="mr-2 h-4 w-4" /> Add funds
             </Button>
           </Link>
         </div>
