@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { User, Property, Investment, Dividend, Transaction, Notification, Wallet, Referral, InstitutionalProfile } from "@/types";
 import { currentUser, wallet as initialWallet, properties, investments, dividends, transactions, notifications, referral } from "@/data/mockData";
+import { propertiesAPI } from "@/lib/api";
 
 interface AppState {
   // User
@@ -36,6 +37,7 @@ interface AppState {
   updateWallet: (balance: number) => void;
   setKycStatus: (status: User["kycStatus"], remediationItems?: string[]) => void;
   saveInstitutionalProfile: (profile: InstitutionalProfile) => void;
+  loadProperties: () => Promise<void>;
 }
 
 export const useAppStore = create<AppState>((set) => ({
@@ -116,4 +118,15 @@ export const useAppStore = create<AppState>((set) => ({
     })),
 
   saveInstitutionalProfile: (profile) => set({ institutionalProfile: profile }),
+
+  loadProperties: async () => {
+    try {
+      const res = await propertiesAPI.list();
+      if (res.success && Array.isArray(res.data) && res.data.length > 0) {
+        set({ properties: res.data as Property[] });
+      }
+    } catch {
+      // Keep mock data as fallback when the API is unavailable.
+    }
+  },
 }));

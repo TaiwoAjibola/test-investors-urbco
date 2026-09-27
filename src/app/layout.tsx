@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Sora, Inter } from "next/font/google";
 import "./globals.css";
 import { ToastProviderWrapper } from "@/hooks/use-toast";
+import { Bootstrap } from "@/components/Bootstrap";
 
 const sora = Sora({
   subsets: ["latin"],
@@ -30,6 +31,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${sora.variable} ${inter.variable} font-sans antialiased`}>
         <ToastProviderWrapper>
+          <Bootstrap />
           {children}
         </ToastProviderWrapper>
       </body>

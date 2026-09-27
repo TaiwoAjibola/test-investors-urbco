@@ -10,12 +10,13 @@ import { Progress } from "@/components/ui/progress";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useParams, useRouter } from "next/navigation";
-import { properties } from "@/data/mockData";
+import { useAppStore } from "@/stores/appStore";
 import { formatCurrency, formatPercentage } from "@/lib/utils";
 
 export default function CheckoutPage() {
   const params = useParams();
   const router = useRouter();
+  const { properties } = useAppStore();
   const property = properties.find((p) => p.id === params.id) || properties[0];
   const fractions = Number(params.fractions) || 1;
   

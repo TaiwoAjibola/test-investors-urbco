@@ -15,7 +15,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { properties } from "@/data/mockData";
 import { formatCurrency, formatPercentage, calculateDividend, calculateROI } from "@/lib/utils";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
@@ -24,7 +23,7 @@ import { useAppStore } from "@/stores/appStore";
 export default function AssetDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const { user } = useAppStore();
+  const { user, properties } = useAppStore();
   const property = properties.find((p) => p.id === params.id) || properties[0];
   
   const [selectedFractions, setSelectedFractions] = useState(1);
@@ -400,6 +399,22 @@ export default function AssetDetailPage() {
                         </div>
                       </div>
                     )}
+                    {bp.settlementFlow && bp.settlementFlow.length > 0 && (
+                      <div className="mt-4">
+                        <div className="text-xs font-semibold text-slate-600 mb-2">Settlement Flow (Terms → Payment → Custody → Reconciliation → Release)</div>
+                        <div className="flex flex-wrap items-center gap-2">
+                          {bp.settlementFlow.map((s, si) => (
+                            <div key={s.key} className="flex items-center gap-2">
+                              <div className={`flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium border ${s.status === "completed" ? "bg-emerald-50 border-emerald-300 text-emerald-700" : "bg-slate-50 border-slate-200 text-slate-500"}`}>
+                                <span className={`h-2 w-2 rounded-full ${s.status === "completed" ? "bg-emerald-500" : "bg-slate-300"}`} />
+                                {s.label}
+                              </div>
+                              {si < bp.settlementFlow!.length - 1 && <span className="text-slate-300">→</span>}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 ) : bp.type === "ownership" ? (
                   <div key={i} className="rounded-2xl border border-teal-200 bg-teal-50/40 p-5">
@@ -436,6 +451,22 @@ export default function AssetDetailPage() {
                       <div className="text-sm">
                         <span className="text-slate-500">Title Terms: </span>
                         <span className="text-slate-800">{bp.titleTerms}</span>
+                      </div>
+                    )}
+                    {bp.settlementFlow && bp.settlementFlow.length > 0 && (
+                      <div className="mt-4">
+                        <div className="text-xs font-semibold text-slate-600 mb-2">Settlement Flow (Terms → Payment → Custody → Reconciliation → Release)</div>
+                        <div className="flex flex-wrap items-center gap-2">
+                          {bp.settlementFlow.map((s, si) => (
+                            <div key={s.key} className="flex items-center gap-2">
+                              <div className={`flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium border ${s.status === "completed" ? "bg-emerald-50 border-emerald-300 text-emerald-700" : "bg-slate-50 border-slate-200 text-slate-500"}`}>
+                                <span className={`h-2 w-2 rounded-full ${s.status === "completed" ? "bg-emerald-500" : "bg-slate-300"}`} />
+                                {s.label}
+                              </div>
+                              {si < bp.settlementFlow!.length - 1 && <span className="text-slate-300">→</span>}
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     )}
                   </div>

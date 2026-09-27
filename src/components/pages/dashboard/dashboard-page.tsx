@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart as RechartsPieChart, Pie, Cell } from "recharts";
-import { dashboardMetrics, investments, dividends, notifications, properties } from "@/data/mockData";
+import { dashboardMetrics, investments, dividends, notifications } from "@/data/mockData";
 import { formatCurrency, formatPercentage } from "@/lib/utils";
 import Link from "next/link";
 

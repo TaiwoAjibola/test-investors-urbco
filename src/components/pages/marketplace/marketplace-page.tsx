@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { properties } from "@/data/mockData";
+import { useAppStore } from "@/stores/appStore";
 import { formatCurrency, formatPercentage, formatCompactNumber } from "@/lib/utils";
 import Link from "next/link";
 
@@ -23,6 +23,8 @@ export default function MarketplacePage() {
     propertyType: "all",
     status: "all",
   });
+
+  const { properties } = useAppStore();
 
   const filteredProperties = properties.filter((property) => {
     const matchesSearch =

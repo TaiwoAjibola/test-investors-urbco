@@ -27,7 +27,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { properties } from "@/data/mockData";
+import { useAppStore } from "@/stores/appStore";
 import { formatCurrency, formatPercentage, formatCompactNumber } from "@/lib/utils";
 import Link from "next/link";
 import { useState } from "react";
@@ -37,6 +37,7 @@ export default function LandingPage() {
   const [investmentAmount, setInvestmentAmount] = useState<number>(50000000); // default ₦50M
   const [calculatorTrack, setCalculatorTrack] = useState<"foundry" | "harbor">("foundry");
 
+  const { properties } = useAppStore();
   const foundryProperties = properties.filter((p) => p.targetTrack === "foundry" || p.targetTrack === "both");
   const harborProperties = properties.filter((p) => p.targetTrack === "harbor" || p.targetTrack === "both");
   const displayedProperties = activeTrack === "foundry" ? foundryProperties : activeTrack === "harbor" ? harborProperties : properties.slice(0, 4);

@@ -46,6 +46,13 @@ export interface FractionTier {
   benefits?: string[];
 }
 
+export interface SettlementStage {
+  key: "terms" | "payment" | "custody" | "reconciliation" | "release";
+  label: string;
+  description?: string;
+  status: "pending" | "completed";
+}
+
 export interface BuyingPath {
   type: "investment" | "ownership" | "both";
   // Investment path
@@ -61,6 +68,8 @@ export interface BuyingPath {
   releaseBasis?: "milestone" | "scheduled";
   milestones?: Milestone[];
   titleTerms?: string;
+  // Per-path settlement flow (Step 3): Terms -> Payment -> Trustee custody -> Reconciliation -> Release
+  settlementFlow?: SettlementStage[];
 }
 
 export interface PaymentOption {

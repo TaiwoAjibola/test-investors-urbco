@@ -1,4 +1,4 @@
-import { Property, Investment, Dividend, Transaction, Notification, Referral, DashboardMetrics, UnitType, BuyingPath, Milestone, FractionTier, PaymentOption, StageDiscount, ReturnsProjection, RiskAssessment, DocumentFile, VirtualTour, CommissionStructure } from "@/types";
+import { Property, Investment, Dividend, Transaction, Notification, Referral, DashboardMetrics, UnitType, BuyingPath, Milestone, FractionTier, PaymentOption, StageDiscount, ReturnsProjection, RiskAssessment, DocumentFile, VirtualTour, CommissionStructure, SettlementStage } from "@/types";
 
 type AdminSeed = {
   targetTrack: "foundry" | "harbor" | "both";
@@ -27,6 +27,14 @@ function deriveAdmin(p: AdminSeed) {
     { id: "uc-2", name: "Premium Unit", type: "custom", count: Math.round(totalUnits / 4), sizeSqm: Math.round(p.squareMeters / totalUnits) * 2, bedrooms: 3, bathrooms: 3, basePrice: Math.round(p.propertyValue * 1.4) },
   ];
 
+  const settlementFlow: SettlementStage[] = [
+    { key: "terms", label: "Terms Agreed", description: "Offering terms & investment agreement executed.", status: "completed" },
+    { key: "payment", label: "Payment Instruction", description: "Investor payment instruction captured and confirmed.", status: "completed" },
+    { key: "custody", label: "Trustee Custody", description: "Capital lodged with Urbco Trustee in escrow.", status: "completed" },
+    { key: "reconciliation", label: "Reconciliation", description: "Independent reconciliation of funds against units.", status: "completed" },
+    { key: "release", label: "Release", description: "Funds / title released per the agreed schedule.", status: "pending" },
+  ];
+
   const investmentPath: BuyingPath = {
     type: "investment",
     interestStructure: "fractional",
@@ -42,6 +50,7 @@ function deriveAdmin(p: AdminSeed) {
       { id: "ft-1", name: "Tier 1 — Lead Allocation", totalFractions: 200, pricePerFraction: p.minimumInvestment ?? 1000000, minInvestment: 0, maxInvestment: 50000000, benefits: ["Priority allotment", "Founder investor badge"] },
       { id: "ft-2", name: "Tier 2 — General", totalFractions: 600, pricePerFraction: Math.round((p.minimumInvestment ?? 1000000) * 1.05), minInvestment: 50000000, benefits: ["Standard allocation"] },
     ] as FractionTier[],
+    settlementFlow,
   };
 
   const ownershipPath: BuyingPath = {
@@ -54,6 +63,7 @@ function deriveAdmin(p: AdminSeed) {
       { id: "ms-4", name: "Handover & Title Perfection", targetDate: new Date("2027-12-31"), releasePct: 15, description: "Final handover and registered title perfection.", status: "pending" },
     ] as Milestone[],
     titleTerms: "Legal title held by Urbco Trustee in escrow, perfected and assigned to investor pro-rata on final milestone clearance.",
+    settlementFlow,
   };
 
   const buyingPaths: BuyingPath[] =
